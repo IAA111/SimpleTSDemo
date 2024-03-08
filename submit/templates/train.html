@@ -1,0 +1,312 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Train</title>
+    <style>
+        .background{
+             width: 720px;
+             border: 2px solid #dddddd;
+             height: 1000px;
+             margin-left: auto;
+             margin-right: auto;
+             margin-top: 10px;
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mycss.css' %}">
+</head>
+<body>
+
+<div class="background">
+
+<!--训练参数设置模块-->
+
+     <div class="container-set">
+        <div class="header">Train Setting</div>
+    </div>
+
+    <!--数据选择模块-->
+    <div class="container" style="margin-top: 8px;">
+        <div class="text-black">Database selection</div>
+        <div class="container" style="margin-top: 8px;">
+            <div class="col-md-3">
+                <div class="text-grey">Database selection</div>
+            </div>
+            <div class="col-md-9">
+                <div>
+                    <label for="upload" class="custom-file-upload">choose file</label>
+                    <input id="upload" type="file" style="display:none"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--模型选择模块-->
+    <div class="container" style="margin-top: 8px;">
+        <div class="text-black">Model selection</div>
+
+        <!--模型分类选择-->
+        <div class="container" style="margin-top: 8px;">
+            <div class="col-md-3">
+                <div class="text-grey">Model Classification</div>
+            </div>
+
+            <div class="col-md-9">
+                <div class="dropdown">
+                    <button id="BtnModelClassification" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Model Class
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="BtnModelClassification" id="modelClass">
+                        <li><a class="dropdown-item" href="#">Stat</a></li>
+                        <li><a class="dropdown-item" href="#">ML</a></li>
+                        <li><a class="dropdown-item" href="#">DL</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <!--模型选择-->
+        <div class="container">
+            <div class="col-md-3">
+                <div class="text-grey">Model Choose</div>
+            </div>
+            <div class="col-md-9">
+                <div class="dropdown">
+                    <button id="BtnModelChoose" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Models
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="BtnModelChoose" id="modelChoice">
+                        <!-- 模型选项由JavaScript动态填充.-->
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <!--模型选择框-->
+        <div class="container">
+            <div class="col-md-3">
+                <div class="text-grey">Selected Models</div>
+            </div>
+            <div class="col-md-9">
+                <div class="card custom-card">
+                    <div class="card-body">
+                        <!-- -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!--训练参数设置模块-->
+    <div class="container" style="margin-top: 5px;">
+        <div class="text-black">Training configuration</div>
+
+        <!--Train batch size -->
+        <div class="container" style="margin-top: 8px;">
+            <div class="col-md-3">
+                <div class="text-grey">Train batch size Settings</div>
+            </div>
+            <div class="col-md-9">
+                <div style="display: flex; align-items: center;">
+                    <div class="text-small-black">The amount of training data constitutes the original data's</div>
+                    <div class="dropdown">
+                        <button id="BtnTrainBatchSize" type="button" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false" style="margin-left: 4px;">
+                                 10%
+                            <span class="caret"></span>
+                        </button>
+                        <ul id="TrainBatch" class="dropdown-menu" aria-labelledby="dLabel">
+                            <li><a class="dropdown-item" href="#">10%</a></li>
+                            <li><a class="dropdown-item" href="#">20%</a></li>
+                            <li><a class="dropdown-item" href="#">30%</a></li>
+                            <li><a class="dropdown-item" href="#">40%</a></li>
+                            <li><a class="dropdown-item" href="#">50%</a></li>
+                            <li><a class="dropdown-item" href="#">60%</a></li>
+                            <li><a class="dropdown-item" href="#">70%</a></li>
+                            <li><a class="dropdown-item" href="#">80%</a></li>
+                            <li><a class="dropdown-item" href="#">90%</a></li>
+                            <li><a class="dropdown-item" href="#">100%</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 缺失机制 -->
+        <div class="container">
+            <div class="col-md-3">
+                <div class="text-grey">Missing Mechanism</div>
+            </div>
+            <div class="col-md-9">
+                <div style="display: flex; align-items: center;">
+                    <div class="text-small-black">The missing mechanism of training data is</div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div class="form-check" style="margin-left: 4px; margin-top: 3px;">
+                            <input class="form-check-input" type="radio" name="Mechanism" id="Mechanism1"
+                                   value="option1" checked>
+                            <label class="form-check-label " for="exampleRadios1" style="font-family: 'Times New Roman', sans-serif;">
+                                MCAR
+                            </label>
+                        </div>
+                        <div class="form-check" style="margin-left: 4px; margin-top: 3px;">
+                            <input class="form-check-input" type="radio" name="Mechanism" id="Mechanism2"
+                                   value="option2">
+                            <label class="form-check-label" for="exampleRadios2" style="font-family: 'Times New Roman', sans-serif;">
+                                MAR
+                            </label>
+                        </div>
+                        <div class="form-check" style="margin-left: 4px; margin-top: 3px;">
+                            <input class="form-check-input" type="radio" name="Mechanism" id="Mechanism3"
+                                   value="option3">
+                            <label class="form-check-label" for="exampleRadios3" style="font-family: 'Times New Roman', sans-serif;">
+                                MNAR
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 缺失率 -->
+        <div class="container">
+            <div class="col-md-3">
+                <div class="text-grey">Missing Rate Settings</div>
+            </div>
+            <div class="col-md-9">
+                <div style="display: flex; align-items: center;">
+                    <div class="text-small-black">The rate of missing data constitutes the original data's</div>
+                    <div class="dropdown">
+                        <button id="BtnMissingRate" type="button" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false" style="margin-left: 4px;">
+                                 10%
+                            <span class="caret"></span>
+                        </button>
+                        <ul id="MissingRate" class="dropdown-menu" aria-labelledby="dLabel" >
+                            <li><a class="dropdown-item" href="#">10%</a></li>
+                            <li><a class="dropdown-item" href="#">20%</a></li>
+                            <li><a class="dropdown-item" href="#">30%</a></li>
+                            <li><a class="dropdown-item" href="#">40%</a></li>
+                            <li><a class="dropdown-item" href="#">50%</a></li>
+                            <li><a class="dropdown-item" href="#">60%</a></li>
+                            <li><a class="dropdown-item" href="#">70%</a></li>
+                            <li><a class="dropdown-item" href="#">80%</a></li>
+                            <li><a class="dropdown-item" href="#">90%</a></li>
+                            <li><a class="dropdown-item" href="#">100%</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 自动调参设置 -->
+        <div class="container">
+            <div class="col-md-3">
+                <div class="text-grey">automatic parameter setting</div>
+            </div>
+            <div class="col-md-9">
+                <div style="display: flex; align-items: center;">
+                    <div class="text-small-black">Whether to enable automatic parameter setting</div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div class="form-check" style="margin-left: 4px; margin-top: 3px;">
+                            <input class="form-check-input" type="radio" name="automatic" id="automatic1"
+                                   value="option1" checked>
+                            <label class="form-check-label" for="exampleRadios" style="font-family: 'Times New Roman', sans-serif;">
+                                Yes
+                            </label>
+                        </div>
+                        <div class="form-check" style="margin-left: 4px; margin-top: 3px;">
+                            <input class="form-check-input" type="radio" name="automatic" id="automatic2"
+                                   value="option2">
+                            <label class="form-check-label" for="exampleRadios" style="font-family: 'Times New Roman', sans-serif;">
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+     <!--保存按钮-->
+    <div class="centered">
+        <div class="btn-group" role="group" aria-label="...">
+            <button id="BtnTrainSetSave" type="button" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+
+
+<!--训练状态模块-->
+
+    <div class="container-set">
+        <div class="header">Train Processing</div>
+    </div>
+
+    <!--训练开关-->
+    <div class="container start-train-container">
+        <div class="col-md-2">
+            <div class="text-black">Start Train</div>
+        </div>
+        <div class="col-md-10">
+            <label class="toggle">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
+        </div>
+    </div>
+
+    <!--训练详情-->
+    <div class="container">
+        <div class="text-black">Start Details</div>
+
+        <div class="container">
+            <div class="col-md-3">
+                <div class="text-grey">Training state</div>
+            </div>
+            <div class="col-md-9">
+                <div class="text-small-black">In operation</div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="col-md-3">
+                <div class="text-grey">Executed time</div>
+            </div>
+            <div class="col-md-9">
+                <div class="text-small-black">time</div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="col-md-3">
+                <div class="text-grey">Number of trained models</div>
+            </div>
+            <div class="col-md-9">
+                <div class="text-small-black">5/10</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--训练结果-->
+    <div class="container">
+        <div class="text-black">Train Result</div>
+    </div>
+
+
+</div>
+
+<script src="{% static "plugins/jquery-3.7.1.min.js" %}"></script>
+<script src="{% static "plugins/bootstrap-3.4.1/js/bootstrap.min.js" %}"></script>
+<script type="text/javascript" src="{% static 'js/train.js' %}"></script>
+</body>
+</html>

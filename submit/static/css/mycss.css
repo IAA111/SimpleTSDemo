@@ -1,0 +1,162 @@
+:root {
+    --bg-color: #F5F5F5;
+    --icon-color: black;
+    --grey-color: #BEBEBE;
+    --area-radius: 10px;
+}
+
+.container-set {
+    height: 35px;
+    margin-left: auto;
+    margin-right: auto;
+    border-bottom: 1px solid #D3D3D3;
+}
+
+.header {
+    float: left;
+    height: 30px;
+    display: flex;
+    padding: 8px 8px;
+    margin-left: 10px;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 16px;
+    color: #000;
+}
+
+.text-black {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 15px;
+    color: #000;
+    margin-bottom: 1px;
+    margin-left:10px;
+}
+
+.text-grey {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 15px;
+    color: #CDC9C9;
+}
+
+.text-small-black {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 14px;
+    color: #000;
+}
+
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #CDC9C9;
+}
+
+.custom-card {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border: 1px solid grey;
+    background-color: white;
+    width: 300px;
+    height: 100px;
+    overflow: auto;
+}
+
+.small-button {
+    padding: 5px 5px;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.centered {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.btn-primary {
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    color: #fff;
+}
+
+.btn-outline-primary {
+    color: #337ab7;
+    background-color: #fff;
+    border-color: #ddd;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.start-train-container {
+    margin-top: 20px;
+    transform: translateX(-14px);
+}
