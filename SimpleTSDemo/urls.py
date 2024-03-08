@@ -22,4 +22,6 @@ urlpatterns = [
     path("show/", views.show),
     path('get_models/', views.get_models),
     path('train/save/', views.train_save),
+    path('start/train/', views.train_start),
+    path('stop/train/', views.train_stop),
 ]

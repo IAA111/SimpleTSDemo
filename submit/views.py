@@ -3,8 +3,10 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from submit import models
+from submit.utils.train_thread_module import TrainThread
 # Create your views here.
 
+global_train_thread = None
 model_dict = {
     "Stat": ["modelA1", "modelA2", "modelA3"],
     "ML": ["modelB1", "modelB2", "modelB3"],
@@ -61,3 +63,38 @@ def train_save(request):
         return JsonResponse({"message": "Parameters were saved successfully."})
     else:
         return JsonResponse({"error": "error."})
+
+@csrf_exempt
+def train_start(request):
+    global global_train_thread
+    if global_train_thread is not None and global_train_thread.is_alive():
+        return JsonResponse({
+            'status': 'error',
+            'message': 'TrainThread is already running.'
+        })
+    global_train_thread = TrainThread()
+    global_train_thread.start()
+
+    return JsonResponse({
+        'status': 'success',
+        'message': 'TrainThread started.'
+    })
+
+
+
+@csrf_exempt
+def train_stop(request):
+    global global_train_thread
+
+    if global_train_thread is None or not global_train_thread.is_alive():
+        return JsonResponse({
+            'status': 'error',
+            'message': 'No active TrainThread to stop.'
+        })
+    global_train_thread.stop()
+    global_train_thread = None
+
+    return JsonResponse({
+        'status': 'success',
+        'message': 'TrainThread stopped.'
+    })

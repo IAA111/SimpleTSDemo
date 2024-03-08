@@ -10,7 +10,8 @@ $(function (){
     MissingRate();
     // 绑定点击 BtnTrainSetSave 按钮事件
     binBtnTrainSetSave();
-
+    // 绑定点击 StartTrainToggle 事件
+    StartTrain();
 
 })
 
@@ -76,3 +77,33 @@ function binBtnTrainSetSave() {
              console.log(JSON.stringify(params));
    }})
         })}
+
+function StartTrain(){
+    $("#StartTrainToggle").change(function (){
+        if(this.checked){
+         $.ajax({
+                url: '/start/train/',
+                type: 'POST',
+                success: function() {
+                   console.log("start success");
+                },
+                error: function() {
+                     console.log("error");
+                }
+            });
+        }
+        else{
+         $.ajax({
+                url: '/stop/train/',
+                type: 'POST',
+                success: function() {
+                   console.log("stop success");
+                },
+                error: function() {
+                     console.log("error");
+                }
+            });
+        }
+
+    });
+}
