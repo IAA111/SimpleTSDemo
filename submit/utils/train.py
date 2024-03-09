@@ -1,8 +1,9 @@
 import time
 from submit.models import TrainParameters
 import json
+import asyncio
 from asgiref.sync import sync_to_async
-async def train_all_models(stopped_callback):
+async def train_all_models():
 
     # DL  ["modelC2"] 0.1 MCAR 0.1 True
     # <class 'str'> <class 'str'> <class 'float'> <class 'str'> <class 'float'> <class 'bool'>
@@ -27,7 +28,7 @@ async def train_all_models(stopped_callback):
     '''
 
     print("开始执行")
-    time.sleep(3)  # 暂停5秒
+    asyncio.sleep(3)  # 暂停5秒
     print("3秒后继续执行")
 
     training_end_time = time.time()

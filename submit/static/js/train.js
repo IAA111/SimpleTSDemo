@@ -79,31 +79,18 @@ function binBtnTrainSetSave() {
         })}
 
 function StartTrain(){
-    $("#StartTrainToggle").change(function (){
-        if(this.checked){
-         $.ajax({
-                url: '/start/train/',
-                type: 'POST',
-                success: function() {
-                   console.log("start success");
-                },
-                error: function() {
-                     console.log("error");
-                }
-            });
-        }
-        else{
-         $.ajax({
-                url: '/stop/train/',
-                type: 'POST',
-                success: function() {
-                   console.log("stop success");
-                },
-                error: function() {
-                     console.log("error");
-                }
-            });
-        }
+    let socket = new WebSocket("ws://localhost:8000/ws/train/")
 
+    socket.onopen = function (e){
+         document.getElementById('StartTrainToggle').checked && socket.send(JSON.stringify({"type": "training.start"}));
+    };
+
+    document.getElementById('StartTrainToggle').addEventListener('change', (event) => {
+      if (event.target.checked) {
+        socket.send(JSON.stringify({"type": "training.start"}));
+      } else {
+        socket.send(JSON.stringify({"type": "training.stop"}));
+      }
     });
+
 }
