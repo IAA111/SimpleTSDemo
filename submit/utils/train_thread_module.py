@@ -14,6 +14,7 @@ class TrainThread(threading.Thread):
         self.model_count, self.training_duration = train.train_all_models(self.stop_requested)
 
     def stop(self):
+        print("stop")
         self.stopped = True
 
     def get_training_duration(self):
