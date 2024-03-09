@@ -24,4 +24,4 @@ class TrainThread(threading.Thread):
         return self.model_count
 
     def stop_requested(self):
-        return self.stopped  # return the current value of self.stopped
+        return self.stopped    # return the current value of self.stopped
