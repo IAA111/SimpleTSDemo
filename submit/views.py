@@ -81,7 +81,6 @@ def train_start(request):
     })
 
 
-
 @csrf_exempt
 def train_stop(request):
     global global_train_thread
@@ -93,6 +92,8 @@ def train_stop(request):
         })
     global_train_thread.stop()
     global_train_thread = None
+
+    print("stop")
 
     return JsonResponse({
         'status': 'success',
