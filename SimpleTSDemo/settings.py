@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'submit.apps.SubmitConfig',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,14 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+ASGI_APPLICATION = 'SimpleTSDemo.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": ["redis://10.211.55.25:6379/1"]
+        }
+    }
+}

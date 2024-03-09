@@ -1,11 +1,12 @@
 import time
 from submit.models import TrainParameters
 import json
-def train_all_models(stopped_callback):
+from asgiref.sync import sync_to_async
+async def train_all_models(stopped_callback):
 
     # DL  ["modelC2"] 0.1 MCAR 0.1 True
     # <class 'str'> <class 'str'> <class 'float'> <class 'str'> <class 'float'> <class 'bool'>
-    model_parameters = TrainParameters.objects.last()
+    model_parameters = await sync_to_async(TrainParameters.objects.last, thread_sensitive=True)()
 
     model_classification = model_parameters. model_classification  # 模型分类
     model_choice = json.loads(model_parameters.model_choice)       # 模型列表
