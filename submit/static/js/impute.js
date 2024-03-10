@@ -3,6 +3,8 @@ $(function (){
     PredictBatchSize();
     // 获取补全模型列表
     ModelSelect();
+    // Task
+    Task();
 
 
 
@@ -57,6 +59,93 @@ function ModelSelect() {
         },
     });
 }
+
+
+function Task() {
+    let intervalId;
+    let start_time;
+    let socket = new WebSocket("ws://localhost:8000/ws/task/")
+
+    socket.onopen = function (e){
+        console.log("Connection open");
+    };
+
+    document.getElementById('taskToggle').addEventListener('change', (event) => {
+      if (event.target.checked) {
+        socket.send(JSON.stringify({"type": "task.start"}));
+      } else {
+        socket.send(JSON.stringify({"type": "task.stop"}));
+      }
+    });
+
+    document.getElementById('stopTask').addEventListener("click", function() {
+        socket.send(JSON.stringify({"type": "task.stop"}));
+        document.getElementById('taskToggle').checked = false;
+    });
+
+    socket.onmessage = function(event){
+        console.log(`return message:${event.data}`);
+        let data = JSON.parse(event.data);
+
+        let impute_start_time = new Date(data.impute_start_time * 1000);
+        let predict_start_time = new Date(data.predict_start_time * 1000);
+
+        document.getElementById("imputeStatus").textContent = data.impute_status;
+        document.getElementById("predictStatus").textContent = data.predict_status;
+
+        if (intervalId) {
+            clearInterval(intervalId);
+        }
+        intervalId = setInterval(() => {
+            updateTaskTime(impute_start_time, predict_start_time);
+        }, 1000);
+
+        if (data.predict_status === "finished") {
+            clearInterval(intervalId);
+        }
+
+    }
+
+    function updateTaskTime(imputeStartTime, predictStartTime) {
+        let currentTime = new Date();
+
+        let imputeTime = parseInt((currentTime - imputeStartTime) / 1000);
+        let predictTime = parseInt((currentTime - predictStartTime) / 1000);
+
+        let formattedImputeTime = formatTime(imputeTime);
+        let formattedPredictTime = formatTime(predictTime);
+
+        document.getElementById("imputeTaskTime").textContent = formattedImputeTime;
+        document.getElementById("predictTaskTime").textContent = formattedPredictTime;
+    }
+
+// 将获得的秒数转换为 HH:MM:SS 格式
+    function formatTime(seconds) {
+        let hours = parseInt(seconds / 3600);
+        let minutes = parseInt((seconds % 3600) / 60);
+        let remainingSeconds = seconds % 60;
+
+        return `${hours}:${minutes}:${remainingSeconds}`;
+    }
+
+
+    socket.onclose = function(event) {
+        if (event.wasClean) {
+            console.log(`Connection closed properly：${event.code},${event.reason}`);
+        } else {
+            console.log('disconnect');
+        }
+    };
+
+    socket.onerror = function(error) {
+        console.log(`[error] ${error.message}`);
+    };
+}
+
+
+
+
+
 
 
 

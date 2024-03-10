@@ -114,7 +114,7 @@
                     <!--滑动框点击开始任务-->
                     <div class="col-md-10">
                         <label class="toggle">
-                            <input type="checkbox">
+                            <input id="taskToggle" type="checkbox">
                             <span class="slider round"></span>
                         </label>
                     </div>
@@ -130,7 +130,7 @@
                         <div class="text-grey-small adjust-align">Task status</div>
                     </div>
                     <div class="col-md-10">
-                        <div class="text-blue-small adjust-align">Run complete</div>
+                        <div class="text-blue-small adjust-align">Not started</div>
                     </div>
                 </div>
                 <div class="container">
@@ -147,7 +147,7 @@
                         <div class="text-grey-small adjust-align">Task status</div>
                     </div>
                     <div class="col-md-10">
-                        <div class="text-blue-small adjust-align">In operation</div>
+                        <div class="text-blue-small adjust-align">Not started</div>
                     </div>
                 </div>
                 <div class="container">
@@ -167,13 +167,11 @@
         <div class="col-md-8 column-custom">
             <div class="panel " style="height: 745px;">
                 <div class="text-black">Ongoing task</div>
+
                 <div class="container">
-                    <div class="col-md-1">
-                        <div class="text-blue-small adjust-align">Stop task</div>
-                    </div>
-                    <div class="col-md-11">
-                    </div>
+                        <div id="stopTask" class="text-blue-small adjust-align">Stop task</div>
                 </div>
+
                 <div class="text-black">Ongoing task</div>
                 <div class="container">
                     <button type="button" class="btn btn-default btn-xs">Last 24 hours</button>

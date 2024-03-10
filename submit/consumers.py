@@ -43,8 +43,7 @@ class TrainChatConsumer(AsyncConsumer):
         print("disconnected", event)
 
     async def start_training(self):
-        start_time = time.time()
-        duration = await self.train_all_models()
+        await self.train_all_models()
 
     async def send_status(self, status, start_time, total_model, model_count):
         await self.send({
@@ -130,4 +129,76 @@ class TrainChatConsumer(AsyncConsumer):
         await self.send_status(status, self.start_time, total_model, model_count)
 
 
+class TaskChatConsumer(AsyncConsumer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.task = None
+        self.impute_start_time = None
+        self.predict_start_time = None
 
+    # WebSocket连接成功
+    async def websocket_connect(self, event):
+        print("connected", event)
+        await self.send({
+            "type": "websocket.accept"    # 发送一个websocket.accept类型的消息以接受连接
+        })
+
+    # 当前端发送消息到服务器时
+    async def websocket_receive(self, event):
+        print("received", event)
+        text_data = json.loads(event['text'])
+        message = text_data['type']
+
+        if message == "task.start":
+            if self.task:
+                self.task.cancel()
+            self.task = asyncio.ensure_future(self.start_task())
+
+        elif message == "task.stop":
+            if self.task:
+                self.task.cancel()
+                self.task = None
+
+    # WebSocket连接断开
+    async def websocket_disconnect(self, event):
+        print("disconnected", event)
+
+    async def start_task(self):
+        self.impute_start_time = time.time()
+        await self.impute()
+        self.predict_start_time = time.time()
+        await self.predict()
+
+    async def send_status(self, impute_status, impute_start_time,predict_status, predict_start_time):
+        await self.send({
+            "type": "websocket.send",
+            "text": json.dumps({
+                "impute_status": impute_status,
+                "impute_start_time": impute_start_time,
+                "predict_status": predict_status,
+                "predict_start_time": predict_start_time,
+            })
+        })
+
+    async def impute(self):
+        self.impute_start_time = time.time()
+        self.impute_status = "progressing"
+        self.predict_status = ("Not Started")
+        await self.send_status(self.impute_status, self.impute_start_time,self.predict_status, self.predict_start_time)
+        print("开始执行补全")
+        await asyncio.sleep(10)
+        self.impute_status = "finished"
+        await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time)
+        print("impute")
+
+
+    async def predict(self):
+        self.predict_time = time.time()
+        self.predict_status = "progressing"
+        await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time)
+
+        print("开始执行预测")
+        await asyncio.sleep(10)
+        self.predict_status = "finished"
+        await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time)
+        print("predict")

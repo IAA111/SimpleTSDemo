@@ -105,10 +105,6 @@ function StartTrain(){
 
         start_time = new Date(data.start_time * 1000);
         data.start_time = start_time.toLocaleString();
-        console.log(`status: ${data.status}`);
-        console.log(`start_time: ${data.start_time}`);
-        console.log(`total_model: ${data.total_model}`);
-        console.log(`model_count: ${data.model_count}`)
 
         document.getElementById("status").textContent = data.status;
         document.getElementById("ModelCount").textContent = data.model_count + "/" + data.total_model;
