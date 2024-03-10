@@ -75,7 +75,7 @@ class TrainChatConsumer(AsyncConsumer):
         model_count = 0
         total_model = len(model_choice)
 
-        await self.send_status("Not started", self.start_time, total_model, model_count)
+        await self.send_status("Progressing", self.start_time, total_model, model_count)
 
 
         '''     
@@ -102,13 +102,13 @@ class TrainChatConsumer(AsyncConsumer):
         '''
 
         print("开始执行")
-        await asyncio.sleep(3)
+        await asyncio.sleep(10)
 
         training_end_time = time.time()
         training_duration = training_end_time - self.start_time
         print(training_duration)
 
-        status = "finished" if model_count == total_model else "in progress"
+        status = "finished"
         await self.send_status(status, self.start_time, total_model, model_count)
 
 

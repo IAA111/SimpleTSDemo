@@ -79,9 +79,12 @@ function binBtnTrainSetSave() {
         })}
 
 function StartTrain(){
+    let intervalId;
+    let start_time;
     let socket = new WebSocket("ws://localhost:8000/ws/train/")
 
     socket.onopen = function (e){
+         console.log("Connection open");
          document.getElementById('StartTrainToggle').checked && socket.send(JSON.stringify({"type": "training.start"}));
     };
 
@@ -90,7 +93,61 @@ function StartTrain(){
         socket.send(JSON.stringify({"type": "training.start"}));
       } else {
         socket.send(JSON.stringify({"type": "training.stop"}));
+        intervalId && clearInterval(intervalId);
+        start_time = undefined;
       }
     });
+
+    socket.onmessage = function(event){
+        console.log(`return message:${event.data}`);
+        let data = JSON.parse(event.data)
+
+        start_time = new Date(data.start_time * 1000);
+        data.start_time = start_time.toLocaleString();
+        console.log(`status: ${data.status}`);
+        console.log(`start_time: ${data.start_time}`);
+        console.log(`total_model: ${data.total_model}`);
+        console.log(`model_count: ${data.model_count}`)
+
+        document.getElementById("status").textContent = data.status;
+        document.getElementById("ModelCount").textContent = data.model_count + "/" + data.total_model;
+
+        function updateTrainedTime() {
+            if (start_time === undefined) {
+                return;
+            }
+            let current_time = Date.now() / 1000;
+            let trained_time = parseInt(current_time - start_time / 1000);
+            let hours = parseInt(trained_time / 3600);
+            let minutes = parseInt((trained_time % 3600) / 60);
+            let seconds = (trained_time % 3600) % 60;
+
+            let formatted_time = [hours, minutes, seconds].join(':');
+            console.log(formatted_time)
+            document.getElementById("trainedTime").textContent = formatted_time;
+        }
+
+        intervalId = setInterval(updateTrainedTime, 1000);
+
+        if (data.status === "finished") {
+            clearInterval(intervalId);
+            start_time = undefined;
+            return;
+        }
+    };
+
+    socket.onclose = function(event) {
+        if (event.wasClean) {
+            console.log(`Connection closed properly：${event.code},${event.reason}`);
+        } else {
+            console.log('disconnect');
+        }
+        intervalId && clearInterval(intervalId);
+        start_time = undefined;
+    };
+
+    socket.onerror = function(error) {
+        console.log(`[error] ${error.message}`);
+    };
 
 }
