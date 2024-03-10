@@ -301,8 +301,36 @@
     <div class="container">
         <div class="text-black">Train Result</div>
     </div>
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">订单列表</div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Model</th>
+                    <th>Time</th>
+                    <th>RMSE</th>
+                    <th>MAE</th>
+                    <th>Accuracy</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <td>{{ obj.id }}</td>
+                        <td>{{ obj.model}}</td>
+                        <td>{{ obj.time|date:"H-i-s" }}</td>
+                        <td>{{ obj.rmes }}</td>
+                        <td>{{ obj.mae }}</td>
+                        <td>{{ obj.accuracy }}</td>
+                    </tr>
+                {% endfor %}
 
-
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <script src="{% static "plugins/jquery-3.7.1.min.js" %}"></script>

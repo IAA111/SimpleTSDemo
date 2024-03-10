@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from submit import models
+from submit.utils.bootstrap import BootStrapModelForm
+from submit.utils.pagination import Pagination
 
 # Create your views here.
 
@@ -13,8 +15,20 @@ model_dict = {
     "DL": ["modelC1", "modelC2", "modelC3"],
     }
 
-def show(request):
-    return render(request,'train.html')
+class TrainResultForm(BootStrapModelForm):
+    class Meta:
+        model = models.TrainResult
+        fields = '__all__'
+
+def train_show(request):
+    queryset = models.TrainResult.objects.all()
+    form = TrainResultForm()
+    context = {
+        'form': form,
+        'queryset': queryset,
+    }
+    return render(request, 'train.html', context)
+
 
 def get_models(request):
     model_class = request.GET.get('model_class', None)

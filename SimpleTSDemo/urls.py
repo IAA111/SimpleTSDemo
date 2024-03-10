@@ -19,7 +19,7 @@ from submit import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("show/", views.show),
+    path("train/", views.train_show),
     path('get_models/', views.get_models),
     path('train/save/', views.train_save),
 ]
