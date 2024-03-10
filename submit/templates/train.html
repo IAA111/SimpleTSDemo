@@ -321,9 +321,9 @@
                         <td>{{ obj.id }}</td>
                         <td>{{ obj.model}}</td>
                         <td>{{ obj.time|date:"H-i-s" }}</td>
-                        <td>{{ obj.rmes }}</td>
-                        <td>{{ obj.mae }}</td>
-                        <td>{{ obj.accuracy }}</td>
+                        <td>{{ obj.rmes|floatformat:2 }}</td>
+                        <td>{{ obj.mae|floatformat:2 }}</td>
+                        <td>{{ obj.accuracy|floatformat:2 }}</td>
                     </tr>
                 {% endfor %}
 

@@ -1,12 +1,12 @@
-from channels.generic.websocket import WebsocketConsumer
-from channels.exceptions import StopConsumer
-from asgiref.sync import async_to_sync
 import asyncio
 import json
 import time
 from asgiref.sync import sync_to_async
 from submit.models import TrainParameters
 from channels.consumer import AsyncConsumer
+from . import models
+from . import views
+
 
 class TrainChatConsumer(AsyncConsumer):
     def __init__(self, *args, **kwargs):
@@ -80,23 +80,41 @@ class TrainChatConsumer(AsyncConsumer):
 
         '''     
 
-            根据训练参数处理训练数据   
+        1.根据训练参数处理训练数据   
 
         '''
 
         '''
-        对每个模型进行训练 
+        2.对每个模型进行训练 
+        
+        models.TrainResult.objects.all().delete()   
 
         for model in model_choice:
 
             if model == '...':
+                start = time.time
                 ...()
-            model_count += 1  
+                
+                time = time.time() - start
+                model_count += 1  
 
-            # 发送当前训练状态
-
-            status = "finished" if model_count == total_model else "in progress"
-            await self.send_status(status,self.start_time, total_model, model_count)
+                # 发送当前训练状态
+                await self.send_status(status,self.start_time, total_model, model_count)
+              
+               
+                # 将该模型训练结果保存到数据表中
+                form = views.TrainResultForm()
+                form.model = model
+                form.time = time
+                form.mae = mae
+                form.accuracy = accuracy
+                
+                if form.is_valid():
+                    form.save()
+                    return redirect("/train/")
+                else:
+                    print(form.errors)
+            
 
 
         '''
