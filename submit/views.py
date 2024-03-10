@@ -9,11 +9,16 @@ from submit.utils.pagination import Pagination
 # Create your views here.
 
 global_train_thread = None
+
 model_dict = {
     "Stat": ["modelA1", "modelA2", "modelA3"],
     "ML": ["modelB1", "modelB2", "modelB3"],
     "DL": ["modelC1", "modelC2", "modelC3"],
     }
+
+InputeModel_list=["modelA1", "modelA2", "modelA3"]
+PredictModel_list=["modelB1", "modelB2", "modelB3"]
+
 
 class TrainResultForm(BootStrapModelForm):
     class Meta:
@@ -28,6 +33,15 @@ def train_show(request):
         'queryset': queryset,
     }
     return render(request, 'train.html', context)
+
+def impute_show(request):
+    return render(request,'impute.html')
+
+def impute_model_select(request):
+    return JsonResponse({
+        'InputeModel_list': InputeModel_list,
+        'PredictModel_list': PredictModel_list
+    })
 
 
 def get_models(request):

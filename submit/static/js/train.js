@@ -34,6 +34,7 @@ function ModelSelect(){
         GetModels($(this).text());
     });
 }
+
 function GetModels(selectedClass){
     $.get("/get_models/?model_class=" + selectedClass, function(data) {
         var selectList = $('#modelChoice');

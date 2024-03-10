@@ -1,0 +1,246 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Impute</title>
+    <script src="{% static 'plugins/echarts.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/impute-css.css' %}">
+</head>
+<style>
+    body {
+        background-color: #F5F5F5;
+    }
+</style>
+<body>
+
+<div class="container-set">
+    <div class="header">Task details</div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- 左侧两个面板 -->
+        <div class="col-md-4 column-custom">
+            <!-- 任务设置  -->
+            <div class="panel" style="height: 285px;">
+                <div class="text-black">Task Setting</div>
+
+                 <!-- 补全任务设置  -->
+                <div class="text-grey">Imputation Task</div>
+                <div class="container">
+
+                    <div class="col-md-2">
+                        <div class="text-grey-small adjust-align">Imputation Model Choose</div>
+                    </div>
+                    <!--补全模型选择模块-->
+                    <div class="col-md-10">
+                        <div class="dropdown">
+                            <button id="ImputeModel" type="button" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                Impute Model
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="ImputeModel">
+                                <!-- 模型选项由JavaScript动态填充.-->
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!--预测任务设置-->
+                <div class="text-grey">Prediction Task</div>
+                <div class="container">
+                    <div class="col-md-2">
+                        <div class="text-grey-small adjust-align">Prediction Model Choose</div>
+                    </div>
+
+                    <!--预测模型选择模块-->
+                    <div class="col-md-10">
+                        <div class="dropdown">
+                            <button id="PredictModel" type="button" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                Predict Model
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="PredictModel">
+                                 <!-- 模型选项由JavaScript动态填充.-->
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="container">
+                    <div class="col-md-2">
+                        <div class="text-grey-small adjust-align">Predict data batch size</div>
+                    </div>
+
+                    <!--Predict data batch size -->
+                    <div class="col-md-10">
+                        <div class="dropdown">
+                            <button id="PredictBatchSize" type="button" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                   10%
+                                <span class="caret"></span>
+                            </button>
+                            <ul id="PredictBatch" class="dropdown-menu" aria-labelledby="dLabel">
+                                <li><a class="dropdown-item" href="#">10%</a></li>
+                                <li><a class="dropdown-item" href="#">20%</a></li>
+                                <li><a class="dropdown-item" href="#">30%</a></li>
+                                <li><a class="dropdown-item" href="#">40%</a></li>
+                                <li><a class="dropdown-item" href="#">50%</a></li>
+                                <li><a class="dropdown-item" href="#">60%</a></li>
+                                <li><a class="dropdown-item" href="#">70%</a></li>
+                                <li><a class="dropdown-item" href="#">80%</a></li>
+                                <li><a class="dropdown-item" href="#">90%</a></li>
+                                <li><a class="dropdown-item" href="#">100%</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!--开始任务模块-->
+                <div class="text-black">Start Task</div>
+                <div class="container">
+                    <div class="col-md-2">
+                        <div class="text-grey-small adjust-align">Click Start Task</div>
+                    </div>
+
+                    <!--滑动框点击开始任务-->
+                    <div class="col-md-10">
+                        <label class="toggle">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+            <!-- 左边下面的面板 -->
+            <div class="panel panel-bottom" style="height: 450px;">
+                <div class="text-black">Task details</div>
+                <div class="text-grey">Imputation Task</div>
+                <div class="container">
+                    <div class="col-md-2">
+                        <div class="text-grey-small adjust-align">Task status</div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="text-blue-small adjust-align">Run complete</div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="col-md-2">
+                        <div class="text-grey-small adjust-align">Executed time</div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="text-blue-small adjust-align">Time</div>
+                    </div>
+                </div>
+                <div class="text-grey">Prediction Task</div>
+                <div class="container">
+                    <div class="col-md-2">
+                        <div class="text-grey-small adjust-align">Task status</div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="text-blue-small adjust-align">In operation</div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="col-md-2">
+                        <div class="text-grey-small adjust-align">Executed time</div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="text-blue-small adjust-align">Time</div>
+                    </div>
+                </div>
+                <div class="text-black">Timeline</div>
+
+
+            </div>
+        </div>
+        <!-- 右边的面板 -->
+        <div class="col-md-8 column-custom">
+            <div class="panel " style="height: 745px;">
+                <div class="text-black">Ongoing task</div>
+                <div class="container">
+                    <div class="col-md-1">
+                        <div class="text-blue-small adjust-align">Stop task</div>
+                    </div>
+                    <div class="col-md-11">
+                    </div>
+                </div>
+                <div class="text-black">Ongoing task</div>
+                <div class="container">
+                    <button type="button" class="btn btn-default btn-xs">Last 24 hours</button>
+                    <button type="button" class="btn btn-default btn-xs">Last 3 days</button>
+                    <button type="button" class="btn btn-default btn-xs">Last 1 week</button>
+                </div>
+
+                <div class="box"></div>
+
+                <div class="text-black">Ongoing task</div>
+                <div class="container">
+                    <button type="button" class="btn btn-default btn-xs">Imputation Data</button>
+                    <button type="button" class="btn btn-default btn-xs">Prediction Data</button>
+                    <button type="button" class="btn btn-default btn-xs">Abnormal data</button>
+                </div>
+                <div class="container" style="max-width: 600px;">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li class="disabled">
+                          <span>
+                          <span aria-hidden="true">&laquo;</span>
+                          </span>
+                        </li>
+                        <li class="active">
+                            <span>1 <span class="sr-only">(current)</span></span>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="{% static "plugins/jquery-3.7.1.min.js" %}"></script>
+<script src="{% static "plugins/bootstrap-3.4.1/js/bootstrap.min.js" %}"></script>
+<script src="{% static 'plugins/echarts.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/impute.js' %}"></script>
+
+</body>
+</html>
