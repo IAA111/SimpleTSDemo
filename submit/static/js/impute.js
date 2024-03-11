@@ -149,7 +149,7 @@ function Task() {
 }
 
 function TaskSetSave() {
-    document.getElementById('taskToggle').addEventListener('change', (event) => {
+    document.getElementById('TaskSaveToggle').addEventListener('change', (event) => {
         if (event.target.checked) {
             const fetchParams = () => ({
                 ImputeModel: $('#ImputeModel').text(),

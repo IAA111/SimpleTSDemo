@@ -23,18 +23,19 @@
     <div class="row">
         <!-- 左侧两个面板 -->
         <div class="col-md-4 column-custom">
-            <!-- 任务设置  -->
+            <!-- 左上任务设置面板  -->
             <div class="panel" style="height: 285px;">
+
                 <div class="text-black">Task Setting</div>
 
                  <!-- 补全任务设置  -->
                 <div class="text-grey">Imputation Task</div>
-                <div class="container">
 
+                 <!--补全模型选择模块-->
+                 <div class="container">
                     <div class="col-md-2">
                         <div class="text-grey-small adjust-align">Imputation Model Choose</div>
                     </div>
-                    <!--补全模型选择模块-->
                     <div class="col-md-10">
                         <div class="dropdown">
                             <button id="ImputeModel" type="button" data-toggle="dropdown" aria-haspopup="true"
@@ -46,7 +47,6 @@
                                 <!-- 模型选项由JavaScript动态填充.-->
                             </ul>
                         </div>
-
                     </div>
                 </div>
 
@@ -73,13 +73,11 @@
                     </div>
                 </div>
 
-
+                <!--预测数据大小设置-->
                 <div class="container">
                     <div class="col-md-2">
                         <div class="text-grey-small adjust-align">Predict data batch size</div>
                     </div>
-
-                    <!--Predict data batch size -->
                     <div class="col-md-10">
                         <div class="dropdown">
                             <button id="PredictBatchSize" type="button" data-toggle="dropdown" aria-haspopup="true"
@@ -100,11 +98,32 @@
                                 <li><a class="dropdown-item" href="#">100%</a></li>
                             </ul>
                         </div>
-
                     </div>
                 </div>
 
-                <!--开始任务模块-->
+                <!--保存任务设置模块-->
+                <div class="text-black">Save Task</div>
+                <div class="container">
+                    <div class="col-md-2">
+                        <div class="text-grey-small adjust-align">Click Save Task</div>
+                    </div>
+
+                    <!--滑动框点击开始任务-->
+                    <div class="col-md-10">
+                        <label class="toggle">
+                            <input id="TaskSaveToggle" type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <!-- 左边下面的面板 -->
+            <div class="panel panel-bottom" style="height: 450px;">
+
+                <!--开始任务滑块模块-->
                 <div class="text-black">Start Task</div>
                 <div class="container">
                     <div class="col-md-2">
@@ -120,9 +139,6 @@
                     </div>
                 </div>
 
-            </div>
-            <!-- 左边下面的面板 -->
-            <div class="panel panel-bottom" style="height: 450px;">
                 <div class="text-black">Task details</div>
                 <div class="text-grey">Imputation Task</div>
                 <div class="container">
@@ -160,9 +176,9 @@
                 </div>
                 <div class="text-black">Timeline</div>
 
-
             </div>
         </div>
+
         <!-- 右边的面板 -->
         <div class="col-md-8 column-custom">
             <div class="panel " style="height: 745px;">
