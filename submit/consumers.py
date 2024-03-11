@@ -200,9 +200,27 @@ class TaskChatConsumer(AsyncConsumer):
         '''
         
              补全过程
-        
+             
+             
+             impute_data.save()   # 对每条补全数据存储到mysql
+             
+             data={
+                     "impute_data": {'index' : 10 , 'value': [f1, f2, f3, ...]},  
+                     "anomaly_detection": {'anomaly': True, 'reason': 'some reason'} or  {'anomaly': False, 'reason': None}                                      
+              }
+             
+             await self.send({
+                "type": "websocket.send",
+                "text": json.dumps({
+                     "impute_data": data, 
+                })
+             })
+             
+                    
+
         '''
 
+        
 
 
         self.impute_status = "finished"

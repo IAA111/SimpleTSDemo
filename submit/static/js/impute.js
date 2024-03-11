@@ -1,3 +1,7 @@
+var myChart = echarts.init(document.querySelector('.box'));
+var maxSeriesLength = 20;
+var data = [];
+
 $(function (){
     // 绑定点击 PredictBatchSize 事件
     PredictBatchSize();
@@ -7,8 +11,8 @@ $(function (){
     Task();
     // 保存任务配置
     TaskSetSave();
-
-
+    // 初始化图表
+    initChart();
 
 })
 
@@ -88,6 +92,11 @@ function Task() {
     socket.onmessage = function(event){
         console.log(`return message:${event.data}`);
         let data = JSON.parse(event.data);
+
+        if(data.hasOwnProperty("impute_data")) {
+             // 更新图表数据
+             updateChart(data.impute_data);
+        }
 
         let impute_start_time = new Date(data.impute_start_time * 1000);
         let predict_start_time = new Date(data.predict_start_time * 1000);
@@ -176,71 +185,30 @@ function TaskSetSave() {
     });
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var myChart = echarts.init(document.querySelector('.box'));
-
-    function randomData() {
-        now = new Date(+now + oneDay);
-        value = value + Math.random() * 21 - 10;
-        return {
-            name: now.toString(),
-            value: [
-                [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'),
-                Math.round(value)
-            ]
-        };
-    }
-
-    let data = [];
-    let now = new Date(1997, 9, 3);
-    let oneDay = 24 * 3600 * 1000;
-    let value = Math.random() * 1000;
-    for (var i = 0; i < 1000; i++) {
-        data.push(randomData());
-    }
+function initChart(){
     option = {
+
         title: {
             text: ''
         },
+
         tooltip: {
             trigger: 'axis',
             formatter: function (params) {
-                params = params[0];
-                var date = new Date(params.name);
+                const date = params[0].name.split("_")[0];
                 return (
-                    date.getDate() +
-                    '/' +
-                    (date.getMonth() + 1) +
-                    '/' +
-                    date.getFullYear() +
+                    date +
                     ' : ' +
-                    params.value[1]
+                    params[0].value[1]
                 );
             },
             axisPointer: {
                 animation: false
             }
         },
+
         xAxis: {
-            type: 'time',
+            type: 'category',
             splitLine: {
                 show: false
             }
@@ -252,26 +220,52 @@ var myChart = echarts.init(document.querySelector('.box'));
                 show: false
             }
         },
-        series: [
-            {
-                name: 'Fake Data',
-                type: 'line',
-                showSymbol: false,
-                data: data
-            }
-        ]
+        series: []
     };
-    setInterval(function () {
-        for (var i = 0; i < 5; i++) {
-            data.shift();
-            data.push(randomData());
-        }
-        myChart.setOption({
-            series: [
-                {
-                    data: data
-                }
-            ]
-        });
-    }, 1000);
     myChart.setOption(option);
+}
+
+
+// 更新图表与异常标记
+function updateChart(new_data) {
+    const isAnomaly = new_data.anomaly_detection.anomaly;  // anomaly标记
+    var seriesCount = new_data.impute_data.value.length;   // 获取系列数量 即 figures 数量
+
+    //  data={
+    //        "impute_data": {'index' : 10 , 'value': [f1, f2, f3, ...]},
+    //         "anomaly_detection": {'anomaly': True, 'reason': 'some reason'} or  {'anomaly': False, 'reason': None}
+    //          }
+
+    while(option.series.length < seriesCount) {
+        option.series.push({ data: [] });
+    }
+
+    new_data.impute_data.value.forEach((value, i) => {
+        var dataPoint = {
+            name: new_data.impute_data.index.toString(),  // 索引
+            value: [
+                new_data.impute_data.index,
+                value
+            ],
+            itemStyle: {
+                color: isAnomaly ? 'red' : 'blue'
+            },
+            label: {
+                show: isAnomaly,
+                formatter: new_data.anomaly_detection.reason // 异常原因
+            }
+
+        };
+
+        // 当前的figure对应的系列series已经到最大存储量，删除最早的数据点
+        if(option.series[i].data.length >= maxSeriesLength) {
+            option.series[i].data.shift();
+        }
+
+        // 添加新的数据点到相应的figure系列
+        option.series[i].data.push(dataPoint);
+    });
+
+    // 更新图表
+    myChart.setOption(option);
+}

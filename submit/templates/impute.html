@@ -108,7 +108,7 @@
                         <div class="text-grey-small adjust-align">Click Save Task</div>
                     </div>
 
-                    <!--滑动框点击开始任务-->
+                    <!--滑动框点击保存任务-->
                     <div class="col-md-10">
                         <label class="toggle">
                             <input id="TaskSaveToggle" type="checkbox">
@@ -139,6 +139,7 @@
                     </div>
                 </div>
 
+                <!--任务详情模块-->
                 <div class="text-black">Task details</div>
                 <div class="text-grey">Imputation Task</div>
                 <div class="container">
@@ -175,18 +176,20 @@
                     </div>
                 </div>
                 <div class="text-black">Timeline</div>
-
             </div>
         </div>
 
+
         <!-- 右边的面板 -->
         <div class="col-md-8 column-custom">
+
             <div class="panel " style="height: 745px;">
-                <div class="text-black">Ongoing task</div>
+                <div class="text-black">Ongoing Task</div>
 
                 <div class="container">
                         <div id="stopTask" class="text-blue-small adjust-align">Stop task</div>
                 </div>
+
 
                 <div class="text-black">Ongoing task</div>
                 <div class="container">
@@ -195,56 +198,29 @@
                     <button type="button" class="btn btn-default btn-xs">Last 1 week</button>
                 </div>
 
+                <!-- 动态折线图 -->
                 <div class="box"></div>
 
-                <div class="text-black">Ongoing task</div>
+                <div class="text-black">Task Result</div>
+
                 <div class="container">
                     <button type="button" class="btn btn-default btn-xs">Imputation Data</button>
                     <button type="button" class="btn btn-default btn-xs">Prediction Data</button>
                     <button type="button" class="btn btn-default btn-xs">Abnormal data</button>
                 </div>
+
                 <div class="container" style="max-width: 600px;">
                     <table class="table">
                         <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
+
                         </tbody>
                     </table>
                 </div>
-                <nav aria-label="...">
+                <div class="clearfix">
                     <ul class="pagination">
-                        <li class="disabled">
-                          <span>
-                          <span aria-hidden="true">&laquo;</span>
-                          </span>
-                        </li>
-                        <li class="active">
-                            <span>1 <span class="sr-only">(current)</span></span>
-                        </li>
+                        {{ page_string }}
                     </ul>
-                </nav>
+                </div>
             </div>
         </div>
     </div>
