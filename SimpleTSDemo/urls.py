@@ -24,5 +24,7 @@ urlpatterns = [
     path('train/save/', views.train_save),
     path('impute/', views.impute_show),
     path('model_select/', views.impute_model_select),
+    path('task/save/', views.task_save),
+
 
 ]

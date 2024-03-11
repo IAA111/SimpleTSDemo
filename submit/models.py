@@ -18,3 +18,8 @@ class TrainResult(models.Model):
     rmes = models.FloatField()
     mae = models.FloatField()
     accuracy = models.FloatField()
+
+class Task(models.Model):
+    impute_model = models.CharField(max_length=10)
+    predict_model = models.CharField(max_length=10)
+    perdict_batch_size = models.FloatField()

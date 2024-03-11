@@ -5,6 +5,8 @@ $(function (){
     ModelSelect();
     // Task
     Task();
+    // 保存任务配置
+    TaskSetSave();
 
 
 
@@ -107,17 +109,21 @@ function Task() {
     }
 
     function updateTaskTime(imputeStartTime, predictStartTime) {
-        let currentTime = new Date();
+    let currentTime = new Date();
 
+    if (document.getElementById("imputeStatus").textContent !== "finished") {
         let imputeTime = parseInt((currentTime - imputeStartTime) / 1000);
-        let predictTime = parseInt((currentTime - predictStartTime) / 1000);
-
         let formattedImputeTime = formatTime(imputeTime);
-        let formattedPredictTime = formatTime(predictTime);
-
         document.getElementById("imputeTaskTime").textContent = formattedImputeTime;
+    }
+
+    if (document.getElementById("predictStatus").textContent !== "Not Started" &&
+        document.getElementById("predictStatus").textContent !== "finished") {
+        let predictTime = parseInt((currentTime - predictStartTime) / 1000);
+        let formattedPredictTime = formatTime(predictTime);
         document.getElementById("predictTaskTime").textContent = formattedPredictTime;
     }
+}
 
 // 将获得的秒数转换为 HH:MM:SS 格式
     function formatTime(seconds) {
@@ -141,6 +147,45 @@ function Task() {
         console.log(`[error] ${error.message}`);
     };
 }
+
+function TaskSetSave() {
+    document.getElementById('taskToggle').addEventListener('change', (event) => {
+        if (event.target.checked) {
+            const fetchParams = () => ({
+                ImputeModel: $('#ImputeModel').text(),
+                PredictModel: $('#PredictModel').text(),
+                PredictBatchSize: $('#PredictBatchSize').text().trim()
+            });
+
+            const params = fetchParams();
+
+            $.ajax({
+                type: "POST",
+                url: "/task/save/",
+                dataType: "JSON",
+                data: JSON.stringify(params),
+                success: function (data) {
+                    console.log(JSON.stringify(params));
+                    console.log("Success: ", data);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

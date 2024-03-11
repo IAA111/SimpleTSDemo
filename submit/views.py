@@ -64,7 +64,7 @@ def train_save(request):
         train_batch_size = float(train_batch_size_str.strip('%')) / 100
 
         missing_rate_str = data.get('MissingRate')
-        missing_rate = float(train_batch_size_str.strip('%')) / 100
+        missing_rate = float(missing_rate_str.strip('%')) / 100
 
         auto_parameters_map = {
             "option1": True,
@@ -85,6 +85,27 @@ def train_save(request):
             missing_mechanism=missing_mechanism_str,
             missing_rate=missing_rate,
             auto_parameters=auto_parameters_bool,
+        )
+        obj.save()
+        print(data)
+        return JsonResponse({"message": "Parameters were saved successfully."})
+    else:
+        return JsonResponse({"error": "error."})
+
+
+@csrf_exempt
+def task_save(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        print(data)
+
+        PredictBatchSizestr = data.get('PredictBatchSize')
+        PredictBatchSize = float(PredictBatchSizestr.strip('%')) / 100
+
+        obj = models.Task(
+            impute_model=data.get('ImputeModel'),
+            predict_model=data.get('PredictModel'),
+            perdict_batch_size=PredictBatchSize,
         )
         obj.save()
         print(data)

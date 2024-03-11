@@ -3,6 +3,7 @@ import json
 import time
 from asgiref.sync import sync_to_async
 from submit.models import TrainParameters
+from submit.models import Task
 from channels.consumer import AsyncConsumer
 from . import models
 from . import views
@@ -181,23 +182,57 @@ class TaskChatConsumer(AsyncConsumer):
         })
 
     async def impute(self):
+        # 补全模型选择
+        task = await sync_to_async(Task.objects.last, thread_sensitive=True)()
+        impute_model = task.impute_model   # 获取到的补全模型名
+        print(impute_model)
+
+        # 传递状态到前端
         self.impute_start_time = time.time()
         self.impute_status = "progressing"
         self.predict_status = ("Not Started")
         await self.send_status(self.impute_status, self.impute_start_time,self.predict_status, self.predict_start_time)
+
+
+        # 执行补全
         print("开始执行补全")
         await asyncio.sleep(10)
+        '''
+        
+             补全过程
+        
+        '''
+
+
+
         self.impute_status = "finished"
         await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time)
         print("impute")
 
 
     async def predict(self):
+        # 预测参数
+        task = await sync_to_async(Task.objects.last, thread_sensitive=True)()
+        predict_model = task.predict_model                     # 获取到的预测模型名
+        perdict_batch_size = task.perdict_batch_size
+        print(predict_model, perdict_batch_size)
+
+
         self.predict_time = time.time()
         self.predict_status = "progressing"
         await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time)
 
         print("开始执行预测")
+
+        '''  
+          
+             预测过程
+        
+             
+        '''
+
+
+
         await asyncio.sleep(10)
         self.predict_status = "finished"
         await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time)
