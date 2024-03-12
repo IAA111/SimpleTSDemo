@@ -1,13 +1,13 @@
 $(function (){
     var selectedClass = 'myClass';
-    // 绑定点击模型分类选择按钮绑定事件
-    ModelSelect();
-    // 获取模型列表
-    GetModels(selectedClass);
+    // 预测模型下拉内容
+    PredictModelSelect();
+    // 补全模型下拉内容
+    ImputeModelSelect();
     // 绑定点击 BtnTrainBatchSize 事件
     TrainBatchSize();
-    // 绑定点击 MissingRate 事件
-    MissingRate();
+    // 绑定点击 BtnPredictBatch 事件
+    PredictBatch();
     // 绑定点击 BtnTrainSetSave 按钮事件
     binBtnTrainSetSave();
     // 绑定点击 StartTrainToggle 事件
@@ -21,30 +21,51 @@ function TrainBatchSize(){
     });
 }
 
-function MissingRate(){
-    $('#MissingRate a').click(function(){
-        $('#BtnMissingRate').html($(this).text() + ' <span class="caret"></span>');
+function PredictBatch(){
+    $('#PredictBatch a').click(function(){
+        $('#BtnPredictBatch').html($(this).text() + ' <span class="caret"></span>');
     });
 }
 
-function ModelSelect(){
-    $('#modelClass a').click(function(){
-        var caret = '<span class="caret"></span>';
-        $('#BtnModelClassification').html($(this).text() + ' ' + caret);
-        GetModels($(this).text());
+function PredictModelSelect(){
+    var data = {
+        models: ["Model 1", "Model 2", "Model 3", "Model 4"]
+    };
+
+    var selectList = $('#TrainPredictModel');
+
+    $.each(data.models, function(i, model) {
+        selectList.append('<li><label><input type="checkbox" value="' + model + '">' + model + '</label></li>');
+    });
+
+    $('.dropdown-menu').on('click', function(e) {
+        if($(e.target).is('input[type="checkbox"]')) {
+            e.stopImmediatePropagation();
+        }
     });
 }
 
-function GetModels(selectedClass){
-    $.get("/get_models/?model_class=" + selectedClass, function(data) {
-        var selectList = $('#modelChoice');
-        selectList.empty(); // 清空modelName下拉菜单
+function ImputeModelSelect(){
 
-        $.each(data.models, function(i, model) {
-            selectList.append('<li><label><input type="checkbox" value="' + model + '">' + model + '</label></li>');
-        });
+    $(document).ready(function() {
+    var data = {
+        models: ["Model 1", "Model 2", "Model 3", "Model 4"]
+    };
+
+    var selectList = $('#TrainImputeModel');
+
+    // 通过遍历每个模型，将其添加到下拉菜单中
+    $.each(data.models, function(i, model) {
+        selectList.append('<li><a href="javascript:;" value="' + model + '">' + model + '</a></li>');
     });
+
+    // 设置点击事件，让被选中的模型显示在按钮上
+    $('#TrainImputeModel li').on('click', function() {
+        $('#BtnTrainImputeModel').text($(this).text()).append('<span class="caret"></span>');
+    });
+});
 }
+
 
 function binBtnTrainSetSave() {
     $('#BtnTrainSetSave').click(function () {
