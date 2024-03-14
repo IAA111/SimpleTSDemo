@@ -60,7 +60,6 @@ class TrainChatConsumer(AsyncConsumer):
         self.model_count = 0
 
         await self.impute()
-
         await self.train_all_models()
 
     async def send_status(self, impute_status, impute_start_time,predict_status, predict_start_time,total_model, model_count):
@@ -77,7 +76,6 @@ class TrainChatConsumer(AsyncConsumer):
         })
 
     async def impute(self):
-
         self.impute_start_time = time.time()
         self.impute_status = "progressing"
         self.predict_status = "Not Started"
@@ -88,12 +86,9 @@ class TrainChatConsumer(AsyncConsumer):
         '''
              补全过程
         '''
-
         self.impute_status = "finished"
         await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time,len(self.predict_model_choice), self.model_count)
         print("impute complete")
-
-
 
     async def train_all_models(self):
         self.predict_start_time = time.time()
@@ -114,9 +109,10 @@ class TrainChatConsumer(AsyncConsumer):
                 model_count += 1  
 
                 # 发送当前训练状态
-                await self.send_status(status,self.start_time, total_model, model_count)
+                await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time,
+                               len(self.predict_model_choice), self.model_count)
               
-               
+              
                 # 将该模型训练结果保存到数据表中
                 form = views.TrainResultForm()
                 form.model = model
@@ -143,17 +139,15 @@ class TaskChatConsumer(AsyncConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.task = None
-        self.impute_start_time = None
-        self.predict_start_time = None
+        self.start_time = None
+        self.status = None
 
-    # WebSocket连接成功
     async def websocket_connect(self, event):
         print("connected", event)
         await self.send({
-            "type": "websocket.accept"    # 发送一个websocket.accept类型的消息以接受连接
+            "type": "websocket.accept"
         })
 
-    # 当前端发送消息到服务器时
     async def websocket_receive(self, event):
         print("received", event)
         text_data = json.loads(event['text'])
@@ -169,85 +163,31 @@ class TaskChatConsumer(AsyncConsumer):
                 self.task.cancel()
                 self.task = None
 
-    # WebSocket连接断开
     async def websocket_disconnect(self, event):
         print("disconnected", event)
 
     async def start_task(self):
-        self.impute_start_time = time.time()
-        await self.impute()
-        self.predict_start_time = time.time()
         await self.predict()
 
-    async def send_status(self, impute_status, impute_start_time,predict_status, predict_start_time):
+    async def send_status(self, status, start_time):
         await self.send({
             "type": "websocket.send",
             "text": json.dumps({
-                "impute_status": impute_status,
-                "impute_start_time": impute_start_time,
-                "predict_status": predict_status,
-                "predict_start_time": predict_start_time,
+                "status": status,
+                "start_time": start_time,
             })
         })
-
-    async def impute(self):
-        # 补全模型选择
-        task = await sync_to_async(Task.objects.last, thread_sensitive=True)()
-        impute_model = task.impute_model   # 获取到的补全模型名
-        print(impute_model)
-
-        # 传递状态到前端
-        self.impute_start_time = time.time()
-        self.impute_status = "progressing"
-        self.predict_status = ("Not Started")
-        await self.send_status(self.impute_status, self.impute_start_time,self.predict_status, self.predict_start_time)
-
-
-        # 执行补全
-        print("开始执行补全")
-        await asyncio.sleep(10)
-        '''
-        
-             补全过程
-             
-             
-             impute_data.save()   # 对每条补全数据存储到mysql
-             
-             data={
-                     "impute_data": {'index' : 10 , 'value': [f1, f2, f3, ...]},  
-                     "anomaly_detection": {'anomaly': True, 'reason': 'some reason'} or  {'anomaly': False, 'reason': None}                                      
-              }
-             
-             await self.send({
-                "type": "websocket.send",
-                "text": json.dumps({
-                     "impute_data": data, 
-                })
-             })
-             
-                    
-
-        '''
-
-        
-
-
-        self.impute_status = "finished"
-        await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time)
-        print("impute")
-
 
     async def predict(self):
         # 预测参数
         task = await sync_to_async(Task.objects.last, thread_sensitive=True)()
         predict_model = task.predict_model                     # 获取到的预测模型名
-        perdict_batch_size = task.perdict_batch_size
-        print(predict_model, perdict_batch_size)
+        predict_batch_size = task.perdict_batch_size
+        print(predict_model, predict_batch_size)
 
-
-        self.predict_time = time.time()
-        self.predict_status = "progressing"
-        await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time)
+        self.start_time = time.time()
+        self.status = "progressing"
+        await self.send_status(self.status, self.start_time)
 
         print("开始执行预测")
 
@@ -255,12 +195,9 @@ class TaskChatConsumer(AsyncConsumer):
           
              预测过程
         
-             
         '''
-
-
 
         await asyncio.sleep(10)
         self.predict_status = "finished"
-        await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time)
+        await self.send_status(self.status, self.start_time)
         print("predict")

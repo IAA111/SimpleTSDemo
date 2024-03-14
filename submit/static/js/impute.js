@@ -52,12 +52,8 @@ function Task() {
         socket.send(JSON.stringify({"type": "task.start"}));
       } else {
         socket.send(JSON.stringify({"type": "task.stop"}));
+        clearInterval(intervalId);
       }
-    });
-
-    document.getElementById('stopTask').addEventListener("click", function() {
-        socket.send(JSON.stringify({"type": "task.stop"}));
-        document.getElementById('taskToggle').checked = false;
     });
 
     socket.onmessage = function(event){
@@ -69,40 +65,30 @@ function Task() {
              updateChart(data.impute_data);
         }
 
-        let impute_start_time = new Date(data.impute_start_time * 1000);
-        let predict_start_time = new Date(data.predict_start_time * 1000);
-
-        document.getElementById("imputeStatus").textContent = data.impute_status;
-        document.getElementById("predictStatus").textContent = data.predict_status;
+        let start_time = new Date(data.start_time * 1000);
+        document.getElementById("Status").textContent = data.status;
 
         if (intervalId) {
             clearInterval(intervalId);
         }
         intervalId = setInterval(() => {
-            updateTaskTime(impute_start_time, predict_start_time);
+            updateTaskTime(start_time);
         }, 1000);
 
-        if (data.predict_status === "finished") {
+        if (data.status === "finished") {
             clearInterval(intervalId);
         }
 
     }
 
-    function updateTaskTime(imputeStartTime, predictStartTime) {
+    function updateTaskTime(StartTime) {
     let currentTime = new Date();
-
-    if (document.getElementById("imputeStatus").textContent !== "finished") {
-        let imputeTime = parseInt((currentTime - imputeStartTime) / 1000);
-        let formattedImputeTime = formatTime(imputeTime);
-        document.getElementById("imputeTaskTime").textContent = formattedImputeTime;
+    if (document.getElementById("Status").textContent !== "finished") {
+        let Time = parseInt((currentTime - StartTime) / 1000);
+        let formattedImputeTime = formatTime(Time);
+        document.getElementById("TaskTime").textContent = formattedImputeTime;
     }
 
-    if (document.getElementById("predictStatus").textContent !== "Not Started" &&
-        document.getElementById("predictStatus").textContent !== "finished") {
-        let predictTime = parseInt((currentTime - predictStartTime) / 1000);
-        let formattedPredictTime = formatTime(predictTime);
-        document.getElementById("predictTaskTime").textContent = formattedPredictTime;
-    }
 }
 
 // 将获得的秒数转换为 HH:MM:SS 格式
@@ -114,13 +100,13 @@ function Task() {
         return `${hours}:${minutes}:${remainingSeconds}`;
     }
 
-
     socket.onclose = function(event) {
         if (event.wasClean) {
             console.log(`Connection closed properly：${event.code},${event.reason}`);
         } else {
             console.log('disconnect');
         }
+        clearInterval(intervalId);
     };
 
     socket.onerror = function(error) {

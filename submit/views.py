@@ -68,7 +68,7 @@ def task_save(request):
 
         obj = models.Task(
             predict_model=data.get('PredictModel'),
-            perdict_batch_size=PredictBatchSize,
+            predict_batch_size=PredictBatchSize,
         )
         obj.save()
         print(data)
