@@ -13,7 +13,14 @@ class TrainChatConsumer(AsyncConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.training_task = None        # 初始化训练任务为空
-        self.start_time = None         # 训练开始时间
+        self.impute_start_time = None
+        self.predict_start_time = None
+        self.total_model = None
+        self.model_count = None
+        self.impute_model = None
+        self.predict_model_choice = None
+        self.train_batch_size = None
+        self.predict_data_Batch_size = None
 
     # WebSocket连接成功
     async def websocket_connect(self, event):
@@ -44,52 +51,60 @@ class TrainChatConsumer(AsyncConsumer):
         print("disconnected", event)
 
     async def start_training(self):
+        # 获取训练参数
+        model_parameters = await sync_to_async(TrainParameters.objects.last, thread_sensitive=True)()
+        self.impute_model = model_parameters.impute_model                              # 补全模型
+        self.predict_model_choice = json.loads(model_parameters.predict_model_choice)  # 预测模型列表
+        self.train_batch_size = model_parameters.train_batch_size
+        self.predict_data_Batch_size = model_parameters.predict_data_Batch_size
+        self.model_count = 0
+
+        await self.impute()
+
         await self.train_all_models()
 
-    async def send_status(self, status, start_time, total_model, model_count):
+    async def send_status(self, impute_status, impute_start_time,predict_status, predict_start_time,total_model, model_count):
         await self.send({
             "type": "websocket.send",
             "text": json.dumps({
-                "status": status,
-                "start_time": start_time,
+                "impute_status": impute_status,
+                "impute_start_time": impute_start_time,
+                "predict_status": predict_status,
+                "predict_start_time": predict_start_time,
                 "total_model": total_model,
                 "model_count":model_count,
             })
         })
 
+    async def impute(self):
+
+        self.impute_start_time = time.time()
+        self.impute_status = "progressing"
+        self.predict_status = "Not Started"
+        await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time,len(self.predict_model_choice), self.model_count)
+
+        # 执行补全
+        await asyncio.sleep(10)
+        '''
+             补全过程
+        '''
+
+        self.impute_status = "finished"
+        await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time,len(self.predict_model_choice), self.model_count)
+        print("impute complete")
+
+
+
     async def train_all_models(self):
-
-        # 获取训练参数
-        # DL  ["modelC2"] 0.1 MCAR 0.1 True
-        # <class 'str'> <class 'str'> <class 'float'> <class 'str'> <class 'float'> <class 'bool'>
-        model_parameters = await sync_to_async(TrainParameters.objects.last, thread_sensitive=True)()
-
-
-        model_classification = model_parameters.model_classification  # 模型分类
-        model_choice = json.loads(model_parameters.model_choice)  # 模型列表
-        train_batch_size = model_parameters.train_batch_size
-        missing_mechanism = model_parameters.missing_mechanism
-        missing_rate = model_parameters.missing_rate
-        auto_parameters = model_parameters.auto_parameters
-
-        model_count = 0
-        total_model = len(model_choice)
-
-        await self.send_status("Progressing", self.start_time, total_model, model_count)
+        self.predict_start_time = time.time()
+        self.predict_status = "Progressing"
+        await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time,
+                               len(self.predict_model_choice), self.model_count)
 
 
-        '''     
-
-        1.根据训练参数处理训练数据   
-
-        '''
-
-        '''
-        2.对每个模型进行训练 
-        
-        models.TrainResult.objects.all().delete()   
-
-        for model in model_choice:
+        ''' 对每个预测模型进行训练 
+    
+        for model in predict_model_choice:
 
             if model == '...':
                 start = time.time
@@ -106,8 +121,9 @@ class TrainChatConsumer(AsyncConsumer):
                 form = views.TrainResultForm()
                 form.model = model
                 form.time = time
-                form.mae = mae
                 form.accuracy = accuracy
+                form.precision = precision
+                form.SMAPE = SMAPE
                 
                 if form.is_valid():
                     form.save()
@@ -115,19 +131,12 @@ class TrainChatConsumer(AsyncConsumer):
                 else:
                     print(form.errors)
             
-
-
         '''
-
-        print("开始执行")
         await asyncio.sleep(10)
 
-        training_end_time = time.time()
-        training_duration = training_end_time - self.start_time
-        print(training_duration)
-
-        status = "finished"
-        await self.send_status(status, self.start_time, total_model, model_count)
+        self.predict_status = "finished"
+        await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time,
+                               len(self.predict_model_choice), self.model_count)
 
 
 class TaskChatConsumer(AsyncConsumer):

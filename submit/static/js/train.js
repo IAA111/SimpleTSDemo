@@ -70,14 +70,12 @@ function ImputeModelSelect(){
 function binBtnTrainSetSave() {
     $('#BtnTrainSetSave').click(function () {
         const fetchParams = () => ({
-            ModelClassification: $("#BtnModelClassification").text(),
-            ModelChoice: $('#modelChoice input[type="checkbox"]:checked').map(function () {
+            impute_model: $("#BtnTrainImputeModel").text(),
+            predict_model_choice: $('#TrainPredictModel input[type="checkbox"]:checked').map(function () {
                 return this.value;
             }).get(),
-            TrainBatchSize: $("#BtnTrainBatchSize").text().trim(),
-            MissingMechanism: $("input[name='Mechanism']:checked").val(),
-            MissingRate: $("#BtnMissingRate").text().trim(),
-            AutoParameters: $("input[name='automatic']:checked").val()
+            train_batch_size: $("#BtnTrainBatchSize").text().trim(),
+            predict_data_Batch_size: $("#BtnPredictBatch").text().trim(),
         });
 
         const params = fetchParams();
@@ -102,12 +100,10 @@ function binBtnTrainSetSave() {
 
 function StartTrain(){
     let intervalId;
-    let start_time;
     let socket = new WebSocket("ws://localhost:8000/ws/train/")
 
     socket.onopen = function (e){
          console.log("Connection open");
-         document.getElementById('StartTrainToggle').checked && socket.send(JSON.stringify({"type": "training.start"}));
     };
 
     document.getElementById('StartTrainToggle').addEventListener('change', (event) => {
@@ -127,32 +123,49 @@ function StartTrain(){
         start_time = new Date(data.start_time * 1000);
         data.start_time = start_time.toLocaleString();
 
-        document.getElementById("status").textContent = data.status;
+        let impute_start_time = new Date(data.impute_start_time * 1000);
+        let predict_start_time = new Date(data.predict_start_time * 1000);
+
+        document.getElementById("imputeStatus").textContent = data.impute_status;
+        document.getElementById("predictStatus").textContent = data.predict_status;
         document.getElementById("ModelCount").textContent = data.model_count + "/" + data.total_model;
 
-        function updateTrainedTime() {
-            if (start_time === undefined) {
-                return;
-            }
-            let current_time = Date.now() / 1000;
-            let trained_time = parseInt(current_time - start_time / 1000);
-            let hours = parseInt(trained_time / 3600);
-            let minutes = parseInt((trained_time % 3600) / 60);
-            let seconds = (trained_time % 3600) % 60;
-
-            let formatted_time = [hours, minutes, seconds].join(':');
-            console.log(formatted_time)
-            document.getElementById("trainedTime").textContent = formatted_time;
-        }
-
-        intervalId = setInterval(updateTrainedTime, 1000);
-
-        if (data.status === "finished") {
+         if (intervalId) {
             clearInterval(intervalId);
-            start_time = undefined;
-            return;
         }
-    };
+        intervalId = setInterval(() => {
+            updateTaskTime(impute_start_time, predict_start_time);
+        }, 1000);
+
+        if (data.predict_status === "finished") {
+            clearInterval(intervalId);
+        }
+    }
+          function updateTaskTime(imputeStartTime, predictStartTime) {
+    let currentTime = new Date();
+
+    if (document.getElementById("imputeStatus").textContent !== "finished") {
+        let imputeTime = parseInt((currentTime - imputeStartTime) / 1000);
+        let formattedImputeTime = formatTime(imputeTime);
+        document.getElementById("imputeTaskTime").textContent = formattedImputeTime;
+    }
+
+    if (document.getElementById("predictStatus").textContent !== "Not Started" &&
+        document.getElementById("predictStatus").textContent !== "finished") {
+        let predictTime = parseInt((currentTime - predictStartTime) / 1000);
+        let formattedPredictTime = formatTime(predictTime);
+        document.getElementById("predictTaskTime").textContent = formattedPredictTime;
+    }
+}
+
+// 将获得的秒数转换为 HH:MM:SS 格式
+    function formatTime(seconds) {
+        let hours = parseInt(seconds / 3600);
+        let minutes = parseInt((seconds % 3600) / 60);
+        let remainingSeconds = seconds % 60;
+
+        return `${hours}:${minutes}:${remainingSeconds}`;
+    }
 
     socket.onclose = function(event) {
         if (event.wasClean) {

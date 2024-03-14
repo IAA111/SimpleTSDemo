@@ -187,24 +187,47 @@
     <div class="container">
         <div class="text-black">Train Details</div>
 
-        <div class="container">
-            <div class="col-md-3">
-                <div class="text-grey">Training state</div>
-            </div>
-            <div class="col-md-9">
-                <div id="status" class="text-small-black">Not started</div>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="col-md-3">
-                <div class="text-grey">Executed time</div>
-            </div>
-            <div class="col-md-9">
-                <div id="trainedTime" class="text-small-black">time</div>
-            </div>
-        </div>
-
+        <!--补全任务-->
+        <div class="text-grey">Imputation Task</div>
+                <!--补全状态-->
+                <div class="container">
+                    <div class="col-md-2">
+                        <div  class="text-grey-small adjust-align">Task status</div>
+                    </div>
+                    <div class="col-md-10">
+                        <div id="imputeStatus" class="text-blue-small adjust-align">Not started</div>
+                    </div>
+                </div>
+                <!--补全时间-->
+                <div class="container">
+                    <div class="col-md-2">
+                        <div class="text-grey-small adjust-align">Executed time</div>
+                    </div>
+                    <div class="col-md-10">
+                        <div id="imputeTaskTime" class="text-blue-small adjust-align">00:00:00</div>
+                    </div>
+                </div>
+         <!--预测任务-->
+                <div class="text-grey">Prediction Task</div>
+        <!--预测状态-->
+                <div class="container">
+                    <div class="col-md-2">
+                        <div  class="text-grey-small adjust-align">Task status</div>
+                    </div>
+                    <div class="col-md-10">
+                        <div id="predictStatus" class="text-blue-small adjust-align">Not started</div>
+                    </div>
+                </div>
+        <!--预测时间-->
+                <div class="container">
+                    <div class="col-md-2">
+                        <div class="text-grey-small adjust-align">Executed time</div>
+                    </div>
+                    <div class="col-md-10">
+                        <div id="predictTaskTime" class="text-blue-small adjust-align">00:00:00</div>
+                    </div>
+                </div>
+        <!--预测模型数-->
         <div class="container">
             <div class="col-md-3">
                 <div class="text-grey">Number of trained models</div>
@@ -213,7 +236,6 @@
                 <div id="ModelCount" class="text-small-black">/</div>
             </div>
         </div>
-
     </div>
 
     <!--训练结果-->
@@ -239,9 +261,9 @@
                         <td>{{ obj.id }}</td>
                         <td>{{ obj.model}}</td>
                         <td>{{ obj.time|date:"H-i-s" }}</td>
-                        <td>{{ obj.rmes|floatformat:2 }}</td>
-                        <td>{{ obj.mae|floatformat:2 }}</td>
                         <td>{{ obj.accuracy|floatformat:2 }}</td>
+                        <td>{{ obj.precision|floatformat:2 }}</td>
+                        <td>{{ obj.SMAPE|floatformat:2 }}</td>
                     </tr>
                 {% endfor %}
 

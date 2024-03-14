@@ -28,28 +28,6 @@
 
                 <div class="text-black">Task Setting</div>
 
-                 <!-- 补全任务设置  -->
-                <div class="text-grey">Imputation Task</div>
-
-                 <!--补全模型选择模块-->
-                 <div class="container">
-                    <div class="col-md-2">
-                        <div class="text-grey-small adjust-align">Imputation Model Choose</div>
-                    </div>
-                    <div class="col-md-10">
-                        <div class="dropdown">
-                            <button id="ImputeModel" type="button" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                Impute Model
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="ImputeModel">
-                                <!-- 模型选项由JavaScript动态填充.-->
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
                 <!--预测任务设置-->
                 <div class="text-grey">Prediction Task</div>
                 <div class="container">
@@ -65,7 +43,7 @@
                                 Predict Model
                                 <span class="caret"></span>
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="PredictModel">
+                            <ul id="TrainPredictModel" class="dropdown-menu" aria-labelledby="PredictModel">
                                  <!-- 模型选项由JavaScript动态填充.-->
                             </ul>
                         </div>

@@ -18,12 +18,9 @@ from django.urls import path
 from submit import views
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
     path("train/", views.train_show),
-    path('get_models/', views.get_models),
     path('train/save/', views.train_save),
     path('impute/', views.impute_show),
-    path('model_select/', views.impute_model_select),
     path('task/save/', views.task_save),
 
 

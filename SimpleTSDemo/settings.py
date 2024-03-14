@@ -79,7 +79,7 @@ WSGI_APPLICATION = "SimpleTSDemo.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "SimpleTSDemo",
+        "NAME": "SimpleTS",
         "USER": "root",
         "PASSWORD": "newpassword",
         "HOST": "localhost",

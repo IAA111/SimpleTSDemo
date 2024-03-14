@@ -6,7 +6,7 @@ $(function (){
     // 绑定点击 PredictBatchSize 事件
     PredictBatchSize();
     // 获取补全模型列表
-    ModelSelect();
+    PredictModelSelect();
     // Task
     Task();
     // 保存任务配置
@@ -22,54 +22,25 @@ function PredictBatchSize(){
     });
 }
 
-function ModelSelect() {
-    $.ajax({
-        url: '/model_select/',
-        type: 'GET',
-        dataType: 'json',
-        success: function (data) {
-            console.log(data);
-            var ulElement = $('#ImputeModel').next('.dropdown-menu');
+function PredictModelSelect() {
+    var data = {
+        models: ["Model 1", "Model 2", "Model 3", "Model 4"]
+    };
 
-            $.each(data.InputeModel_list, function(i,model){
-                var li = $('<li></li>');
-                var label = $('<label></label>');
-                var radio = $('<input type="radio" name="impute_model" value="' + model + '">');
-                label.append(radio);
-                label.append(model);
-                li.append(label);
-                ulElement.append(li);
+    var selectList = $('#TrainPredictModel');
 
-                li.on('click', function(){
-                    $('#ImputeModel').text(model);
-                    $('#ImputeModel').dropdown('toggle');
-                });
-            });
-
-            ulElement = $('#PredictModel').next('.dropdown-menu');
-
-            $.each(data.PredictModel_list, function(i,model){
-                var li = $('<li></li>');
-                var label = $('<label></label>');
-                var radio = $('<input type="radio" name="predict_model" value="' + model + '">');
-                label.append(radio);
-                label.append(model);
-                li.append(label);
-                ulElement.append(li);
-
-                li.on('click', function(){
-                    $('#PredictModel').text(model);
-                    $('#PredictModel').dropdown('toggle');
-                });
-            });
-        },
+    $.each(data.models, function(i, model) {
+        var listItem = $('<li><label><input type="radio" name="models" value="' + model + '">' + model + '</label></li>');
+        listItem.on('click', function() {
+            var selectedModel = $(this).text();
+            $('#PredictModel').text(selectedModel);
+        });
+        selectList.append(listItem);
     });
 }
 
-
 function Task() {
     let intervalId;
-    let start_time;
     let socket = new WebSocket("ws://localhost:8000/ws/task/")
 
     socket.onopen = function (e){
@@ -161,7 +132,6 @@ function TaskSetSave() {
     document.getElementById('TaskSaveToggle').addEventListener('change', (event) => {
         if (event.target.checked) {
             const fetchParams = () => ({
-                ImputeModel: $('#ImputeModel').text(),
                 PredictModel: $('#PredictModel').text(),
                 PredictBatchSize: $('#PredictBatchSize').text().trim()
             });
