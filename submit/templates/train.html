@@ -6,7 +6,7 @@
     <title>Train</title>
     <style>
         .background{
-             width: 760px;
+             width: 740px;
              border: 2px solid #dddddd;
              height: 1000px;
              margin-left: auto;
@@ -20,21 +20,20 @@
 <body>
 
 <div class="background">
-
 <!--训练参数设置模块-->
 
      <div class="container-set">
         <div class="header">Train Setting</div>
-    </div>
+     </div>
 
     <!--数据选择模块-->
     <div class="container" style="margin-top: 8px;">
-        <div class="text-black">Database selection</div>
+        <div class="text-black">Dataset selection</div>
         <div class="container" style="margin-top: 8px;">
-            <div class="col-md-3">
-                <div class="text-grey">Database selection</div>
+            <div class="col-md-2">
+                <div class="text-grey">Dataset selection</div>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <div>
                     <label for="upload" class="custom-file-upload">choose file</label>
                     <input id="upload" type="file" style="display:none"/>
@@ -49,11 +48,11 @@
 
         <!--补全模型选择-->
         <div class="container" style="margin-top: 8px;">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="text-grey">Impute Model Choose</div>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <div class="dropdown">
                     <button id="BtnTrainImputeModel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Impute Model
@@ -68,11 +67,11 @@
 
         <!--预测模型选择-->
         <div class="container">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="text-grey">Predict Model Choose</div>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <div class="dropdown">
                     <button id="BtnTrainPredictModel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Predict Model
@@ -94,12 +93,11 @@
 
         <!--Train Batch Size -->
         <div class="container" style="margin-top: 8px;">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="text-grey">Train Batch Size Settings</div>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <div style="display: flex; align-items: center;">
-                    <div class="text-small-black">The amount of training data constitutes the original data's</div>
                     <div class="dropdown">
                         <button id="BtnTrainBatchSize" type="button" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false" style="margin-left: 4px;">
@@ -125,12 +123,11 @@
 
         <!-- Predict Data Batch Size -->
         <div class="container">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="text-grey">Predict Data Batch Size</div>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <div style="display: flex; align-items: center;">
-                    <div class="text-small-black">The rate of predict data constitutes the original data's</div>
                     <div class="dropdown">
                         <button id="BtnPredictBatch" type="button" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false" style="margin-left: 4px;">

@@ -22,6 +22,7 @@ urlpatterns = [
     path('train/save/', views.train_save),
     path('impute/', views.impute_show),
     path('task/save/', views.task_save),
+    path('home/', views.home),
 
 
 ]

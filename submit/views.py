@@ -75,3 +75,6 @@ def task_save(request):
         return JsonResponse({"message": "Parameters were saved successfully."})
     else:
         return JsonResponse({"error": "error."})
+
+def home(request):
+    return render(request, 'home.html')
