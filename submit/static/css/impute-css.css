@@ -25,11 +25,11 @@
              border-radius: 4px;
          }
      .panel-bottom {
-         margin-top: 10px;
+         margin-top: 6px;
      }
      .column-custom {
-        padding-right: 5px;
-        padding-left: 5px;
+        padding-right: 1px;
+        padding-left: 1px;
     }
     .text-black{
             height: 28px;
@@ -66,7 +66,7 @@
             display: flex;
             align-items: center;
             font-family:"Times New Roman", Times, serif;
-            font-size: 14px;
+            font-size: 20px;
             color: #4876FF;
          }
 
@@ -77,8 +77,8 @@
     .toggle {
             position: relative;
             display: inline-block;
-            width: 40px;
-            height: 20px;
+            width: 50px;
+            height: 30px;
         }
         .toggle input {
             opacity: 0;
@@ -98,10 +98,10 @@
         .slider:before {
             position: absolute;
             content: "";
-            height: 16px;
-            width: 16px;
+            height: 28px;
+            width: 28px;
             left: 2px;
-            bottom: 2px;
+            bottom: 1px;
             background-color: white;
             transition: .4s;
         }
