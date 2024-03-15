@@ -6,7 +6,7 @@
     <title>SimpleTSDemo</title>
     <style>
         .background {
-            width: 60%;
+            width: 75%;
             border: 2px solid #D0D0D0;
             height: 830px;
             margin-left: auto;
@@ -33,16 +33,16 @@
                 <div id="area1" style="height: 100%;margin: 2px 1px 1px 3px; border: 1px solid #D0D0D0;border-radius: 10px;background-color: white;">
                     <div style="display: flex;border-radius: 10px; flex-direction: column; height: 100%; border-bottom: 1px solid rgba(229, 229, 229, 1); border-right: 1px solid rgba(229, 229, 229, 1);">
                         <div style="display: flex;border-radius: 10px 10px 0 0;align-items: center;background: var(--bg-color); padding: 13px 16px; border-bottom: 1px solid rgba(229, 229, 229, 1);">
-                            <h4 style="margin: 0;font-weight: 600; white-space: nowrap;">Train Setting</h4>
+                            <h4 class="logo-small" style="margin: 0;font-weight: 600; white-space: nowrap;">Train Setting</h4>
                         </div>
                         <!--数据选择模块-->
-                        <div class="container" style="margin-top: 8px;">
+                        <div class="container" style="margin-top: 18px;">
                             <div class="text-black">Dataset selection</div>
-                            <div class="container" style="margin-top: 8px;">
-                                <div class="col-md-2">
+                            <div class="container" style="margin-top: 15px;">
+                                <div class="col-md-4">
                                     <div class="text-grey">Dataset selection</div>
                                 </div>
-                                <div class="col-md-10">
+                                <div class="col-md-8">
                                     <div>
                                         <label for="upload" class="custom-file-upload">choose file</label>
                                         <input id="upload" type="file" style="display:none"/>
@@ -52,19 +52,20 @@
                         </div>
 
                         <!--模型选择模块-->
-                        <div class="container" style="margin-top: 8px;">
+                        <div class="container" style="margin-top: 15px;">
                             <div class="text-black">Model selection</div>
 
                             <!--补全模型选择-->
-                            <div class="container" style="margin-top: 8px;">
-                                <div class="col-md-2">
+                            <div class="container" style="margin-top: 16px;">
+                                <div class="col-md-4">
                                     <div class="text-grey">Impute Model Choose</div>
                                 </div>
 
-                                <div class="col-md-10">
+                                <div class="col-md-8">
                                     <div class="dropdown">
                                         <button id="BtnTrainImputeModel" type="button" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
+                                                aria-haspopup="true" aria-expanded="false"
+                                        style="font-size: 20px;">
                                             Impute Model
                                             <span class="caret"></span>
                                         </button>
@@ -77,15 +78,15 @@
                             </div>
 
                             <!--预测模型选择-->
-                            <div class="container">
-                                <div class="col-md-2">
+                            <div class="container" style="margin-top: 8px;">
+                                <div class="col-md-4">
                                     <div class="text-grey">Predict Model Choose</div>
                                 </div>
 
-                                <div class="col-md-10">
+                                <div class="col-md-8">
                                     <div class="dropdown">
                                         <button id="BtnTrainPredictModel" type="button" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
+                                                aria-haspopup="true" aria-expanded="false" style="font-size: 20px;">
                                             Predict Model
                                             <span class="caret"></span>
                                         </button>
@@ -101,20 +102,20 @@
 
 
                         <!--训练参数设置模块-->
-                        <div class="container" style="margin-top: 5px;">
+                        <div class="container" style="margin-top: 15px;">
                             <div class="text-black">Training configuration</div>
 
                             <!--Train Batch Size -->
-                            <div class="container" style="margin-top: 8px;">
-                                <div class="col-md-2">
+                            <div class="container" style="margin-top: 15px;">
+                                <div class="col-md-4">
                                     <div class="text-grey">Train Batch Size</div>
                                 </div>
-                                <div class="col-md-10">
+                                <div class="col-md-8">
                                     <div style="display: flex; align-items: center;">
                                         <div class="dropdown">
                                             <button id="BtnTrainBatchSize" type="button" data-toggle="dropdown"
                                                     aria-haspopup="true"
-                                                    aria-expanded="false" style="margin-left: 4px;">
+                                                    aria-expanded="false" style="margin-left: 4px;font-size: 20px;">
                                                 10%
                                                 <span class="caret"></span>
                                             </button>
@@ -136,16 +137,16 @@
                             </div>
 
                             <!-- Predict Data Batch Size -->
-                            <div class="container">
-                                <div class="col-md-2">
+                            <div class="container" style="margin-top: 6px;">
+                                <div class="col-md-4">
                                     <div class="text-grey">Predict Data Batch Size</div>
                                 </div>
-                                <div class="col-md-10">
+                                <div class="col-md-8">
                                     <div style="display: flex; align-items: center;">
                                         <div class="dropdown">
                                             <button id="BtnPredictBatch" type="button" data-toggle="dropdown"
                                                     aria-haspopup="true"
-                                                    aria-expanded="false" style="margin-left: 4px;">
+                                                    aria-expanded="false" style="margin-left: 4px;font-size: 20px;">
                                                 10%
                                                 <span class="caret"></span>
                                             </button>
@@ -170,8 +171,8 @@
 
                         <!--保存按钮-->
                         <div class="centered">
-                            <div class="btn-group center-btn" role="group" aria-label="...">
-                                <button id="BtnTrainSetSave" type="button" class="btn btn-default">Save</button>
+                            <div class="btn-group center-btn" role="group" >
+                                <button id="BtnTrainSetSave" type="button" class="btn btn-lg">Save</button>
                             </div>
                         </div>
 
@@ -183,15 +184,15 @@
                 <div id="area2" style="height: 100%;margin: 3px;border: 1px solid #D0D0D0;border-radius: 10px;background-color: white;">
                     <div style="display: flex; flex-direction: column; height: 100%; border-bottom: 1px solid rgba(229, 229, 229, 1); border-right: 1px solid rgba(229, 229, 229, 1);">
                         <div style="display: flex;border-radius: 10px 10px 0 0;background: var(--bg-color); align-items: center; padding: 13px 16px; border-bottom: 1px solid rgba(229, 229, 229, 1);">
-                            <h4 style="margin: 0;font-weight: 600;white-space: nowrap;">Train Processing</h4>
+                            <h4 class="logo-small" style="margin: 0;font-weight: 600;white-space: nowrap;">Train Processing</h4>
                         </div>
                         <!--训练开关-->
-                        <div class="container" style="margin-top: 8px;">
+                        <div class="container" style="margin-top: 12px;">
                             <div class="mr-auto">
                                 <div class="text-black">Start/Stop Train</div>
                             </div>
                             <div>
-                                <label class="toggle"  style="margin-top: 8px; margin-left: 25px;">
+                                <label class="toggle"  style="margin-top: 10px; margin-left: 25px;">
                                     <input type="checkbox" id="StartTrainToggle">
                                     <span class="slider round"></span>
                                 </label>
@@ -199,56 +200,56 @@
                         </div>
 
                         <!--训练详情-->
-                        <div class="container" style="margin-top: 5px;">
+                        <div class="container" style="margin-top: 8px;">
 
                             <div class="text-black">Train Details</div>
 
                             <!--补全任务-->
-                            <div class="text-grey" style="margin-left: 10px;margin-top: 5px;">Imputation Task</div>
+                            <div class="text-grey" style="margin-left: 15px;margin-top: 18px;">Imputation Task</div>
                             <!--补全状态-->
-                            <div class="container">
-                                <div class="col-md-2">
+                            <div class="container" style="margin-top: 8px;">
+                                <div class="col-md-3">
                                     <div class="text-grey-small adjust-align">Task status</div>
                                 </div>
-                                <div class="col-md-10">
+                                <div class="col-md-9">
                                     <div id="imputeStatus" class="text-blue-small adjust-align">Not started</div>
                                 </div>
                             </div>
                             <!--补全时间-->
-                            <div class="container">
-                                <div class="col-md-2">
+                            <div class="container" style="margin-top: 6px;">
+                                <div class="col-md-3">
                                     <div class="text-grey-small adjust-align">Executed time</div>
                                 </div>
-                                <div class="col-md-10">
+                                <div class="col-md-9">
                                     <div id="imputeTaskTime" class="text-blue-small adjust-align">00:00:00</div>
                                 </div>
                             </div>
                             <!--预测任务-->
-                            <div class="text-grey"style="margin-left: 10px; margin-top: 10px;">Prediction Task</div>
+                            <div class="text-grey"style="margin-left: 15px; margin-top: 16px;">Prediction Task</div>
                             <!--预测状态-->
-                            <div class="container">
-                                <div class="col-md-2">
+                            <div class="container" style="margin-top: 6px;">
+                                <div class="col-md-3">
                                     <div class="text-grey-small adjust-align">Task status</div>
                                 </div>
-                                <div class="col-md-10">
+                                <div class="col-md-9">
                                     <div id="predictStatus" class="text-blue-small adjust-align">Not started</div>
                                 </div>
                             </div>
                             <!--预测时间-->
-                            <div class="container">
-                                <div class="col-md-2">
+                            <div class="container" style="margin-top: 6px;">
+                                <div class="col-md-3">
                                     <div class="text-grey-small adjust-align">Executed time</div>
                                 </div>
-                                <div class="col-md-10">
+                                <div class="col-md-9">
                                     <div id="predictTaskTime" class="text-blue-small adjust-align">00:00:00</div>
                                 </div>
                             </div>
                             <!--预测模型数-->
-                            <div class="container">
-                                <div class="col-md-2">
+                            <div class="container" style="margin-top: 6px;">
+                                <div class="col-md-3">
                                     <div class="text-grey-small adjust-align">trained models</div>
                                 </div>
-                                <div class="col-md-10">
+                                <div class="col-md-9">
                                     <div id="ModelCount" class="text-blue-small adjust-align">0/0</div>
                                 </div>
                             </div>
@@ -260,14 +261,14 @@
         </div>
         <div class="bottom-area" style="height: 100%;" >
             <div id="area4">
-                <div id="area3" style="height: 353px;border: 1px solid #D0D0D0;margin:5px 3px 3px 3px;background-color: white;border-radius: 10px">
+                <div id="area3" style="height: 284px;border: 1px solid #D0D0D0;margin:5px 3px 3px 3px;background-color: white;border-radius: 10px">
                     <div style="display: flex; flex-direction: column; height: 100%; border-bottom: 1px solid rgba(229, 229, 229, 1); border-right: 1px solid rgba(229, 229, 229, 1);">
                         <div style="display: flex;border-radius: 10px 10px 0 0;background: var(--bg-color); align-items: center; padding: 13px 16px; border-bottom: 1px solid rgba(229, 229, 229, 1);">
-                            <h4 style="margin: 0; font-weight: 600;white-space: nowrap;">Train Result</h4>
+                            <h4 class="logo-small" style="margin: 0; font-weight: 580;white-space: nowrap;">Train Result</h4>
                         </div>
                         <div class="container" style="width: 100%;">
                             <div class="panel panel-default">
-                                <table class="table">
+                                <table class="table" style="font-size: 25px;">
                                     <thead>
                                     <tr>
                                         <th>ID</th>
