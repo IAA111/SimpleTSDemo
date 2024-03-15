@@ -1,0 +1,175 @@
+:root {
+    --bg-color: #F5F5F5;
+    --icon-color: black;
+    --grey-color: #BEBEBE;
+    --area-radius: 10px;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+}
+
+.top-layout {
+    border: 0;
+    border-radius: 0;
+    height: 60px;
+    background: var(--bg-color);
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 0;
+}
+
+.home-content {
+    font-family: PingFang SC Regular, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    display: flex;
+    height: calc(100vh - 60px);
+    width: 100%;
+    position: fixed;
+    top: 60px;
+    left: 0;
+}
+
+.top-layout .container-fluid {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.logo {
+    float: left;
+    height: 34px;
+    padding: 12px 8px;
+    font-size: 44px;
+    font-weight: bold;
+    line-height: 10px;
+    color: #000;
+    font-family: "Times New Roman", serif;
+}
+
+
+.logo-small {
+    float: left;
+    height: 25px;
+    padding: 10px 10px;
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 10px;
+    color: #000;
+}
+
+
+.side-layout {
+    height: 100%;
+    text-align: center;
+    background: rgba(245, 245, 245, 1);
+    width: 530px;
+    border-right: 1px solid rgba(204, 204, 204, 1);
+}
+
+.text-grey{
+            height: 28px;
+            display: flex;
+            align-items: center;
+            font-family:"Times New Roman", Times, serif;
+            font-size: 32px;
+            color: #606060;
+            font-weight: bold;
+         }
+
+.text-grey-small{
+            height: 28px;
+            display: flex;
+            align-items: center;
+            font-family:"Times New Roman", Times, serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: rgba(23, 12, 12, 0.91);
+         }
+.text-blue-small{
+            height: 28px;
+            display: flex;
+            align-items: center;
+            font-size: 26px;
+            font-weight: 700;
+            color: #0a2e98;
+         }
+
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 30px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.main-body {
+    height: 100%;
+    flex: 1;
+}
+
+.main-body .top-area {
+    height: 55%;
+    display: flex;
+    flex-direction: row;
+}
+.main-body .bottom-area {
+    height: 45%;
+    flex-direction: row;
+    display: flex;
+}
+
+.main-body .bottom-area .bottom-area-right {
+    width: 55%;
+}
+.main-body .bottom-area .bottom-area-left {
+    width: 45%;
+}
