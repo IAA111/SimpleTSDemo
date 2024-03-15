@@ -12,11 +12,98 @@ html {
     height: 26px;
     display: flex;
     align-items: center;
-    font-size: 18px;
+    font-size: 17px;
     color: #000;
     margin-bottom: 1px;
     margin-left:10px;
     font-weight: 500;
+}
+
+.text-grey-small{
+            height: 28px;
+            display: flex;
+            align-items: center;
+            font-family:"Times New Roman", Times, serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: rgba(23, 12, 12, 0.91);
+         }
+.text-blue-small{
+            height: 28px;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            font-weight: 400;
+            color: #0a2e98;
+         }
+
+.text-grey{
+            height: 28px;
+            display: flex;
+            align-items: center;
+            font-family:"Times New Roman", Times, serif;
+            font-size: 15px;
+            color: #808080;
+            font-weight: bold;
+         }
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #CDC9C9;
+}
+
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
 }
 
 .logo {
@@ -38,7 +125,6 @@ html {
     border-bottom: 1px solid #ddd;
     margin-bottom: 0;
 }
-
 
 .top-layout .container-fluid {
     display: flex;
@@ -81,20 +167,26 @@ html {
 }
 
 .main-body .top-area {
-    height: 55%;
+    height: 50%;
     display: flex;
     flex-direction: row;
 }
 .main-body .bottom-area {
-    height: 45%;
+    height: 50%;
     flex-direction: column;
 }
 
 .main-body .top-area .top-area-right {
-    width: 55%;
+    width: 50%;
 }
 .main-body .top-area .top-area-left {
-    width: 45%;
+    width: 50%;
+}
+
+.center-btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .left-col {
