@@ -78,3 +78,6 @@ def task_save(request):
 
 def home(request):
     return render(request, 'home.html')
+
+def predict(request):
+    return render(request, 'predict.html')

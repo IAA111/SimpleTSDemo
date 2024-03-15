@@ -16,7 +16,7 @@
 <body>
 
 <div class="container-set">
-    <div class="header">Task details</div>
+    <div class="header">TSMS</div>
 </div>
 
 <div class="container-fluid">
@@ -24,23 +24,25 @@
         <!-- 左侧两个面板 -->
         <div class="col-md-4 column-custom">
             <!-- 左上任务设置面板  -->
-            <div class="panel" style="height: 285px;">
+            <div class="panel" style="height: 255px;">
 
-                <div class="text-black">Task Setting</div>
+                <div style="display: flex;">
+                    <span style="font-size:26px;margin-top: 3px" class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                    <span class="text-black" style="margin-left:5px">Task Setting</span>
+                </div>
 
                 <!--预测任务设置-->
-                <div class="text-grey">Prediction Task</div>
-                <div class="container">
-                    <div class="col-md-2">
+                <div class="container" style="width: 100%;margin-top: 10px">
+                    <div class="col-md-8">
                         <div class="text-grey-small adjust-align">Prediction Model Choose</div>
                     </div>
 
                     <!--预测模型选择模块-->
-                    <div class="col-md-10">
+                    <div class="col-md-4">
                         <div class="dropdown">
                             <button id="PredictModel" type="button" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
-                                Predict Model
+                                Model
                                 <span class="caret"></span>
                             </button>
                             <ul id="TrainPredictModel" class="dropdown-menu" aria-labelledby="PredictModel">
@@ -52,11 +54,11 @@
                 </div>
 
                 <!--预测数据大小设置-->
-                <div class="container">
-                    <div class="col-md-2">
+                <div class="container" style="width: 100%;margin-top: 5px;">
+                    <div class="col-md-8">
                         <div class="text-grey-small adjust-align">Predict data batch size</div>
                     </div>
-                    <div class="col-md-10">
+                    <div class="col-md-4">
                         <div class="dropdown">
                             <button id="PredictBatchSize" type="button" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
@@ -80,18 +82,18 @@
                 </div>
 
                 <!--保存任务设置模块-->
-                <div class="text-black">Save Task</div>
-                <div class="container">
-                    <div class="col-md-2">
+                <div style="display: flex;margin-top: 12px">
+                    <span style="font-size:26px;margin-top: 3px" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    <span class="text-black" style="margin-left:5px">Save Task</span>
+                </div>
+                <div class="container" style="width: 100%;margin-top: 10px">
+                    <div class="col-md-8">
                         <div class="text-grey-small adjust-align">Click Save Task</div>
                     </div>
 
-                    <!--滑动框点击保存任务-->
-                    <div class="col-md-10">
-                        <label class="toggle">
-                            <input id="TaskSaveToggle" type="checkbox">
-                            <span class="slider round"></span>
-                        </label>
+                    <!--按钮点击保存任务-->
+                    <div class="col-md-4">
+                        <button class="btn btn-default" id="TaskSaveToggle" type="submit">Save</button>
                     </div>
                 </div>
 
@@ -102,10 +104,13 @@
             <div class="panel panel-bottom" style="height: 450px;">
 
                 <!--开始任务滑块模块-->
-                <div class="text-black">Start Task</div>
+                <div style="display: flex;">
+                    <span style="font-size:26px;margin-top: 3px" class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                    <span class="text-black" style="margin-left:5px">Task Control</span>
+                </div>
                 <div class="container">
                     <div class="col-md-2">
-                        <div class="text-grey-small adjust-align">Click Start Task</div>
+                        <div class="text-grey-small adjust-align">Click Start / Stop Task</div>
                     </div>
 
                     <!--滑动框点击开始任务-->
