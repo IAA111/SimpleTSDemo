@@ -182,7 +182,7 @@ class TaskChatConsumer(AsyncConsumer):
         # 预测参数
         task = await sync_to_async(Task.objects.last, thread_sensitive=True)()
         predict_model = task.predict_model                     # 获取到的预测模型名
-        predict_batch_size = task.perdict_batch_size
+        predict_batch_size = task.predict_batch_size
         print(predict_model, predict_batch_size)
 
         self.start_time = time.time()
@@ -199,5 +199,5 @@ class TaskChatConsumer(AsyncConsumer):
 
         await asyncio.sleep(10)
         self.predict_status = "finished"
-        await self.send_status(self.status, self.start_time)
+        await self.send_status(self.predict_status, self.start_time)
         print("predict")

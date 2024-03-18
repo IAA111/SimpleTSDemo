@@ -52,6 +52,7 @@ function Task() {
         socket.send(JSON.stringify({"type": "task.start"}));
       } else {
         socket.send(JSON.stringify({"type": "task.stop"}));
+        document.getElementById("Status").textContent = "Stopped"
         clearInterval(intervalId);
       }
     });
@@ -115,30 +116,29 @@ function Task() {
 }
 
 function TaskSetSave() {
-    document.getElementById('TaskSaveToggle').addEventListener('change', (event) => {
-        if (event.target.checked) {
-            const fetchParams = () => ({
-                PredictModel: $('#PredictModel').text(),
-                PredictBatchSize: $('#PredictBatchSize').text().trim()
-            });
-
-            const params = fetchParams();
-
-            $.ajax({
-                type: "POST",
-                url: "/task/save/",
-                dataType: "JSON",
-                data: JSON.stringify(params),
-                success: function (data) {
-                    console.log(JSON.stringify(params));
-                    console.log("Success: ", data);
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        }
+  document.getElementById('TaskSaveToggle').addEventListener('click', (event) => {
+    const fetchParams = () => ({
+      PredictModel: $('#PredictModel').text(),
+      PredictBatchSize: $('#PredictBatchSize').text().trim()
     });
+
+    const params = fetchParams();
+
+    $.ajax({
+      type: "POST",
+      url: "/task/save/",
+      contentType: "application/json",
+      dataType: "JSON",
+      data: JSON.stringify(params),
+      success: function (data) {
+          console.log(JSON.stringify(params));
+          console.log("Success: ", data);
+      },
+      error: function (error) {
+          console.log(error);
+      }
+    });
+  });
 }
 
 function initChart(){

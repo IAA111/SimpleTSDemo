@@ -16,4 +16,4 @@ class TrainResult(models.Model):
 
 class Task(models.Model):
     predict_model = models.CharField(max_length=10)
-    perdict_batch_size = models.FloatField()
+    predict_batch_size = models.FloatField()
