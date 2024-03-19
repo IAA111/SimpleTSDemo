@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.core import serializers
 from submit import models
 from submit.utils.bootstrap import BootStrapModelForm
 from submit.utils.pagination import Pagination
@@ -13,14 +14,17 @@ class TrainResultForm(BootStrapModelForm):
         model = models.TrainResult
         fields = '__all__'
 
+
 def train_show(request):
     queryset = models.TrainResult.objects.all()
+    page_object = Pagination(request, queryset)
     form = TrainResultForm()
     context = {
         'form': form,
-        'queryset': queryset,
+        'queryset': page_object.page_queryset,
+        'page_string': page_object.html()
     }
-    return render(request, 'train.html', context)
+    return render(request, 'home.html', context)
 
 def impute_show(request):
     return render(request,'impute.html')
@@ -28,33 +32,31 @@ def impute_show(request):
 
 @csrf_exempt
 def train_save(request):
-    '''
-       前端返回形式
-       {'impute_model': 'Model 1',
-        'predict_model_choice': ['Model 2', 'Model 3', 'Model 4'],
-        'train_batch_size': '40%',
-        'predict_data_Batch_size': '60%'}  '''
+    if request.method == 'POST':
 
-    if request.method == "POST":
-        data = json.loads(request.body)
-
-        train_batch_size_str = data.get('train_batch_size')
+        impute_model = request.POST['impute_model']
+        predict_model_choice = request.POST['predict_model_choice']
+        train_batch_size_str = request.POST['train_batch_size']
         train_batch_size = float(train_batch_size_str.strip('%')) / 100
-
-        predict_data_Batch_size_str = data.get('predict_data_Batch_size')
+        predict_data_Batch_size_str = request.POST['predict_data_Batch_size']
         predict_data_Batch_size = float(predict_data_Batch_size_str.strip('%')) / 100
+        # 处理文件上传
+        dataset = request.FILES['dataset'] if 'dataset' in request.FILES else None
 
+        # 存入数据库
         obj = models.TrainParameters(
-            impute_model=data.get('impute_model'),
-            predict_model_choice=json.dumps(data.get('predict_model_choice')),
+            impute_model=impute_model,
+            predict_model_choice=predict_model_choice,
             train_batch_size=train_batch_size,
-            predict_data_Batch_size=predict_data_Batch_size
+            predict_data_Batch_size=predict_data_Batch_size,
+            dataset=dataset
         )
         obj.save()
         print(obj)
-        return JsonResponse({"message": "Parameters were saved successfully."})
+
+        return JsonResponse({"message": "TrainParameters Successfully Saved"})
     else:
-        return JsonResponse({"error": "error."})
+        return JsonResponse({"error": "error"}, status=400)
 
 
 @csrf_exempt

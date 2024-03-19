@@ -117,7 +117,14 @@
         .slider.round:before {
             border-radius: 50%;
         }
-    .box{
-            width: 700px;
-            height: 320px;
+        .box{
+                width: 700px;
+                height: 320px;
+            }
+
+        .default-color{
+             color: black;
         }
+         .processing-color {
+             color: #0059ff;
+         }

@@ -5,6 +5,7 @@ class TrainParameters(models.Model):
     predict_model_choice = models.TextField()
     train_batch_size = models.FloatField()
     predict_data_Batch_size = models.FloatField()
+    dataset = models.FileField(verbose_name='dataset',max_length=128,upload_to='dataset/', null=True,)
 
 # 存储训练结果
 class TrainResult(models.Model):

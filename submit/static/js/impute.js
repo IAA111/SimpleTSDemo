@@ -49,9 +49,13 @@ function Task() {
 
     document.getElementById('taskToggle').addEventListener('change', (event) => {
       if (event.target.checked) {
+        document.getElementById('click-trigger').className = 'glyphicon glyphicon-record processing-color';
         socket.send(JSON.stringify({"type": "task.start"}));
       } else {
         socket.send(JSON.stringify({"type": "task.stop"}));
+        document.getElementById('click-trigger').className = 'glyphicon glyphicon-record default-color';
+        document.getElementById('predict').className = 'glyphicon glyphicon-record default-color';
+        document.getElementById('finished').className = 'glyphicon glyphicon-record default-color';
         document.getElementById("Status").textContent = "Stopped"
         clearInterval(intervalId);
       }
@@ -60,6 +64,13 @@ function Task() {
     socket.onmessage = function(event){
         console.log(`return message:${event.data}`);
         let data = JSON.parse(event.data);
+
+        if (data.status === "progressing") {
+            document.getElementById('predict').className = 'glyphicon glyphicon-record processing-color';
+        } else if (data.status === "finished") {
+            document.getElementById('finished').className = 'glyphicon glyphicon-record processing-color';
+            clearInterval(intervalId);
+        }
 
         if(data.hasOwnProperty("impute_data")) {
              // 更新图表数据
@@ -75,10 +86,6 @@ function Task() {
         intervalId = setInterval(() => {
             updateTaskTime(start_time);
         }, 1000);
-
-        if (data.status === "finished") {
-            clearInterval(intervalId);
-        }
 
     }
 

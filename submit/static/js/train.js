@@ -69,6 +69,9 @@ function ImputeModelSelect(){
 
 function binBtnTrainSetSave() {
     $('#BtnTrainSetSave').click(function () {
+        var form_data = new FormData();
+        form_data.append("dataset", $('#upload')[0].files[0]);
+
         const fetchParams = () => ({
             impute_model: $("#BtnTrainImputeModel").text(),
             predict_model_choice: $('#TrainPredictModel input[type="checkbox"]:checked').map(function () {
@@ -80,13 +83,17 @@ function binBtnTrainSetSave() {
 
         const params = fetchParams();
 
+        for ( var key in params ) {
+             form_data.append(key, params[key]);
+         }
+
         $.ajax({
             type: "POST",
             url: "/train/save/",
-            dataType: "JSON",
-            data: JSON.stringify(params),
+            data: form_data,
+            processData: false,
+            contentType: false,
             success: function (data) {
-                console.log(JSON.stringify(params));
                 console.log("Success: ", data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -182,3 +189,4 @@ function StartTrain(){
     };
 
 }
+
