@@ -3,27 +3,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SimpleTSDemo</title>
+    <title>Impute</title>
     <script src="{% static 'plugins/echarts.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/predict.css' %}">
 </head>
+<style>
+    body {
+        background-color: #F5F5F5;
+    }
+</style>
 <body>
-    <nav class="top-layout">
-        <div class="container-fluid">
-            <div class="logo">SimpleTSDemo</div>
-        </div>
-    </nav>
-    <!--主面板-->
-    <div class="home-content">
-        <!--侧边导航栏-->
-        <div class="side-layout">
-            <div style="display: flex;border-radius: 10px; flex-direction: column; height: 100%; border-bottom: 1px solid rgba(229, 229, 229, 1); border-right: 1px solid rgba(229, 229, 229, 1);">
-                <div style="display: flex;border-radius: 10px 10px 0 0;align-items: center;background: var(--bg-color); padding: 13px 16px; border-bottom: 1px solid rgba(229, 229, 229, 1);">
-                    <h4 class="logo-small" style="margin: 0;font-weight: 600; white-space: nowrap;">Task Setting</h4>
+
+<div class="container-set">
+    <div class="header">TSMS</div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- 左侧两个面板 -->
+        <div class="col-md-4 column-custom">
+            <!-- 左上任务设置面板  -->
+            <div class="panel" style="height: 255px;">
+
+                <div style="display: flex;">
+                    <span style="font-size:26px;margin-top: 3px" class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                    <span class="text-black" style="margin-left:5px">Task Setting</span>
                 </div>
-                <div class="text-grey" style="margin-top: 15px;margin-left: 20px;">Prediction Task</div>
-                <div class="container" style="width: 100%;margin-top: 15px;margin-left: 20px;">
+
+                <!--预测任务设置-->
+                <div class="container" style="width: 100%;margin-top: 10px">
                     <div class="col-md-8">
                         <div class="text-grey-small adjust-align">Prediction Model Choose</div>
                     </div>
@@ -32,12 +41,12 @@
                     <div class="col-md-4">
                         <div class="dropdown">
                             <button id="PredictModel" type="button" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false" style="font-size: 16px;">
-                                Predict Model
+                                    aria-expanded="false">
+                                Model
                                 <span class="caret"></span>
                             </button>
-                            <ul id="TrainPredictModel" class="dropdown-menu" aria-labelledby="PredictModel" >
-                                <!-- 模型选项由JavaScript动态填充.-->
+                            <ul id="TrainPredictModel" class="dropdown-menu" aria-labelledby="PredictModel">
+                                 <!-- 模型选项由JavaScript动态填充.-->
                             </ul>
                         </div>
 
@@ -45,15 +54,15 @@
                 </div>
 
                 <!--预测数据大小设置-->
-                <div class="container"  style="width: 100%;margin-top: 15px;margin-left: 20px;">
-                    <div class="col-md-7">
+                <div class="container" style="width: 100%;margin-top: 5px;">
+                    <div class="col-md-8">
                         <div class="text-grey-small adjust-align">Predict data batch size</div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="dropdown">
                             <button id="PredictBatchSize" type="button" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false" style="font-size: 16px;">
-                                10%
+                                    aria-expanded="false">
+                                   10%
                                 <span class="caret"></span>
                             </button>
                             <ul id="PredictBatch" class="dropdown-menu" aria-labelledby="dLabel">
@@ -73,33 +82,37 @@
                 </div>
 
                 <!--保存任务设置模块-->
-                <div class="text-grey" style="margin-top: 20px;margin-left: 20px;">Save Task</div>
-                <div class="container"  style="width: 100%;margin-top: 15px;margin-left: 20px;">
-                    <div class="col-md-7">
+                <div style="display: flex;margin-top: 18px">
+                    <span style="font-size:26px;margin-top: 3px" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    <span class="text-black" style="margin-left:5px">Save Task</span>
+                </div>
+                <div class="container" style="width: 100%;margin-top: 10px">
+                    <div class="col-md-8">
                         <div class="text-grey-small adjust-align">Click Save Task</div>
                     </div>
 
-                    <!--滑动框点击保存任务-->
-                    <div class="col-md-5">
-                            <div class="btn-group center-btn" role="group" >
-                                <button id="TaskSaveToggle" type="button" class="btn btn-lg" style="margin-top: -10px;">Save</button>
-                            </div>
+                    <!--按钮点击保存任务-->
+                    <div class="col-md-4">
+                        <button class="btn btn-default" id="TaskSaveToggle" type="submit">Save</button>
                     </div>
                 </div>
+            </div>
 
-                <!--任务状态栏-->
-                <div style="display: flex;border-radius: 10px 10px 0 0;align-items: center;background: var(--bg-color); padding: 13px 16px; border-bottom: 1px solid rgba(229, 229, 229, 1);">
-                    <h4 class="logo-small" style="margin-top: 35px;font-weight: 600; white-space: nowrap;">Task Processing</h4>
-                </div>
+            <!-- 左边下面的面板 -->
+            <div class="panel panel-bottom" style="height: 487px;">
 
                 <!--开始任务滑块模块-->
-                <div class="text-grey" style="margin-top: 15px;margin-left: 20px;">Start Task</div>
-                <div class="container" style="width: 100%;margin-top: 15px; ">
-                    <div class="col-md-6">
-                        <div class="text-grey-small adjust-align">Click Start Task</div>
+                <div style="display: flex;">
+                    <span style="font-size:26px;margin-top: 3px" class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                    <span class="text-black" style="margin-left:5px">Task Control</span>
+                </div>
+                <div class="container" style="width: 100%;margin-top: 12px">
+                    <div class="col-md-8">
+                        <div class="text-grey-small adjust-align">Click Start / Stop Task</div>
                     </div>
+
                     <!--滑动框点击开始任务-->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="toggle">
                             <input id="taskToggle" type="checkbox">
                             <span class="slider round"></span>
@@ -108,119 +121,146 @@
                 </div>
 
                 <!--任务详情模块-->
-                <div class="text-grey" style="margin-top: 15px;margin-left: 20px;">Task details</div>
 
-                <div class="container" style="width: 100%;margin-top: 15px;">
-                    <div class="col-md-5">
+                <div style="display: flex;margin-top: 12px">
+                    <span style="font-size:26px;margin-top: 3px" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                    <span class="text-black" style="margin-left:5px">Task Details</span>
+                </div>
+
+                <div class="text-grey" style="margin-top: 8px">Prediction Task</div>
+                <div class="container" style="width: 100%;margin-top: 7px">
+                    <div class="col-md-8">
                         <div  class="text-grey-small adjust-align">Task status</div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div id="Status" class="text-blue-small adjust-align">Not started</div>
                     </div>
                 </div>
-                <div class="container" style="width: 100%;margin-top: 15px;">
-                    <div class="col-md-5">
+                <div class="container" style="width: 100%;margin-top: 5px">
+                    <div class="col-md-8">
                         <div class="text-grey-small adjust-align">Executed time</div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div id="TaskTime" class="text-blue-small adjust-align">00:00:00</div>
                     </div>
                 </div>
+
+                <!--时间轴模块-->
+                <div style="display: flex;margin-top: 20px">
+                    <span style="font-size:26px;margin-top: 3px" class="glyphicon glyphicon-time"
+                          aria-hidden="true"></span>
+                    <span class="text-black" style="margin-left:5px">Timeline</span>
+                </div>
+
+                <div class="container" style="width: 100%; margin-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                            <span id="click-trigger" style="font-size:30px;margin-left: -15px" class="glyphicon glyphicon-record"></span>
+                            <p class="text-grey-small adjust-align" style="margin-top: 10px">Click trigger</p>
+                            <p class="text-grey-small adjust-align">Time</p>
+                        </div>
+                        <hr style="width: 20%; border: 1px solid black;margin-top: -50px;margin-left: -10px">
+                        <div style="display: flex;flex-direction: column; align-items: center; justify-content: center;">
+                            <span id="predict" style="font-size:30px; margin-left:-80px;" class="glyphicon glyphicon-record"></span>
+                            <p class="text-grey-small adjust-align" style=" margin-left:-80px;margin-top: 10px">Predict</p>
+                            <p class="text-grey-small adjust-align" style=" margin-left:-80px;">Time</p>
+                        </div>
+                        <hr style="width: 20%; border: 1px solid black;margin-top: -50px;margin-left: -5px">
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                            <span id="finished" style="font-size:30px;margin-left: -80px;" class="glyphicon glyphicon-record"></span>
+                            <p class="text-grey-small adjust-align" style=" margin-left:-80px;margin-top: 10px">Finished</p>
+                            <p class="text-grey-small adjust-align" style=" margin-left:-80px;">Time</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <!--主体部分-->
-        <div class="main-body">
-            <div class="top-area">
-                <div id="area1"
-                     style="width: 100%;height: 100%;margin: 4px 5px 3px 5px; border: 1px solid #D0D0D0;border-radius: 10px;background-color: white;">
-                    <div style="display: flex;border-radius: 10px; flex-direction: column; height: 100%; border-bottom: 1px solid rgba(229, 229, 229, 1); border-right: 1px solid rgba(229, 229, 229, 1);">
-                        <div style="display: flex;border-radius: 10px 10px 0 0;align-items: center;background: var(--bg-color); padding: 13px 16px; border-bottom: 1px solid rgba(229, 229, 229, 1);">
-                            <h4 class="logo-small" style="margin: 0;font-weight: 600; white-space: nowrap;">Graph</h4>
-                        </div>
-                        <div class="box"></div>
-                    </div>
 
+
+        <!-- 右边的面板 -->
+        <div class="col-md-8 column-custom">
+            <!-- 表 -->
+            <div class="panel " style="height: 345px;">
+                <div class="text-black">Ongoing Task</div>
+                <!-- 动态折线图 -->
+                 <div class="box"></div>
+            </div>
+
+            <!-- 结果 -->
+            <div class="panel " style="height: 400px;">
+                <div class="text-black">Task Result</div>
+                <div class="container" style="width: 100%">
+                    <div class="col-md-5">
+                        <div class="text-grey" style="margin-top: 8px;margin-left: -20px">Prediction Statistics</div>
+                        <div class="text-center"
+                             style="flex: 1; display: flex;margin-left: -20px; flex-direction: column; overflow: auto;">
+                            <div style="flex: 1">
+                                <table id="table_wrong_info" class="table table-hover"
+                                       style="table-layout: fixed;background-color: #F8F8F8; font-size: 13px; color: rgba(128, 128, 128, 1); font-weight: 400;">
+                                    <tbody>
+                                    <tr class="form-group" style="color: #000;">
+                                        <th class="col-sm-1 text-center text-grey-small"
+                                            style="font-size: 16px; font-weight: 600;">ID
+                                        </th>
+                                        <th class="col-sm-2 text-center text-grey-small"
+                                            style="font-size: 16px; font-weight: 600;">Category
+                                        </th>
+                                        <th class="col-sm-3 text-center text-grey-small"
+                                            style="font-size: 16px; font-weight: 600;">True Value
+                                        </th>
+                                        <th class="col-sm-3 text-center text-grey-small"
+                                            style="font-size: 16px; font-weight: 600;">Predict Value
+                                        </th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-7">
+                        <div class="text-grey" style="margin-top: 8px;margin-left: -20px">Anomaly Statistics</div>
+                        <div class="text-center"
+                             style="flex: 1; display: flex;margin-left: -20px; flex-direction: column; overflow: auto;">
+                            <div style="flex: 1">
+                                <table id="table_wrong_info" class="table table-hover"
+                                       style="table-layout: fixed;background-color: #F8F8F8; font-size: 13px; color: rgba(128, 128, 128, 1); font-weight: 400;">
+                                    <tbody>
+                                    <tr class="form-group" style="color: #000;">
+                                        <th class="col-sm-1 text-center text-grey-small"
+                                            style="font-size: 16px; font-weight: 600;">ID
+                                        </th>
+                                        <th class="col-sm-1 text-center text-grey-small"
+                                            style="font-size: 16px; font-weight: 600;">Category
+                                        </th>
+                                        <th class="col-sm-2 text-center text-grey-small"
+                                            style="font-size: 16px; font-weight: 600;">True Value
+                                        </th>
+                                        <th class="col-sm-2 text-center text-grey-small"
+                                            style="font-size: 16px; font-weight: 600;">Predict Value
+                                        </th>
+                                        <th class="col-sm-2 text-center text-grey-small"
+                                            style="font-size: 16px; font-weight: 600;">Reason
+                                        </th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+                    </div>
                 </div>
             </div>
-            <div class="bottom-area">
-                <div class="bottom-area-left">
-                    <div id="area2"
-                         style="width: 100%;height: 100%;margin: 9px 5px 3px 5px; border: 1px solid #D0D0D0;border-radius: 10px;background-color: white;">
-                        <div style="display: flex;border-radius: 10px; flex-direction: column; height: 100%; border-bottom: 1px solid rgba(229, 229, 229, 1); border-right: 1px solid rgba(229, 229, 229, 1);">
-                            <div style="display: flex;border-radius: 10px 10px 0 0;align-items: center;background: var(--bg-color); padding: 13px 16px; border-bottom: 1px solid rgba(229, 229, 229, 1);">
-                                <h4 class="logo-small" style="margin: 0;font-weight: 600; white-space: nowrap;">Anomaly
-                                    Judgment</h4>
-                            </div>
-                            <div style="margin-bottom: 3px">
-                                <div id="table_node_info" style="font-size: 14px;">
-                                    <div style="height: 40px;font-size: 28px;font-weight: bold; line-height: 40px; border-bottom: 1px solid rgba(229, 229, 229, 1); padding: 0 16px; color: rgba(42, 130, 228, 1); display: flex; justify-content: space-between; align-items: center;">
-                                        <span>Anomaly ID:</span>
-                                        <span id="query_num">0</span>
-                                    </div>
-                                    <div style="height: 40px;font-size: 28px;font-weight: bold; line-height: 40px; border-bottom: 1px solid rgba(229, 229, 229, 1); padding: 0 16px; color: rgba(42, 130, 228, 1); display: flex; justify-content: space-between; align-items: center;">
-                                        <span>Anomaly Position:</span>
-                                        <span id="query_type_num">0</span>
-                                    </div>
-                                    <div style="height: 40px; font-size: 28px;font-weight: bold;line-height: 40px; border-bottom: 1px solid rgba(229, 229, 229, 1); padding: 0 16px; color: rgba(42, 130, 228, 1); display: flex; justify-content: space-between; align-items: center;">
-                                        <span>Predict Value:</span>
-                                        <span id="query_num">0</span>
-                                    </div>
-                                    <div style="height: 40px;font-size: 28px;font-weight: bold;line-height: 40px; border-bottom: 1px solid rgba(229, 229, 229, 1); padding: 0 16px; color: rgba(42, 130, 228, 1); display: flex; justify-content: space-between; align-items: center;">
-                                        <span>True Value:</span>
-                                        <span id="query_num">0</span>
-                                    </div>
-                                    <div style="height: 40px;font-size: 28px;font-weight: bold; line-height: 40px; border-bottom: 1px solid rgba(229, 229, 229, 1); padding: 0 16px; color: rgba(212, 48, 48, 1); display: flex; justify-content: space-between; align-items: center;">
-                                        <span>Anomaly Reason Analyze:</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr style="margin-bottom: 2px">
-
-                            <div class="panel panel-default" style="margin-bottom: 0; border: none;">
-                                <div class="panel-body" style="height: 100%; padding: 0 16px">
-                                    <div id="pie_func_type" style="width: 100%; height: 100%"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="bottom-area-right">
-                    <div id="area3"
-                         style="width: 100%;height: 100%;margin: 9px 4px 4px 8px; border: 1px solid #D0D0D0;border-radius: 10px;background-color: white;">
-                        <div style="display: flex;border-radius: 10px; flex-direction: column; height: 100%; border-bottom: 1px solid rgba(229, 229, 229, 1); border-right: 1px solid rgba(229, 229, 229, 1);">
-                            <div style="display: flex;border-radius: 10px 10px 0 0;align-items: center;background: var(--bg-color); padding: 13px 16px; border-bottom: 1px solid rgba(229, 229, 229, 1);">
-                                <h4 class="logo-small" style="margin: 0;font-weight: 600; white-space: nowrap;">Anomaly
-                                    Statistics</h4>
-                            </div>
-                            <div class="text-center" style="flex: 1; display: flex; flex-direction: column; overflow: auto;">
-        <div style="flex: 1">
-            <table id="table_wrong_info" class="table" style="table-layout: fixed; font-size: 13px; color: rgba(128, 128, 128, 1); font-weight: 400;">
-                <tbody>
-                <tr class="form-group" style="color: #000;">
-                    <th class="col-sm-1 text-center" style="border: unset; font-size: 20px; font-weight: 600;">ID</th>
-                    <th class="col-sm-2 text-center" style="border: unset; font-size: 20px; font-weight: 600;">Category</th>
-                    <th class="col-sm-3 text-center" style="border: unset; font-size: 20px; font-weight: 600;">Predict</th>
-                    <th class="col-sm-2 text-center" style="border: unset; font-size: 20px; font-weight: 600;">True</th>
-                    <th class="col-sm-2 text-center" style="border: unset; font-size: 20px; font-weight: 600;">Detail</th>
-                </tr>
-                </tbody>
-            </table>
         </div>
     </div>
+</div>
 
-                        </div>
-                    </div>
+<script src="{% static "plugins/jquery-3.7.1.min.js" %}"></script>
+<script src="{% static "plugins/bootstrap-3.4.1/js/bootstrap.min.js" %}"></script>
+<script src="{% static 'plugins/echarts.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/impute.js' %}"></script>
 
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <script src="{% static "plugins/jquery-3.7.1.min.js" %}"></script>
-    <script src="{% static "plugins/bootstrap-3.4.1/js/bootstrap.min.js" %}"></script>
-    <script src="{% static 'plugins/echarts.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/predict.js' %}"></script>
 </body>
 </html>

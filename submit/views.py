@@ -26,10 +26,6 @@ def train_show(request):
     }
     return render(request, 'home.html', context)
 
-def impute_show(request):
-    return render(request,'impute.html')
-
-
 @csrf_exempt
 def train_save(request):
     if request.method == 'POST':

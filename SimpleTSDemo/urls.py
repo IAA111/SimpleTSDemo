@@ -21,7 +21,6 @@ from django.views.static import serve
 
 urlpatterns = [
     path('train/save/', views.train_save),
-    path('impute/', views.impute_show),
     path('task/save/', views.task_save),
     path('predict/', views.predict),
     path('home/', views.train_show),
