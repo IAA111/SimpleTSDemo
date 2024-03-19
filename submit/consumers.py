@@ -6,6 +6,7 @@ from submit.models import TrainParameters
 from submit.models import Task
 from channels.consumer import AsyncConsumer
 import csv
+import pandas as pd
 from . import models
 from . import views
 
@@ -54,19 +55,17 @@ class TrainChatConsumer(AsyncConsumer):
     async def start_training(self):
         # 获取训练参数
         model_parameters = await sync_to_async(TrainParameters.objects.last, thread_sensitive=True)()
-        self.impute_model = model_parameters.impute_model                              # 补全模型
-        self.predict_model_choice = json.loads(model_parameters.predict_model_choice)  # 预测模型列表
+        self.impute_model = model_parameters.impute_model                                  # 补全模型
+        self.predict_model_choice = model_parameters.predict_model_choice.split(', ')      # 训练预测模型列表
         self.train_batch_size = model_parameters.train_batch_size
         self.predict_data_Batch_size = model_parameters.predict_data_Batch_size
         self.model_count = 0
 
-        if model_parameters.dataset:  # 检查dataset是否有文件
-            with model_parameters.dataset.open('r') as f:  # 注意这里我们以文本模式打开文件
-                csv_reader = csv.reader(f)  # 创建一个csv阅读器
-                for row in csv_reader:  # 遍历文件中的每一行
-                    print(row)  # row是一个列表，包含了这一行的所有列的值
+        if model_parameters.dataset:
+            self.dataset = model_parameters.dataset.open('r')            # 读取 dataset 文件
 
         await self.impute()
+        self.dataset.close()                                             # 关闭 dataset 文件
         await self.train_all_models()
 
     async def send_status(self, impute_status, impute_start_time,predict_status, predict_start_time,total_model, model_count):
@@ -88,13 +87,16 @@ class TrainChatConsumer(AsyncConsumer):
         self.predict_status = "Not Started"
         await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time,len(self.predict_model_choice), self.model_count)
 
-        # 执行补全
-
+        df = pd.read_csv(self.dataset)            # 读取所有数据
+        print(df)
 
         await asyncio.sleep(10)
+
         '''
-             补全过程
+             补全过程 根据补全模型名选择合适的补全方法进行补全
+             将补全结果保存在数据库中
         '''
+
         self.impute_status = "finished"
         await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time,len(self.predict_model_choice), self.model_count)
         print("impute complete")
@@ -106,7 +108,10 @@ class TrainChatConsumer(AsyncConsumer):
                                len(self.predict_model_choice), self.model_count)
 
 
-        ''' 对每个预测模型进行训练 
+        ''' 
+        从数据库中获取已经补全的数据
+        
+        对每个预测模型进行训练 
     
         for model in predict_model_choice:
 
