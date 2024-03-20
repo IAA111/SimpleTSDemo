@@ -24,15 +24,37 @@
         <!-- 左侧两个面板 -->
         <div class="col-md-4 column-custom">
             <!-- 左上任务设置面板  -->
-            <div class="panel" style="height: 255px;">
+            <div class="panel" style="height: 265px;">
 
                 <div style="display: flex;">
                     <span style="font-size:26px;margin-top: 3px" class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                     <span class="text-black" style="margin-left:5px">Task Setting</span>
                 </div>
 
-                <!--预测任务设置-->
+                <!--补全任务设置-->
                 <div class="container" style="width: 100%;margin-top: 10px">
+                    <div class="col-md-8">
+                        <div class="text-grey-small adjust-align">Imputation Model Choose</div>
+                    </div>
+
+                    <!--预测模型选择模块-->
+                    <div class="col-md-4">
+                        <div class="dropdown">
+                            <button id="ImputeModel" type="button" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                Model
+                                <span class="caret"></span>
+                            </button>
+                            <ul id="ImputationModel" class="dropdown-menu" aria-labelledby="ImputeModel">
+                                 <!-- 模型选项由JavaScript动态填充.-->
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!--预测任务设置-->
+                <div class="container" style="width: 100%;margin-top: 6px">
                     <div class="col-md-8">
                         <div class="text-grey-small adjust-align">Prediction Model Choose</div>
                     </div>
@@ -45,7 +67,7 @@
                                 Model
                                 <span class="caret"></span>
                             </button>
-                            <ul id="TrainPredictModel" class="dropdown-menu" aria-labelledby="PredictModel">
+                            <ul id="PredictModel" class="dropdown-menu" aria-labelledby="PredictModel">
                                  <!-- 模型选项由JavaScript动态填充.-->
                             </ul>
                         </div>
@@ -56,7 +78,7 @@
                 <!--预测数据大小设置-->
                 <div class="container" style="width: 100%;margin-top: 5px;">
                     <div class="col-md-8">
-                        <div class="text-grey-small adjust-align">Predict data batch size</div>
+                        <div class="text-grey-small adjust-align">Predict Window Size</div>
                     </div>
                     <div class="col-md-4">
                         <div class="dropdown">
@@ -82,7 +104,7 @@
                 </div>
 
                 <!--保存任务设置模块-->
-                <div style="display: flex;margin-top: 18px">
+                <div style="display: flex;margin-top: 15px">
                     <span style="font-size:26px;margin-top: 3px" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                     <span class="text-black" style="margin-left:5px">Save Task</span>
                 </div>
@@ -99,7 +121,7 @@
             </div>
 
             <!-- 左边下面的面板 -->
-            <div class="panel panel-bottom" style="height: 487px;">
+            <div class="panel panel-bottom" style="height: 498px;">
 
                 <!--开始任务滑块模块-->
                 <div style="display: flex;">
@@ -127,6 +149,24 @@
                     <span class="text-black" style="margin-left:5px">Task Details</span>
                 </div>
 
+                <div class="text-grey" style="margin-top: 8px">Imputation Task</div>
+                <div class="container" style="width: 100%;margin-top: 7px">
+                    <div class="col-md-8">
+                        <div  class="text-grey-small adjust-align">Task status</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="ImpStatus" class="text-blue-small adjust-align">Not started</div>
+                    </div>
+                </div>
+                <div class="container" style="width: 100%;margin-top: 5px">
+                    <div class="col-md-8">
+                        <div class="text-grey-small adjust-align">Executed time</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="ImpTaskTime" class="text-blue-small adjust-align">00:00:00</div>
+                    </div>
+                </div>
+
                 <div class="text-grey" style="margin-top: 8px">Prediction Task</div>
                 <div class="container" style="width: 100%;margin-top: 7px">
                     <div class="col-md-8">
@@ -146,7 +186,7 @@
                 </div>
 
                 <!--时间轴模块-->
-                <div style="display: flex;margin-top: 20px">
+                <div style="display: flex;margin-top: 15px">
                     <span style="font-size:26px;margin-top: 3px" class="glyphicon glyphicon-time"
                           aria-hidden="true"></span>
                     <span class="text-black" style="margin-left:5px">Timeline</span>
@@ -154,22 +194,19 @@
 
                 <div class="container" style="width: 100%; margin-top: 20px;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                            <span id="click-trigger" style="font-size:30px;margin-left: -15px" class="glyphicon glyphicon-record"></span>
-                            <p class="text-grey-small adjust-align" style="margin-top: 10px">Click trigger</p>
-                            <p class="text-grey-small adjust-align">Time</p>
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;margin-left: 5px">
+                            <span id="click-trigger" style="font-size:30px;" class="glyphicon glyphicon-record"></span>
+                            <p class="text-grey-small adjust-align" style="margin-top: 10px;margin-left: 2px">Impute</p>
                         </div>
-                        <hr style="width: 20%; border: 1px solid black;margin-top: -50px;margin-left: -10px">
+                        <hr style="width: 20%; border: 1px solid black;margin-top: -30px;margin-left: 11px;">
                         <div style="display: flex;flex-direction: column; align-items: center; justify-content: center;">
-                            <span id="predict" style="font-size:30px; margin-left:-80px;" class="glyphicon glyphicon-record"></span>
-                            <p class="text-grey-small adjust-align" style=" margin-left:-80px;margin-top: 10px">Predict</p>
-                            <p class="text-grey-small adjust-align" style=" margin-left:-80px;">Time</p>
+                            <span id="predict" style="font-size:30px; margin-left:-138px;" class="glyphicon glyphicon-record"></span>
+                            <p class="text-grey-small adjust-align" style=" margin-left:-130px;margin-top: 10px">Predict</p>
                         </div>
-                        <hr style="width: 20%; border: 1px solid black;margin-top: -50px;margin-left: -5px">
+                        <hr style="width: 20%; border: 1px solid black;margin-top: -30px;margin-left: -35px">
                         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                            <span id="finished" style="font-size:30px;margin-left: -80px;" class="glyphicon glyphicon-record"></span>
-                            <p class="text-grey-small adjust-align" style=" margin-left:-80px;margin-top: 10px">Finished</p>
-                            <p class="text-grey-small adjust-align" style=" margin-left:-80px;">Time</p>
+                            <span id="finished" style="font-size:30px;margin-left: -145px;" class="glyphicon glyphicon-record"></span>
+                            <p class="text-grey-small adjust-align" style=" margin-left:-130px;margin-top: 10px">Finished</p>
                         </div>
                     </div>
                 </div>
@@ -180,7 +217,7 @@
         <!-- 右边的面板 -->
         <div class="col-md-8 column-custom">
             <!-- 表 -->
-            <div class="panel " style="height: 345px;">
+            <div class="panel " style="height: 365px;">
                 <div class="text-black">Ongoing Task</div>
                 <!-- 动态折线图 -->
                  <div class="box"></div>

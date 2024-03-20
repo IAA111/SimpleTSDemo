@@ -10,6 +10,8 @@ $(function (){
     PredictBatch();
     // 绑定点击 BtnTrainSetSave 按钮事件
     binBtnTrainSetSave();
+    // 绑定点击 PredictBatch 事件
+    ImputationSize();
     // 绑定点击 StartTrainToggle 事件
     StartTrain();
 
@@ -24,6 +26,12 @@ function TrainBatchSize(){
 function PredictBatch(){
     $('#PredictBatch a').click(function(){
         $('#BtnPredictBatch').html($(this).text() + ' <span class="caret"></span>');
+    });
+}
+
+function ImputationSize(){
+    $('#ImputationSize a').click(function(){
+        $('#BtnImputationSize').html($(this).text() + ' <span class="caret"></span>');
     });
 }
 
