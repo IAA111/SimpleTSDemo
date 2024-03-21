@@ -141,6 +141,7 @@ function StartTrain(){
         let impute_start_time = new Date(data.impute_start_time * 1000);
         let predict_start_time = new Date(data.predict_start_time * 1000);
 
+
         document.getElementById("imputeStatus").textContent = data.impute_status;
         document.getElementById("predictStatus").textContent = data.predict_status;
         document.getElementById("ModelCount").textContent = data.model_count + "/" + data.total_model;

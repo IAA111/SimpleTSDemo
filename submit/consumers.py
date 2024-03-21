@@ -23,6 +23,7 @@ class TrainChatConsumer(AsyncConsumer):
         self.predict_model_choice = None
         self.train_batch_size = None
         self.predict_data_Batch_size = None
+        self.dataset = None
 
     # WebSocket连接成功
     async def websocket_connect(self, event):
@@ -40,7 +41,6 @@ class TrainChatConsumer(AsyncConsumer):
         if message == "training.start":
             if self.training_task:
                 self.training_task.cancel()
-            self.start_time = time.time()
             self.training_task = asyncio.ensure_future(self.start_training())
 
         elif message == "training.stop" :
@@ -68,16 +68,16 @@ class TrainChatConsumer(AsyncConsumer):
         self.dataset.close()                                             # 关闭 dataset 文件
         await self.train_all_models()
 
-    async def send_status(self, impute_status, impute_start_time,predict_status, predict_start_time,total_model, model_count):
+    async def send_status(self):
         await self.send({
             "type": "websocket.send",
             "text": json.dumps({
-                "impute_status": impute_status,
-                "impute_start_time": impute_start_time,
-                "predict_status": predict_status,
-                "predict_start_time": predict_start_time,
-                "total_model": total_model,
-                "model_count":model_count,
+                "impute_status": self.impute_status,
+                "impute_start_time": self.impute_start_time,
+                "predict_status": self.predict_status,
+                "predict_start_time": self.predict_start_time,
+                "total_model": self.total_model,
+                "model_count":self.model_count,
             })
         })
 
@@ -85,7 +85,7 @@ class TrainChatConsumer(AsyncConsumer):
         self.impute_start_time = time.time()
         self.impute_status = "progressing"
         self.predict_status = "Not Started"
-        await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time,len(self.predict_model_choice), self.model_count)
+        await self.send_status()
 
         df = pd.read_csv(self.dataset)            # 读取所有数据
         print(df)
@@ -98,14 +98,13 @@ class TrainChatConsumer(AsyncConsumer):
         '''
 
         self.impute_status = "finished"
-        await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time,len(self.predict_model_choice), self.model_count)
+        await self.send_status()
         print("impute complete")
 
     async def train_all_models(self):
         self.predict_start_time = time.time()
         self.predict_status = "Progressing"
-        await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time,
-                               len(self.predict_model_choice), self.model_count)
+        await self.send_status()
 
 
         ''' 
@@ -145,8 +144,7 @@ class TrainChatConsumer(AsyncConsumer):
         await asyncio.sleep(10)
 
         self.predict_status = "finished"
-        await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time,
-                               len(self.predict_model_choice), self.model_count)
+        await self.send_status()
 
 
 class TaskChatConsumer(AsyncConsumer):
@@ -155,6 +153,9 @@ class TaskChatConsumer(AsyncConsumer):
         self.task = None
         self.start_time = None
         self.status = None
+        self.impute_model = None
+        self.predict_model = None
+        self.predict_window_size = None
 
     async def websocket_connect(self, event):
         print("connected", event)
@@ -181,37 +182,32 @@ class TaskChatConsumer(AsyncConsumer):
         print("disconnected", event)
 
     async def start_task(self):
+        # 获取参数
         await self.predict()
 
-    async def send_status(self, status, start_time):
+    async def send_status(self):
         await self.send({
             "type": "websocket.send",
             "text": json.dumps({
-                "status": status,
-                "start_time": start_time,
+                "status": self.status,
+                "start_time": self.start_time,
             })
         })
 
     async def predict(self):
-        # 预测参数
-        task = await sync_to_async(Task.objects.last, thread_sensitive=True)()
-        predict_model = task.predict_model                     # 获取到的预测模型名
-        predict_batch_size = task.predict_batch_size
-        print(predict_model, predict_batch_size)
-
         self.start_time = time.time()
         self.status = "progressing"
-        await self.send_status(self.status, self.start_time)
+        await self.send_status()
 
         print("开始执行预测")
 
         '''  
-          
+
              预测过程
-        
+
         '''
 
         await asyncio.sleep(10)
-        self.predict_status = "finished"
-        await self.send_status(self.predict_status, self.start_time)
+        self.status = "finished"
+        await self.send_status()
         print("predict")
