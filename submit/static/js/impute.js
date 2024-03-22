@@ -152,7 +152,7 @@ function initChart(){
     option = {
 
         title: {
-            text: ''
+            text: 'Dynamic Data'
         },
 
         tooltip: {

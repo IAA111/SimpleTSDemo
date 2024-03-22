@@ -87,13 +87,13 @@ class TrainChatConsumer(AsyncConsumer):
         self.predict_status = "Not Started"
         await self.send_status()
 
-        df = pd.read_csv(self.dataset)            # 读取所有数据
+        df = pd.read_csv(self.dataset)             # 读取所有数据
         print(df)
 
         await asyncio.sleep(10)
 
         '''
-             补全过程 根据补全模型名选择合适的补全方法进行补全
+             补全过程 根据补全模型选择合适的补全方法进行补全
              将补全结果保存在数据库中
         '''
 
