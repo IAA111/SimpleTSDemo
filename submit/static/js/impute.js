@@ -13,8 +13,9 @@ $(function (){
     Task();
     // 保存任务配置
     TaskSetSave();
-    // 初始化图表
-    initChart();
+    // 初始化缺失率饼图
+    initMissingRateChart();
+    initAnomalyRateChart();
 
 })
 
@@ -209,46 +210,82 @@ function initChart(){
 }
 
 
-// 更新图表与异常标记
-function updateChart(new_data) {
-    const isAnomaly = new_data.anomaly_detection.anomaly;  // anomaly标记
-    var seriesCount = new_data.impute_data.value.length;   // 获取系列数量 即 figures 数量
-
-    //  data={
-    //        "impute_data": {'index' : 10 , 'value': [f1, f2, f3, ...]},
-    //         "anomaly_detection": {'anomaly': True, 'reason': 'some reason'} or  {'anomaly': False, 'reason': None}
-    //          }
-
-    while(option.series.length < seriesCount) {
-        option.series.push({ data: [] });
-    }
-
-    new_data.impute_data.value.forEach((value, i) => {
-        var dataPoint = {
-            name: new_data.impute_data.index.toString(),  // 索引
-            value: [
-                new_data.impute_data.index,
-                value
-            ],
-            itemStyle: {
-                color: isAnomaly ? 'red' : 'blue'
-            },
-            label: {
-                show: isAnomaly,
-                formatter: new_data.anomaly_detection.reason // 异常原因
-            }
-
-        };
-
-        // 当前的figure对应的系列series已经到最大存储量，删除最早的数据点
-        if(option.series[i].data.length >= maxSeriesLength) {
-            option.series[i].data.shift();
+function initMissingRateChart(){
+var myChart2 = echarts.init(document.getElementById('missing_rate_chart'));
+    option = {
+  title: {
+    text: 'missing_rate_chart',
+    subtext: 'Fake Data',
+    left: 'center',
+    top: '18%'
+  },
+  tooltip: {
+    trigger: 'item'
+  },
+  legend: {
+       top: '5%',
+  },
+  series: [
+    {
+      name: 'Access From',
+      type: 'pie',
+      radius: '50%',
+      data: [
+        { value: 1048, name: 'Search Engine' },
+        { value: 735, name: 'Direct' },
+        { value: 580, name: 'Email' },
+        { value: 484, name: 'Union Ads' },
+        { value: 300, name: 'Video Ads' }
+      ],
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
         }
+      },
+    }
+  ]
+};
+    myChart2.setOption(option);
+}
 
-        // 添加新的数据点到相应的figure系列
-        option.series[i].data.push(dataPoint);
-    });
-
-    // 更新图表
-    myChart.setOption(option);
+function initAnomalyRateChart(){
+    var myChart3 = echarts.init(document.getElementById('anomaly_rate_chart'));
+    option = {
+  title: {
+    text: 'anomaly_rate_chart',
+    subtext: 'Fake Data',
+    left: 'center',
+    top: '18%'
+  },
+  tooltip: {
+    trigger: 'item'
+  },
+  legend: {
+       top: '5%',
+  },
+  series: [
+    {
+      name: 'Access From',
+      type: 'pie',
+      radius: '50%',
+      data: [
+        { value: 1048, name: 'Search Engine' },
+        { value: 735, name: 'Direct' },
+        { value: 580, name: 'Email' },
+        { value: 484, name: 'Union Ads' },
+        { value: 300, name: 'Video Ads' }
+      ],
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+    }
+  ]
+};
+    myChart3.setOption(option);
 }
