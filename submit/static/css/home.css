@@ -189,12 +189,6 @@ input:checked + .slider:before {
 .main-body .top-area .top-area-left {
     width: 57%;
 }
-.main-body .bottom-area .bottom-area-left{
-    width: 57%;
-}
-.main-body .bottom-area .bottom-area-right{
-    width: 43%;
-}
 
 .center-btn {
   display: flex;

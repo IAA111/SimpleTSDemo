@@ -14,22 +14,27 @@ from . import views
 class TrainChatConsumer(AsyncConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.training_task = None        # 初始化训练任务为空
+        self.training_task = None
+        self.impute_status = None
+        self.predict_status = None
         self.impute_start_time = None
         self.predict_start_time = None
-        self.total_model = None
-        self.model_count = None
+        self.impute_total_model = None
+        self.impute_model_count = None
+        self.predict_total_model = None
+        self.predict_model_count = None
         self.impute_model = None
-        self.predict_model_choice = None
-        self.train_batch_size = None
-        self.predict_data_Batch_size = None
+        self.predict_model = None
+        self.train_data_size = None
+        self.predict_window_size = None
+        self.imputation_size = None
         self.dataset = None
 
     # WebSocket连接成功
     async def websocket_connect(self, event):
         print("connected", event)
         await self.send({
-            "type": "websocket.accept"  # 发送一个websocket.accept类型的消息以接受连接
+            "type": "websocket.accept"
         })
 
     # 当前端发送消息到服务器时
@@ -43,7 +48,7 @@ class TrainChatConsumer(AsyncConsumer):
                 self.training_task.cancel()
             self.training_task = asyncio.ensure_future(self.start_training())
 
-        elif message == "training.stop" :
+        elif message == "training.stop":
             if self.training_task:
                 self.training_task.cancel()
                 self.training_task = None
@@ -55,11 +60,15 @@ class TrainChatConsumer(AsyncConsumer):
     async def start_training(self):
         # 获取训练参数
         model_parameters = await sync_to_async(TrainParameters.objects.last, thread_sensitive=True)()
-        self.impute_model = model_parameters.impute_model                                  # 补全模型
-        self.predict_model_choice = model_parameters.predict_model_choice.split(', ')      # 训练预测模型列表
-        self.train_batch_size = model_parameters.train_batch_size
-        self.predict_data_Batch_size = model_parameters.predict_data_Batch_size
-        self.model_count = 0
+        self.impute_model = model_parameters.impute_model.split(',')
+        self.predict_model = model_parameters.predict_model.split(',')
+        self.train_data_size = model_parameters.train_data_size
+        self.predict_window_size = model_parameters.predict_window_size
+        self.imputation_size = model_parameters.imputation_size
+        self.impute_model_count = 0
+        self.predict_model_count = 0
+        self.impute_total_model = len(self.impute_model)
+        self.predict_total_model = len(self.predict_model)
 
         if model_parameters.dataset:
             self.dataset = model_parameters.dataset.open('r')            # 读取 dataset 文件
@@ -76,8 +85,10 @@ class TrainChatConsumer(AsyncConsumer):
                 "impute_start_time": self.impute_start_time,
                 "predict_status": self.predict_status,
                 "predict_start_time": self.predict_start_time,
-                "total_model": self.total_model,
-                "model_count":self.model_count,
+                "impute_total_model": self.impute_total_model,
+                "impute_model_count":self.impute_model_count,
+                "predict_total_model": self.predict_total_model,
+                "predict_model_count": self.predict_model_count,
             })
         })
 

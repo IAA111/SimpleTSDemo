@@ -11,6 +11,9 @@
 <style>
     body {
         background-color: #F5F5F5;
+        width: 1470px;
+        height: 790px;
+
     }
 </style>
 <body>
@@ -21,8 +24,8 @@
 
 <div class="container-fluid">
     <div class="row">
-        <!-- 左侧两个面板 -->
-        <div class="col-md-4 column-custom">
+        <!-- 左侧面板 -->
+        <div class="col-md-3 column-custom">
             <!-- 左上任务设置面板  -->
             <div class="panel" style="height: 290px;">
 
@@ -33,12 +36,12 @@
 
                 <!--补全任务设置-->
                 <div class="container" style="width: 100%;margin-top: 16px">
-                    <div class="col-md-8">
-                        <div class="text-grey-small adjust-align">Imputation Model Choose</div>
+                    <div class="col-md-7">
+                        <div class="text-grey-small adjust-align">Imputation Model</div>
                     </div>
 
                     <!--预测模型选择模块-->
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <div class="dropdown">
                             <button id="ImputeModel" type="button" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
@@ -55,12 +58,12 @@
 
                 <!--预测任务设置-->
                 <div class="container" style="width: 100%;margin-top: 6px">
-                    <div class="col-md-8">
-                        <div class="text-grey-small adjust-align">Prediction Model Choose</div>
+                    <div class="col-md-7">
+                        <div class="text-grey-small adjust-align">Prediction Model</div>
                     </div>
 
                     <!--预测模型选择模块-->
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <div class="dropdown">
                             <button id="PredictModel" type="button" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
@@ -196,8 +199,8 @@
         </div>
 
 
-        <!-- 右边的面板 -->
-        <div class="col-md-8 column-custom">
+        <!-- 中间面板 -->
+        <div class="col-md-6 column-custom">
             <!-- 表 -->
             <div class="panel " style="height: 355px;">
                 <div class="text-black">Ongoing Task</div>
@@ -222,13 +225,13 @@
                                             style="font-size: 16px; font-weight: 600;">ID
                                         </th>
                                         <th class="col-sm-2 text-center text-grey-small"
-                                            style="font-size: 16px; font-weight: 600;">Category
+                                            style="font-size: 16px; font-weight: 600;">Index
                                         </th>
                                         <th class="col-sm-3 text-center text-grey-small"
-                                            style="font-size: 16px; font-weight: 600;">True Value
+                                            style="font-size: 16px; font-weight: 600;">TrueValue
                                         </th>
                                         <th class="col-sm-3 text-center text-grey-small"
-                                            style="font-size: 16px; font-weight: 600;">Predict Value
+                                            style="font-size: 16px; font-weight: 600;">PredictValue
                                         </th>
                                     </tr>
                                     </tbody>
@@ -249,16 +252,16 @@
                                         <th class="col-sm-1 text-center text-grey-small"
                                             style="font-size: 16px; font-weight: 600;">ID
                                         </th>
-                                        <th class="col-sm-1 text-center text-grey-small"
-                                            style="font-size: 16px; font-weight: 600;">Category
+                                        <th class="col-sm-2 text-center text-grey-small"
+                                            style="font-size: 16px; font-weight: 600;">Index
                                         </th>
                                         <th class="col-sm-2 text-center text-grey-small"
-                                            style="font-size: 16px; font-weight: 600;">True Value
+                                            style="font-size: 16px; font-weight: 600;">TrueValue
                                         </th>
                                         <th class="col-sm-2 text-center text-grey-small"
-                                            style="font-size: 16px; font-weight: 600;">Predict Value
+                                            style="font-size: 16px; font-weight: 600;">PredictValue
                                         </th>
-                                        <th class="col-sm-2 text-center text-grey-small"
+                                        <th class="col-sm-3 text-center text-grey-small"
                                             style="font-size: 16px; font-weight: 600;">Reason
                                         </th>
                                     </tr>
@@ -273,6 +276,12 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-3 column-custom">
+            <div class="panel " style="height: 760px;">
+            </div>
+        </div>
+
     </div>
 </div>
 

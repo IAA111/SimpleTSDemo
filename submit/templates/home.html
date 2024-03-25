@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SimpleTSDemo</title>
+    <title>TSMS</title>
     <style>
         .background {
             width: 1200px;
@@ -105,7 +105,7 @@
                         <div class="container" style="margin-top: 15px;width: 100%">
                             <div class="text-black">Training configuration</div>
 
-                            <!--Train Batch Size -->
+                            <!--Train Data Size -->
                             <div class="container" style="margin-top: 15px;width: 100%">
                                 <div class="col-md-8">
                                     <div class="text-grey">Train Data Size</div>
@@ -113,13 +113,13 @@
                                 <div class="col-md-4">
                                     <div style="display: flex; align-items: center;">
                                         <div class="dropdown">
-                                            <button id="BtnTrainBatchSize" type="button" data-toggle="dropdown"
+                                            <button id="BtnTrainDataSize" type="button" data-toggle="dropdown"
                                                     aria-haspopup="true"
                                                     aria-expanded="false" style="margin-left: 4px;font-size: 20px;">
                                                 10%
                                                 <span class="caret"></span>
                                             </button>
-                                            <ul id="TrainBatch" class="dropdown-menu" aria-labelledby="dLabel">
+                                            <ul id="TrainDataSize" class="dropdown-menu" aria-labelledby="dLabel">
                                                 <li><a class="dropdown-item" href="#">10%</a></li>
                                                 <li><a class="dropdown-item" href="#">20%</a></li>
                                                 <li><a class="dropdown-item" href="#">30%</a></li>
@@ -136,7 +136,7 @@
                                 </div>
                             </div>
 
-                            <!-- Predict Data Batch Size -->
+                            <!-- Predict Window Size -->
                             <div class="container" style="margin-top: 6px;width: 100%">
                                 <div class="col-md-8">
                                     <div class="text-grey">Predict Window Size</div>
@@ -144,13 +144,13 @@
                                 <div class="col-md-4">
                                     <div style="display: flex; align-items: center;">
                                         <div class="dropdown">
-                                            <button id="BtnPredictBatch" type="button" data-toggle="dropdown"
+                                            <button id="BtnPredictWindowSize" type="button" data-toggle="dropdown"
                                                     aria-haspopup="true"
                                                     aria-expanded="false" style="margin-left: 4px;font-size: 20px;">
                                                 10%
                                                 <span class="caret"></span>
                                             </button>
-                                            <ul id="PredictBatch" class="dropdown-menu" aria-labelledby="dLabel">
+                                            <ul id="PredictWindowSize" class="dropdown-menu" aria-labelledby="dLabel">
                                                 <li><a class="dropdown-item" href="#">10%</a></li>
                                                 <li><a class="dropdown-item" href="#">20%</a></li>
                                                 <li><a class="dropdown-item" href="#">30%</a></li>
@@ -290,7 +290,7 @@
                                     <div class="text-grey-small adjust-align">trained models</div>
                                 </div>
                                 <div class="col-md-9">
-                                    <div id="ModelCount" class="text-blue-small adjust-align">0/0</div>
+                                    <div id="PreModelCount" class="text-blue-small adjust-align">0/0</div>
                                 </div>
                             </div>
                         </div>
@@ -300,7 +300,6 @@
             </div>
         </div>
         <div class="bottom-area" style="height: 100%;" >
-            <div class="bottom-area-left">
                 <div id="area3" style="height: 407px;border: 1px solid #D0D0D0;margin:5px 3px 3px 3px;background-color: white;border-radius: 10px">
                     <div style="display: flex; flex-direction: column; height: 100%; border-bottom: 1px solid rgba(229, 229, 229, 1); border-right: 1px solid rgba(229, 229, 229, 1);">
                         <div style="display: flex;border-radius: 10px 10px 0 0;background: var(--bg-color); align-items: center; padding: 13px 16px; border-bottom: 1px solid rgba(229, 229, 229, 1);">
@@ -325,6 +324,7 @@
                                         <tr>
                                             <td>{{ obj.id }}</td>
                                             <td>{{ obj.model }}</td>
+                                            <td>{{ obj.dataset }}</td>
                                             <td>{{ obj.time|date:"H-i-s" }}</td>
                                             <td>{{ obj.accuracy|floatformat:2 }}</td>
                                             <td>{{ obj.precision|floatformat:2 }}</td>
@@ -344,10 +344,6 @@
                     </div>
                 </div>
             </div>
-        <div class="bottom-area-right">
-                <div id="area3" style="height: 407px;border: 1px solid #D0D0D0;margin:5px 3px 3px 3px;background-color: white;border-radius: 10px">
-                    </div>
-        </div>
     </div></div>
 
 </div>

@@ -5,9 +5,9 @@ $(function (){
     // 补全模型下拉内容
     ImputeModelSelect();
     // 绑定点击 BtnTrainBatchSize 事件
-    TrainBatchSize();
+    TrainDataSize();
     // 绑定点击 BtnPredictBatch 事件
-    PredictBatch();
+    PredictWindowSize();
     // 绑定点击 BtnTrainSetSave 按钮事件
     binBtnTrainSetSave();
     // 绑定点击 PredictBatch 事件
@@ -17,15 +17,15 @@ $(function (){
 
 })
 
-function TrainBatchSize(){
-    $('#TrainBatch a').click(function(){
-        $('#BtnTrainBatchSize').html($(this).text() + ' <span class="caret"></span>');
+function TrainDataSize(){
+    $('#TrainDataSize a').click(function(){
+        $('#BtnTrainDataSize').html($(this).text() + ' <span class="caret"></span>');
     });
 }
 
-function PredictBatch(){
-    $('#PredictBatch a').click(function(){
-        $('#BtnPredictBatch').html($(this).text() + ' <span class="caret"></span>');
+function PredictWindowSize(){
+    $('#PredictWindowSize a').click(function(){
+        $('#BtnPredictWindowSize').html($(this).text() + ' <span class="caret"></span>');
     });
 }
 
@@ -62,14 +62,14 @@ function ImputeModelSelect(){
 
     var selectList = $('#TrainImputeModel');
 
-    // 通过遍历每个模型，将其添加到下拉菜单中
     $.each(data.models, function(i, model) {
-        selectList.append('<li><a href="javascript:;" value="' + model + '">' + model + '</a></li>');
+        selectList.append('<li><label><input type="checkbox" value="' + model + '">' + model + '</label></li>');
     });
 
-    // 设置点击事件，让被选中的模型显示在按钮上
-    $('#TrainImputeModel li').on('click', function() {
-        $('#BtnTrainImputeModel').text($(this).text()).append('<span class="caret"></span>');
+    $('.dropdown-menu').on('click', function(e) {
+        if($(e.target).is('input[type="checkbox"]')) {
+            e.stopImmediatePropagation();
+        }
     });
 });
 }
@@ -81,12 +81,15 @@ function binBtnTrainSetSave() {
         form_data.append("dataset", $('#upload')[0].files[0]);
 
         const fetchParams = () => ({
-            impute_model: $("#BtnTrainImputeModel").text(),
-            predict_model_choice: $('#TrainPredictModel input[type="checkbox"]:checked').map(function () {
+            impute_model: $('#TrainImputeModel input[type="checkbox"]:checked').map(function () {
                 return this.value;
             }).get(),
-            train_batch_size: $("#BtnTrainBatchSize").text().trim(),
-            predict_data_Batch_size: $("#BtnPredictBatch").text().trim(),
+            predict_model: $('#TrainPredictModel input[type="checkbox"]:checked').map(function () {
+                return this.value;
+            }).get(),
+            train_data_size: $("#BtnTrainDataSize").text().trim(),
+            predict_window_size: $("#BtnPredictWindowSize").text().trim(),
+            imputation_size:$("#BtnImputationSize").text().trim(),
         });
 
         const params = fetchParams();
@@ -144,7 +147,8 @@ function StartTrain(){
 
         document.getElementById("imputeStatus").textContent = data.impute_status;
         document.getElementById("predictStatus").textContent = data.predict_status;
-        document.getElementById("ModelCount").textContent = data.model_count + "/" + data.total_model;
+        document.getElementById("PreModelCount").textContent = data.predict_model_count + "/" + data.predict_total_model;
+        document.getElementById("ImpModelCount").textContent = data.impute_model_count + "/" + data.impute_total_model;
 
          if (intervalId) {
             clearInterval(intervalId);

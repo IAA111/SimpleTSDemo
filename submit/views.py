@@ -31,20 +31,23 @@ def train_save(request):
     if request.method == 'POST':
 
         impute_model = request.POST['impute_model']
-        predict_model_choice = request.POST['predict_model_choice']
-        train_batch_size_str = request.POST['train_batch_size']
-        train_batch_size = float(train_batch_size_str.strip('%')) / 100
-        predict_data_Batch_size_str = request.POST['predict_data_Batch_size']
-        predict_data_Batch_size = float(predict_data_Batch_size_str.strip('%')) / 100
+        predict_model = request.POST['predict_model']
+        train_data_size_str = request.POST['train_data_size']
+        train_data_size = float(train_data_size_str.strip('%')) / 100
+        predict_window_size_str = request.POST['predict_window_size']
+        predict_window_size = float(predict_window_size_str.strip('%')) / 100
+        imputation_size_str = request.POST['imputation_size']
+        imputation_size = float(imputation_size_str.strip('%')) / 100
         # 处理文件上传
         dataset = request.FILES['dataset'] if 'dataset' in request.FILES else None
 
         # 存入数据库
         obj = models.TrainParameters(
             impute_model=impute_model,
-            predict_model_choice=predict_model_choice,
-            train_batch_size=train_batch_size,
-            predict_data_Batch_size=predict_data_Batch_size,
+            predict_model=predict_model,
+            train_data_size=train_data_size,
+            predict_window_size=predict_window_size,
+            imputation_size= imputation_size,
             dataset=dataset
         )
         obj.save()
