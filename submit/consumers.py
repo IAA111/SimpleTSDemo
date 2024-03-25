@@ -133,10 +133,8 @@ class TrainChatConsumer(AsyncConsumer):
                 model_count += 1  
 
                 # 发送当前训练状态
-                await self.send_status(self.impute_status, self.impute_start_time, self.predict_status, self.predict_start_time,
-                               len(self.predict_model_choice), self.model_count)
-              
-              
+                await self.send_status()
+                          
                 # 将该模型训练结果保存到数据表中
                 form = views.TrainResultForm()
                 form.model = model
@@ -194,7 +192,20 @@ class TaskChatConsumer(AsyncConsumer):
 
     async def start_task(self):
         # 获取参数
+        task_parameters = await sync_to_async(Task.objects.last, thread_sensitive=True)()
+        self.impute_model = task_parameters.impute_model
+        self.predict_model = task_parameters.predict_model
+        self.predict_window_size = task_parameters.predict_window_size
+
+        self.start_time = time.time()
+        self.status = "progressing"
+        await self.send_status()
+
+        await self.impute()
         await self.predict()
+
+        self.status = "finished"
+        await self.send_status()
 
     async def send_status(self):
         await self.send({
@@ -205,11 +216,18 @@ class TaskChatConsumer(AsyncConsumer):
             })
         })
 
-    async def predict(self):
-        self.start_time = time.time()
-        self.status = "progressing"
-        await self.send_status()
+    async def impute(self):
+        print("开始执行补全")
 
+        '''  
+
+             补全过程
+
+        '''
+        await asyncio.sleep(10)
+
+
+    async def predict(self):
         print("开始执行预测")
 
         '''  
@@ -217,8 +235,5 @@ class TaskChatConsumer(AsyncConsumer):
              预测过程
 
         '''
+        await asyncio.sleep(5)
 
-        await asyncio.sleep(10)
-        self.status = "finished"
-        await self.send_status()
-        print("predict")

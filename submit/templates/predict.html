@@ -40,7 +40,7 @@
                         <div class="text-grey-small adjust-align">Imputation Model</div>
                     </div>
 
-                    <!--预测模型选择模块-->
+                    <!--补全模型选择模块-->
                     <div class="col-md-5">
                         <div class="dropdown">
                             <button id="ImputeModel" type="button" data-toggle="dropdown" aria-haspopup="true"
@@ -48,7 +48,7 @@
                                 Model
                                 <span class="caret"></span>
                             </button>
-                            <ul id="ImputationModel" class="dropdown-menu" aria-labelledby="ImputeModel">
+                            <ul id="ImputeModelSelect" class="dropdown-menu" aria-labelledby="ImputeModel">
                                  <!-- 模型选项由JavaScript动态填充.-->
                             </ul>
                         </div>
@@ -70,7 +70,7 @@
                                 Model
                                 <span class="caret"></span>
                             </button>
-                            <ul id="PredictModel" class="dropdown-menu" aria-labelledby="PredictModel">
+                            <ul id="PredictModelSelect" class="dropdown-menu" aria-labelledby="PredictModel">
                                  <!-- 模型选项由JavaScript动态填充.-->
                             </ul>
                         </div>
@@ -85,12 +85,12 @@
                     </div>
                     <div class="col-md-4">
                         <div class="dropdown">
-                            <button id="PredictBatchSize" type="button" data-toggle="dropdown" aria-haspopup="true"
+                            <button id="BtnPredictWindowSize" type="button" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
                                    10%
                                 <span class="caret"></span>
                             </button>
-                            <ul id="PredictBatch" class="dropdown-menu" aria-labelledby="dLabel">
+                            <ul id="PredictWindowSize" class="dropdown-menu" aria-labelledby="dLabel">
                                 <li><a class="dropdown-item" href="#">10%</a></li>
                                 <li><a class="dropdown-item" href="#">20%</a></li>
                                 <li><a class="dropdown-item" href="#">30%</a></li>

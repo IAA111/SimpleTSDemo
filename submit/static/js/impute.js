@@ -4,8 +4,10 @@ var data = [];
 
 $(function (){
     // 绑定点击 PredictBatchSize 事件
-    PredictBatchSize();
+    PredictWindowSize();
     // 获取补全模型列表
+    ImputeModelSelect();
+    //获取预测模型列表
     PredictModelSelect();
     // Task
     Task();
@@ -16,9 +18,26 @@ $(function (){
 
 })
 
-function PredictBatchSize(){
-    $('#PredictBatch a').click(function(){
-        $('#PredictBatchSize').html($(this).text() + ' <span class="caret"></span>');
+function PredictWindowSize(){
+    $('#PredictWindowSize a').click(function(){
+        $('#BtnPredictWindowSize').html($(this).text() + ' <span class="caret"></span>');
+    });
+}
+
+function ImputeModelSelect() {
+    var data = {
+        models: ["Model 1", "Model 2", "Model 3", "Model 4"]
+    };
+
+    var selectList = $('#ImputeModelSelect');
+
+    $.each(data.models, function(i, model) {
+        var listItem = $('<li><label><input type="radio" name="models" value="' + model + '">' + model + '</label></li>');
+        listItem.on('click', function() {
+            var selectedModel = $(this).text();
+            $('#ImputeModel').text(selectedModel);
+        });
+        selectList.append(listItem);
     });
 }
 
@@ -27,7 +46,7 @@ function PredictModelSelect() {
         models: ["Model 1", "Model 2", "Model 3", "Model 4"]
     };
 
-    var selectList = $('#TrainPredictModel');
+    var selectList = $('#PredictModelSelect');
 
     $.each(data.models, function(i, model) {
         var listItem = $('<li><label><input type="radio" name="models" value="' + model + '">' + model + '</label></li>');
@@ -125,8 +144,9 @@ function Task() {
 function TaskSetSave() {
   document.getElementById('TaskSaveToggle').addEventListener('click', (event) => {
     const fetchParams = () => ({
+      ImputeModel: $('#ImputeModel').text(),
       PredictModel: $('#PredictModel').text(),
-      PredictBatchSize: $('#PredictBatchSize').text().trim()
+      PredictWindowSize: $('#BtnPredictWindowSize').text().trim()
     });
 
     const params = fetchParams();

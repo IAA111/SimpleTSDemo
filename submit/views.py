@@ -62,14 +62,14 @@ def train_save(request):
 def task_save(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        print(data)
 
-        PredictBatchSizestr = data.get('PredictBatchSize')
-        PredictBatchSize = float(PredictBatchSizestr.strip('%')) / 100
+        PredictWindowSizestr = data.get('PredictWindowSize')
+        PredictWindowSize = float(PredictWindowSizestr.strip('%')) / 100
 
         obj = models.Task(
+            impute_model=data.get('ImputeModel'),
             predict_model=data.get('PredictModel'),
-            predict_batch_size=PredictBatchSize,
+            predict_window_size=PredictWindowSize,
         )
         obj.save()
         print(data)
