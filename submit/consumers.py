@@ -217,6 +217,14 @@ class TaskChatConsumer(AsyncConsumer):
         })
 
     async def impute(self):
+        nan_counts_dict = {"figure1": 2, "figure2": 150, "figure3": 3, "figure4": 6, "figure5": 8, "figure6": 10}
+        await self.send({
+            "type": "websocket.send",
+            "text": json.dumps({
+                "impute_data": nan_counts_dict
+            })
+        })
+
         print("开始执行补全")
 
         '''  

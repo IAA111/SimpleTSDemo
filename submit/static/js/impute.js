@@ -62,6 +62,7 @@ function PredictModelSelect() {
 function Task() {
     let intervalId;
     let socket = new WebSocket("ws://localhost:8000/ws/task/")
+    var chartControl_missing = initMissingRateChart();
 
     socket.onopen = function (e){
         console.log("Connection open");
@@ -85,6 +86,11 @@ function Task() {
         console.log(`return message:${event.data}`);
         let data = JSON.parse(event.data);
 
+        if(data.hasOwnProperty("impute_data")) {
+        // 更新饼图
+        chartControl_missing.updateChart(data.impute_data);
+    }
+
         if (data.status === "progressing") {
             document.getElementById('predict').className = 'glyphicon glyphicon-record processing-color';
         } else if (data.status === "finished") {
@@ -94,7 +100,7 @@ function Task() {
 
         if(data.hasOwnProperty("impute_data")) {
              // 更新图表数据
-             updateChart(data.impute_data);
+             chartControl_missing.updateChart(data.impute_data);
         }
 
         let start_time = new Date(data.start_time * 1000);
@@ -215,7 +221,6 @@ var myChart2 = echarts.init(document.getElementById('missing_rate_chart'));
     option = {
   title: {
     text: 'missing_rate_chart',
-    subtext: 'Fake Data',
     left: 'center',
     top: '18%'
   },
@@ -231,11 +236,6 @@ var myChart2 = echarts.init(document.getElementById('missing_rate_chart'));
       type: 'pie',
       radius: '50%',
       data: [
-        { value: 1048, name: 'Search Engine' },
-        { value: 735, name: 'Direct' },
-        { value: 580, name: 'Email' },
-        { value: 484, name: 'Union Ads' },
-        { value: 300, name: 'Video Ads' }
       ],
       emphasis: {
         itemStyle: {
@@ -248,6 +248,21 @@ var myChart2 = echarts.init(document.getElementById('missing_rate_chart'));
   ]
 };
     myChart2.setOption(option);
+    // 在这里定义你的updateChart函数
+    function updateChart(data) {
+        // 将数据转换为 ECharts 饼图所接受的格式
+        var pieData = Object.entries(data).map(([key, value]) => ({name: key, value: value}));
+
+        // 使用 setOption 更新饼图数据
+        myChart2.setOption({
+            series: [{
+                data: pieData
+            }]
+        });
+    }
+    return {
+        updateChart: updateChart
+    };
 }
 
 function initAnomalyRateChart(){
@@ -255,7 +270,6 @@ function initAnomalyRateChart(){
     option = {
   title: {
     text: 'anomaly_rate_chart',
-    subtext: 'Fake Data',
     left: 'center',
     top: '18%'
   },

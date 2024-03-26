@@ -8,7 +8,7 @@
         .background {
             width: 1200px;
             border: 2px solid #D0D0D0;
-            height: 1000px;
+            height: 1060px;
             margin-left: auto;
             margin-right: auto;
             margin-top: 10px;
@@ -300,7 +300,7 @@
             </div>
         </div>
         <div class="bottom-area" style="height: 100%;" >
-                <div id="area3" style="height: 407px;border: 1px solid #D0D0D0;margin:5px 3px 3px 3px;background-color: white;border-radius: 10px">
+                <div id="area3" style="height: 440px;border: 1px solid #D0D0D0;margin:5px 3px 3px 3px;background-color: white;border-radius: 10px">
                     <div style="display: flex; flex-direction: column; height: 100%; border-bottom: 1px solid rgba(229, 229, 229, 1); border-right: 1px solid rgba(229, 229, 229, 1);">
                         <div style="display: flex;border-radius: 10px 10px 0 0;background: var(--bg-color); align-items: center; padding: 13px 16px; border-bottom: 1px solid rgba(229, 229, 229, 1);">
                             <h4 class="logo-small" style="margin: 0; font-weight: 580;white-space: nowrap;">Train Result</h4>
@@ -323,8 +323,8 @@
                                     {% for obj in queryset %}
                                         <tr>
                                             <td>{{ obj.id }}</td>
-                                            <td>{{ obj.model }}</td>
                                             <td>{{ obj.dataset }}</td>
+                                            <td>{{ obj.model }}</td>
                                             <td>{{ obj.time|date:"H-i-s" }}</td>
                                             <td>{{ obj.accuracy|floatformat:2 }}</td>
                                             <td>{{ obj.precision|floatformat:2 }}</td>
@@ -335,7 +335,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="clearfix">
+                            <div class="clearfix" style="margin-top:-38px ">
                                 <ul class="pagination">
                                     {{ page_string }}
                                 </ul>
