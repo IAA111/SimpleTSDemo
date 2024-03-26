@@ -207,7 +207,6 @@ function StartTrain(){
 }
 
 function ShowTrainResults(){
-    $(document).ready(function(){
     $(document).on('click', '.pagination a', function(e) {
         e.preventDefault();  // 阻止默认行为
 
@@ -227,6 +226,20 @@ function ShowTrainResults(){
                 console.log(thrownError);
             }
         });
+    });
+    $(document).on('submit', 'form', function(event) {
+    event.preventDefault();
+
+    // 获取输入框中的值
+    var page = $("input[name='page']", this).val();
+
+    $.ajax({
+        url: '/load_train_results/',
+        type: 'GET',
+        data: {'page': page},
+        success: function(data) {
+            $('#train-results-table').html(data.html);
+        }
     });
 });
 }

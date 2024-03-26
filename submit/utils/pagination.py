@@ -44,21 +44,6 @@ class Pagination(object):
         self.plus = plus
 
     def html(self):
-        if self.total_page_count <= 2 * self.plus + 1:
-            start_page = 1
-            end_page = self.total_page_count
-        else:
-            if self.page <= self.plus:
-                start_page = 1
-                end_page = 2 * self.plus + 1
-            else:
-                if (self.page + self.plus) > self.total_page_count:
-                    start_page = self.total_page_count - 2 * self.plus
-                    end_page = self.total_page_count
-                else:
-                    start_page = self.page - self.plus
-                    end_page = self.page + self.plus
-
         page_str_list = []
         page_str_list.append("<li><a data-page='{}'>First</a></li>".format(1))
 
@@ -69,13 +54,8 @@ class Pagination(object):
             prev = "<li><a data-page='{}'>Prev</a></li>".format(1)
         page_str_list.append(prev)
 
-        # Pages
-        for i in range(start_page, end_page + 1):
-            if i == self.page:
-                ele = "<li class='active'><a data-page='{}'>{}</a></li>".format(i, i)
-            else:
-                ele = "<li><a data-page='{}'>{}</a></li>".format(i, i)
-            page_str_list.append(ele)
+        # Current page
+        page_str_list.append("<li class='active'><a data-page='{}'>{}</a></li>".format(self.page, self.page))
 
         # Next page
         if self.page < self.total_page_count:
