@@ -20,3 +20,9 @@ class Task(models.Model):
     impute_model = models.CharField(max_length=20)
     predict_model = models.CharField(max_length=20)
     predict_window_size = models.FloatField()
+
+class PredictResult(models.Model):
+    index = models.IntegerField()
+    true_value = models.FloatField()
+    predict_value = models.FloatField()
+    is_Anomaly = models.BooleanField()

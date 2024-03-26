@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.http import JsonResponse
+from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.core import serializers
@@ -14,17 +15,38 @@ class TrainResultForm(BootStrapModelForm):
         model = models.TrainResult
         fields = '__all__'
 
+class PredictResultForm(BootStrapModelForm):
+    class Meta:
+        model = models.PredictResult
+        fields = '__all__'
 
 def train_show(request):
+    form = TrainResultForm()
     queryset = models.TrainResult.objects.all()
     page_object = Pagination(request, queryset)
-    form = TrainResultForm()
+
     context = {
         'form': form,
         'queryset': page_object.page_queryset,
         'page_string': page_object.html()
     }
     return render(request, 'home.html', context)
+
+def load_train_results(request):
+    page = request.GET.get('page', 1)
+    queryset = models.TrainResult.objects.all()
+    page_object = Pagination(request, queryset)
+
+    context = {
+        'queryset': page_object.page_queryset,
+        'page_string': page_object.html()
+    }
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string('train_results.html', context, request=request)
+        return JsonResponse({'html': html})
+
+    else:
+        return render(request, 'home.html', context)
 
 @csrf_exempt
 def train_save(request):
@@ -81,4 +103,12 @@ def home(request):
     return render(request, 'home.html')
 
 def predict(request):
-    return render(request, 'predict.html')
+    queryset = models.PredictResult.objects.all()
+    page_object = Pagination(request, queryset)
+    form = PredictResultForm()
+    context = {
+        'form': form,
+        'queryset': page_object.page_queryset,
+        'page_string': page_object.html()
+    }
+    return render(request, 'predict.html', context)

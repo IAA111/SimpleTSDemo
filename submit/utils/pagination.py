@@ -44,18 +44,14 @@ class Pagination(object):
         self.plus = plus
 
     def html(self):
-        # Calculating, showing the previous five pages and the next five pages of the current page
         if self.total_page_count <= 2 * self.plus + 1:
-            # The amount of data in the database is relatively small, less than 11 pages
             start_page = 1
             end_page = self.total_page_count
         else:
-            # There is a lot of data in the database >11 pages
             if self.page <= self.plus:
                 start_page = 1
                 end_page = 2 * self.plus + 1
             else:
-                # The current page + 5 > total page count
                 if (self.page + self.plus) > self.total_page_count:
                     start_page = self.total_page_count - 2 * self.plus
                     end_page = self.total_page_count
@@ -64,32 +60,32 @@ class Pagination(object):
                     end_page = self.page + self.plus
 
         page_str_list = []
-        page_str_list.append("<li><a href='?page={}'>First</a></li>".format(1))
+        page_str_list.append("<li><a data-page='{}'>First</a></li>".format(1))
 
         # Previous page
         if self.page > 1:
-            prev = "<li><a href='?page={}'>Prev</a></li>".format(self.page - 1)
+            prev = "<li><a data-page='{}'>Prev</a></li>".format(self.page - 1)
         else:
-            prev = "<li><a href='?page={}'>Prev</a></li>".format(1)
+            prev = "<li><a data-page='{}'>Prev</a></li>".format(1)
         page_str_list.append(prev)
 
         # Pages
         for i in range(start_page, end_page + 1):
             if i == self.page:
-                ele = "<li class='active'><a href='?page={}'>{}</a></li>".format(i, i)
+                ele = "<li class='active'><a data-page='{}'>{}</a></li>".format(i, i)
             else:
-                ele = "<li><a href='?page={}'>{}</a></li>".format(i, i)
+                ele = "<li><a data-page='{}'>{}</a></li>".format(i, i)
             page_str_list.append(ele)
 
         # Next page
         if self.page < self.total_page_count:
-            next = "<li><a href='?page={}'>Next</a></li>".format(self.page + 1)
+            next = "<li><a data-page='{}'>Next</a></li>".format(self.page + 1)
         else:
-            next = "<li><a href='?page={}'>Next</a></li>".format(1)
+            next = "<li><a data-page='{}'>Next</a></li>".format(1)
         page_str_list.append(next)
 
         # Last page
-        page_str_list.append("<li><a href='?page={}'>Last</a></li>".format(self.total_page_count))
+        page_str_list.append("<li><a data-page='{}'>Last</a></li>".format(self.total_page_count))
 
         search_string = '''
         <li>

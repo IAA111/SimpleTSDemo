@@ -236,9 +236,21 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-
+                                    {% for obj in queryset %}
+                                        <tr>
+                                            <td>{{ obj.id }}</td>
+                                            <td>{{ obj.index }}</td>
+                                            <td>{{ obj.true_value|floatformat:2 }}</td>
+                                            <td>{{ obj.predict_value|floatformat:2 }}</td>
+                                        </tr>
+                                    {% endfor %}
                                     </tbody>
                                 </table>
+                                <div class="clearfix" style="margin-top:-38px;transform: scale(0.8); transform-origin: left top;">
+                                <ul class="pagination">
+                                    {{ page_string }}
+                                </ul>
+                            </div>
                             </div>
                         </div>
 
@@ -270,9 +282,25 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-
+                                    {% for obj in queryset %}
+                                        <tr>
+                                            <td>{{ obj.id }}</td>
+                                            <td>{{ obj.index }}</td>
+                                            <td>{{ obj.true_value|floatformat:2 }}</td>
+                                            <td>{{ obj.predict_value|floatformat:2 }}</td>
+                                            <td>
+                                                <input type="button" class="btn btn-primary btn-xs btn-edit"
+                                                       value="detail">
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
                                     </tbody>
                                 </table>
+                                <div class="clearfix" style="margin-top:-38px;transform: scale(0.8); transform-origin: left top;">
+                                    <ul class="pagination">
+                                    {{ page_string }}
+                                </ul>
+                            </div>
                             </div>
                         </div>
 

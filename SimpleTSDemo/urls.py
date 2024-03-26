@@ -24,6 +24,7 @@ urlpatterns = [
     path('task/save/', views.task_save),
     path('predict/', views.predict),
     path('home/', views.train_show),
+    path('load_train_results/', views.load_train_results),
 
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
 

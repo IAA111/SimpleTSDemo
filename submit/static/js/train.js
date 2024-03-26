@@ -14,6 +14,9 @@ $(function (){
     ImputationSize();
     // 绑定点击 StartTrainToggle 事件
     StartTrain();
+    // 训练结果表单分页
+    ShowTrainResults();
+
 
 })
 
@@ -203,3 +206,27 @@ function StartTrain(){
 
 }
 
+function ShowTrainResults(){
+    $(document).ready(function(){
+    $(document).on('click', '.pagination a', function(e) {
+        e.preventDefault();  // 阻止默认行为
+
+        var page = $(this).data('page');
+
+        // 发送 AJAX 请求到服务器
+        $.ajax({
+            url: '/load_train_results/',
+            data: {'page': page},
+            method: 'GET',
+            success: function(data) {
+                // 请求成功后替换表格数据
+                $('#train-results-table').html(data.html);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                // 打印错误信息
+                console.log(thrownError);
+            }
+        });
+    });
+});
+}
