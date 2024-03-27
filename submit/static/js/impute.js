@@ -16,7 +16,8 @@ $(function (){
     // 初始化缺失率饼图
     initMissingRateChart();
     initAnomalyRateChart();
-
+    // 获取表格数据
+    ShowTaskResults();
 })
 
 function PredictWindowSize(){
@@ -302,4 +303,68 @@ function initAnomalyRateChart(){
   ]
 };
     myChart3.setOption(option);
+}
+
+function ShowTaskResults(){
+    $(document).on('click', '.pagination1 a', function (e) {
+        e.preventDefault();
+        var page = $(this).data('page');
+        $.ajax({
+            url: '/load_impute_results/',  // Set this URL to load impute results data
+            data: {'page': page},
+            method: 'GET',
+            success: function (data) {
+                $('#impute-results-table').html(data.html);  // Update the impute results table
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError);
+            }
+        });
+    });
+
+    $(document).on('click', '.pagination2 a', function (e) {  // Add a new handler for the second table
+        e.preventDefault();
+
+        var page = $(this).data('page');
+
+        $.ajax({
+            url: '/load_anomaly_results/',  // Set this URL to load anomaly results data
+            data: {'page': page},
+            method: 'GET',
+            success: function (data) {
+                $('#Anomaly-results-table').html(data.html);  // Update the anomaly results table
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError);
+            }
+        });
+    });
+
+    $('#impute-results-table').on('submit', 'form', function(e) {
+        e.preventDefault();
+        var page = $("input[name='page']", this).val();
+
+        $.ajax({
+            url: '/load_impute_results/',  // Set this URL to load impute results data
+            type: 'GET',
+            data: {'page': page},
+            success: function (data) {
+                $('#impute-results-table').html(data.html);
+            }
+        });
+    });
+
+    $('#Anomaly-results-table').on('submit', 'form', function(e) {
+        e.preventDefault();
+        var page = $("input[name='page']", this).val();
+
+        $.ajax({
+            url: '/load_anomaly_results/',  // Set this URL to load anomaly results data
+            type: 'GET',
+            data: {'page': page},
+            success: function (data) {
+                $('#Anomaly-results-table').html(data.html);
+            }
+        });
+    });
 }

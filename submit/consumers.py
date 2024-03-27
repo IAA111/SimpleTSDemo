@@ -120,7 +120,7 @@ class TrainChatConsumer(AsyncConsumer):
 
         ''' 
         从数据库中获取已经补全的数据
-        
+        先把 TrainResult 清空
         对每个预测模型进行训练 
     
         for model in predict_model_choice:
@@ -145,7 +145,6 @@ class TrainChatConsumer(AsyncConsumer):
                 
                 if form.is_valid():
                     form.save()
-                    return redirect("/train/")
                 else:
                     print(form.errors)
             
@@ -229,7 +228,7 @@ class TaskChatConsumer(AsyncConsumer):
 
         '''  
 
-             补全过程
+             具体补全过程
 
         '''
         await asyncio.sleep(10)

@@ -26,3 +26,15 @@ class PredictResult(models.Model):
     true_value = models.FloatField()
     predict_value = models.FloatField()
     is_Anomaly = models.BooleanField()
+
+class ImputeResult(models.Model):
+    time = models.CharField(max_length=24)
+    variable = models.IntegerField()
+    Imputed_value = models.FloatField()
+
+class AnomalyResult(models.Model):
+    time = models.CharField(max_length=24)
+    variable = models.IntegerField()
+    true_value = models.FloatField()
+    predict_value = models.FloatField()
+    analysis = models.CharField(max_length=255, default='')

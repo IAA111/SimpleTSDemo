@@ -17,7 +17,6 @@ $(function (){
     // 训练结果表单分页
     ShowTrainResults();
 
-
 })
 
 function TrainDataSize(){
@@ -206,40 +205,36 @@ function StartTrain(){
 
 }
 
-function ShowTrainResults(){
-    $(document).on('click', '.pagination a', function(e) {
+function ShowTrainResults() {
+    $(document).on('click', '.pagination a', function (e) {
         e.preventDefault();  // 阻止默认行为
 
         var page = $(this).data('page');
 
-        // 发送 AJAX 请求到服务器
         $.ajax({
             url: '/load_train_results/',
             data: {'page': page},
             method: 'GET',
-            success: function(data) {
-                // 请求成功后替换表格数据
+            success: function (data) {
                 $('#train-results-table').html(data.html);
             },
-            error: function(xhr, ajaxOptions, thrownError) {
-                // 打印错误信息
+            error: function (xhr, ajaxOptions, thrownError) {
                 console.log(thrownError);
             }
         });
     });
-    $(document).on('submit', 'form', function(event) {
-    event.preventDefault();
+    $(document).on('submit', 'form', function (event) {
+        event.preventDefault();
+        var page = $("input[name='page']", this).val();
 
-    // 获取输入框中的值
-    var page = $("input[name='page']", this).val();
-
-    $.ajax({
-        url: '/load_train_results/',
-        type: 'GET',
-        data: {'page': page},
-        success: function(data) {
-            $('#train-results-table').html(data.html);
-        }
+        $.ajax({
+            url: '/load_train_results/',
+            type: 'GET',
+            data: {'page': page},
+            success: function (data) {
+                $('#train-results-table').html(data.html);
+            }
+        });
     });
-});
 }
+

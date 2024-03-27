@@ -12,8 +12,7 @@
     body {
         background-color: #F5F5F5;
         width: 1470px;
-        height: 790px;
-
+        height: 846px;
     }
 </style>
 <body>
@@ -27,7 +26,7 @@
         <!-- 左侧面板 -->
         <div class="col-md-3 column-custom">
             <!-- 左上任务设置面板  -->
-            <div class="panel" style="height: 290px;">
+            <div class="panel" style="height: 300px;">
 
                 <div style="display: flex;">
                     <span style="font-size:26px;margin-top: 3px" class="glyphicon glyphicon-cog" aria-hidden="true"></span>
@@ -209,103 +208,16 @@
             </div>
 
             <!-- 结果 -->
-            <div class="panel " style="height: 400px;">
+            <div class="panel " style="height: 440px;">
                 <div class="text-black">Task Result</div>
                 <div class="container" style="width: 100%">
                     <div class="col-md-5">
-                        <div class="text-grey" style="margin-top: 8px;margin-left: -20px">Prediction Statistics</div>
-                        <div class="text-center"
-                             style="flex: 1; display: flex;margin-left: -20px; flex-direction: column; overflow: auto;">
-                            <div style="flex: 1">
-                                <table id="table_wrong_info" class="table table-hover"
-                                       style="table-layout: fixed;background-color: #F8F8F8; font-size: 13px; color: rgba(128, 128, 128, 1); font-weight: 400;">
-                                   <thead>
-                                    <tr class="form-group" style="color: #000;">
-                                        <th class="col-sm-2 text-center text-grey-small"
-                                            style="font-size: 16px; font-weight: 600;">ID
-                                        </th>
-                                        <th class="col-sm-3 text-center text-grey-small"
-                                            style="font-size: 16px; font-weight: 600;">Index
-                                        </th>
-                                        <th class="col-sm-3 text-center text-grey-small"
-                                            style="font-size: 16px; font-weight: 600;">True
-                                        </th>
-                                        <th class="col-sm-3 text-center text-grey-small"
-                                            style="font-size: 16px; font-weight: 600;">Predict
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for obj in queryset %}
-                                        <tr>
-                                            <td>{{ obj.id }}</td>
-                                            <td>{{ obj.index }}</td>
-                                            <td>{{ obj.true_value|floatformat:2 }}</td>
-                                            <td>{{ obj.predict_value|floatformat:2 }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                                <div class="clearfix" style="margin-top:-38px;transform: scale(0.8); transform-origin: left top;">
-                                <ul class="pagination">
-                                    {{ page_string }}
-                                </ul>
-                            </div>
-                            </div>
-                        </div>
-
+                        <div class="text-grey" style="margin-top: 3px;margin-left: -20px">Imputation Statistics</div>
+                        {% include "impute_results.html" %}
                     </div>
                     <div class="col-md-7">
-                        <div class="text-grey" style="margin-top: 8px;margin-left: -10px">Anomaly Statistics</div>
-                        <div class="text-center"
-                             style="flex: 1; display: flex;margin-left: 10px; flex-direction: column; overflow: auto;">
-                            <div style="flex: 1">
-                                <table id="table_wrong_info" class="table table-hover"
-                                       style="table-layout: fixed;background-color: #F8F8F8; font-size: 13px; color: rgba(128, 128, 128, 1); font-weight: 400;">
-                                    <thead>
-                                    <tr class="form-group" style="color: #000;">
-                                        <th class="col-sm-1 text-center text-grey-small"
-                                            style="font-size: 16px; font-weight: 600;">ID
-                                        </th>
-                                        <th class="col-sm-2 text-center text-grey-small"
-                                            style="font-size: 16px; font-weight: 600;">Index
-                                        </th>
-                                        <th class="col-sm-2 text-center text-grey-small"
-                                            style="font-size: 16px; font-weight: 600;">True
-                                        </th>
-                                        <th class="col-sm-2 text-center text-grey-small"
-                                            style="font-size: 16px; font-weight: 600;">Predict
-                                        </th>
-                                        <th class="col-sm-3 text-center text-grey-small"
-                                            style="font-size: 16px; font-weight: 600;">Analysis
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for obj in queryset %}
-                                        <tr>
-                                            <td>{{ obj.id }}</td>
-                                            <td>{{ obj.index }}</td>
-                                            <td>{{ obj.true_value|floatformat:2 }}</td>
-                                            <td>{{ obj.predict_value|floatformat:2 }}</td>
-                                            <td>
-                                                <input type="button" class="btn btn-primary btn-xs btn-edit"
-                                                       value="detail">
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                                <div class="clearfix" style="margin-top:-38px;transform: scale(0.8); transform-origin: left top;">
-                                    <ul class="pagination">
-                                    {{ page_string }}
-                                </ul>
-                            </div>
-                            </div>
-                        </div>
-
-
-
+                        <div class="text-grey" style="margin-top: 3px;margin-left: 27px">Anomaly Statistics</div>
+                        {% include "Anomaly_results.html" %}
                     </div>
                 </div>
             </div>

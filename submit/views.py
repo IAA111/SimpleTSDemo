@@ -48,6 +48,37 @@ def load_train_results(request):
     else:
         return render(request, 'home.html', context)
 
+def load_impute_results(request):
+    page = request.GET.get('page', 1)
+    queryset1 = models.ImputeResult.objects.all()
+    page_object1 = Pagination(request, queryset1)
+
+    context = {
+        'queryset1': page_object1.page_queryset,
+        'page_string1': page_object1.html()
+    }
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string('impute_results.html', context, request=request)
+        return JsonResponse({'html': html})
+    else:
+        return render(request, 'predict.html', context)
+
+def load_anomaly_results(request):
+    page = request.GET.get('page', 1)
+    queryset2 = models.AnomalyResult.objects.all()
+    page_object2 = Pagination(request, queryset2)
+
+    context = {
+        'queryset2': page_object2.page_queryset,
+        'page_string2': page_object2.html()
+    }
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string('Anomaly_results.html', context, request=request)
+        return JsonResponse({'html': html})
+    else:
+        return render(request, 'predict.html', context)
+
+
 @csrf_exempt
 def train_save(request):
     if request.method == 'POST':
@@ -103,12 +134,17 @@ def home(request):
     return render(request, 'home.html')
 
 def predict(request):
-    queryset = models.PredictResult.objects.all()
-    page_object = Pagination(request, queryset)
-    form = PredictResultForm()
+    queryset1 = models.ImputeResult.objects.all()
+    page_object1 = Pagination(request, queryset1)
+
+    queryset2 = models.AnomalyResult.objects.all()
+    page_object2 = Pagination(request, queryset2)
+
     context = {
-        'form': form,
-        'queryset': page_object.page_queryset,
-        'page_string': page_object.html()
+        'queryset1': page_object1.page_queryset,
+        'page_string1': page_object1.html(),
+        'queryset2': page_object2.page_queryset,
+        'page_string2': page_object2.html()
     }
+
     return render(request, 'predict.html', context)
