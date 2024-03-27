@@ -15,11 +15,14 @@ $(function (){
     TaskSetSave();
     // 初始化缺失率饼图
     initMissingRateChart();
+    // 初始化异常率饼图
     initAnomalyRateChart();
     // 获取表格数据
     ShowTaskResults();
     // 点击 details 按钮
     bindBtnDetails();
+    // 保存 details 设置按钮
+    bindBtnSaveDetails();
 })
 
 function PredictWindowSize(){
@@ -396,4 +399,30 @@ function bindBtnDetails() {
             }
         });
     })
+}
+
+function bindBtnSaveDetails(){
+    $("#btnSave").click(function () {
+    $.ajax({
+        url: "/save/analysis/",
+        type: 'POST',
+        data: {
+            uid: EDIT_ID,
+            analysis: $("#analysisInput").val()
+        },
+        dataType: "JSON",
+        success: function (data) {
+            if(data.status == 'OK'){
+                alert('Saved successfully');
+                $("#myModal").modal('hide'); // 关闭模态框
+                // 你可以在这里添加代码来更新页面的其他元素，例如列表或者数据表格，来显示新的数据
+            } else {
+                alert('Failed to save: ' + data.error);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Failed to connect to server: ' + textStatus);
+        }
+    });
+})
 }
