@@ -235,6 +235,33 @@
     </div>
 </div>
 
+<!-- detail 对话框 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Anomaly Analysis</h4>
+            </div>
+            <div class="modal-body">
+                <form id="formAdd">
+                    <div class="clearfix">
+                        <div class="form-group">
+                        <label for="analysisInput">Analysis</label>
+                        <input type="text" class="form-control" id="analysisInput" name="analysis" placeholder="Enter analysis">
+                    </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">cancel</button>
+                <button id="btnSave" type="button" class="btn btn-primary">save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="{% static "plugins/jquery-3.7.1.min.js" %}"></script>
 <script src="{% static "plugins/bootstrap-3.4.1/js/bootstrap.min.js" %}"></script>
 <script src="{% static 'plugins/echarts.min.js' %}"></script>

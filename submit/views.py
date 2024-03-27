@@ -148,3 +148,11 @@ def predict(request):
     }
 
     return render(request, 'predict.html', context)
+
+def get_analysis(request):
+    uid = request.GET.get('uid')
+    try:
+        record = models.AnomalyResult.objects.get(pk=uid)
+    except models.AnomalyResult.DoesNotExist:
+        return JsonResponse({'status': 'ERROR', 'error': 'Record not found'})
+    return JsonResponse({'status': 'OK', 'analysis': record.analysis})

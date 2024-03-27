@@ -18,6 +18,8 @@ $(function (){
     initAnomalyRateChart();
     // 获取表格数据
     ShowTaskResults();
+    // 点击 details 按钮
+    bindBtnDetails();
 })
 
 function PredictWindowSize(){
@@ -367,4 +369,31 @@ function ShowTaskResults(){
             }
         });
     });
+}
+
+function bindBtnDetails() {
+    $(".btn-edit").click(function () {
+        //清空对话框中的数据
+        $('#formAdd')[0].reset();
+        var currentId = $(this).attr('uid');
+        EDIT_ID = currentId;
+        $("#myModal").modal('show');
+        $.ajax({
+            url: "/get/analysis/",
+            type: 'GET',
+            data: {uid: currentId},
+            dataType: "JSON",
+            success: function (data) {
+                if(data.status == 'ERROR'){
+                    alert('Error: ' + data.error);
+                } else {
+                    $("#analysisInput").val(data.analysis);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                //服务器连接失败时的处理
+                alert('Failed to connect to server: ' + textStatus);
+            }
+        });
+    })
 }
