@@ -10,6 +10,8 @@ import pandas as pd
 from . import models
 from . import views
 
+from process import *
+from estimator import *
 
 class TrainChatConsumer(AsyncConsumer):
     def __init__(self, *args, **kwargs):
@@ -122,33 +124,39 @@ class TrainChatConsumer(AsyncConsumer):
         从数据库中获取已经补全的数据
         先把 TrainResult 清空
         对每个预测模型进行训练 
-    
-        for model in predict_model_choice:
-
-            if model == '...':
-                start = time.time
-                ...()
-                
-                time = time.time() - start
-                model_count += 1  
-
-                # 发送当前训练状态
-                await self.send_status()
-                          
-                # 将该模型训练结果保存到数据表中
-                form = views.TrainResultForm()
-                form.model = model
-                form.time = time
-                form.accuracy = accuracy
-                form.precision = precision
-                form.SMAPE = SMAPE
-                
-                if form.is_valid():
-                    form.save()
-                else:
-                    print(form.errors)
             
         '''
+        # 根据实际情况传入数据和预测窗口大小
+        prediction_window = 0.1
+
+        hs_df,_,_ = data_process(df=None,prediction_window=prediction_window)
+
+        # predict_model_choice应为深度学习模型名列表
+        for model in predict_model_choice:
+            start = time.time
+
+            # 得到模型路径,需要数据库存储path
+            path = model_train(model, hs_df, prediction_window)
+
+            time = time.time() - start
+
+            # model_count += 1
+
+            # 发送当前训练状态
+            await self.send_status()
+
+            # 将该模型训练结果保存到数据表中
+            form = views.TrainResultForm()
+            form.model = model
+            # form.time = time
+            # form.accuracy = accuracy
+            # form.precision = precision
+            # form.SMAPE = SMAPE
+
+            if form.is_valid():
+                form.save()
+            else:
+                print(form.errors)
         await asyncio.sleep(10)
 
         self.predict_status = "finished"
@@ -237,10 +245,59 @@ class TaskChatConsumer(AsyncConsumer):
     async def predict(self):
         print("开始执行预测")
 
-        '''  
-
-             预测过程
-
         '''
+            记录最佳模型
+            best_model = None
+            best_acc = 0
+            best_precision = 0
+            best_smape = float('inf')
+        '''
+        prediction_window = 0.1
+        hs_df, test_l,window_len = data_process(df=None, prediction_window=prediction_window)
+        window = self.predict_window_size
+        # dl_list:深度学习模型名字列表
+        for dl in dl_list:
+            print(dl)
+            # 开始预测计时
+            start = time.time()
+            # path从数据库中取，
+            pred_l = model_predict(model_name=dl, path=path, is_dl=True,prediction_len=window_len , history_data=None)
+            # 预测结束
+            interval = time.time() - start
+
+            acc = cal_accuracy(pred_l, test_l)
+            precision = cal_precision(pred_l, test_l)
+            smape = cal_smape(pred_l, test_l)
+
+            '''
+                if acc>best_acc:
+                    best_acc = acc
+                    best_model = dl
+                best_precision = precision if precision>best_precision else best_precision
+                best_smape = smape if smape<best_smape else best_smape
+            '''
+
+
+        for ml in ml_list:
+            print(ml)
+            # 开始预测计时
+            start = time.time()
+            # path从数据库中取，
+            pred_l = model_predict(model_name=ml, path=None, is_dl=False,prediction_len=window_len , history_data=None)
+            # 预测结束
+            interval = time.time() - start
+
+            acc = cal_accuracy(pred_l, test_l)
+            precision = cal_precision(pred_l, test_l)
+            smape = cal_smape(pred_l, test_l)
+
+            '''
+                if acc>best_acc:
+                    best_acc = acc
+                    best_model = dl
+                best_precision = precision if precision>best_precision else best_precision
+                best_smape = smape if smape<best_smape else best_smape
+            '''
+
         await asyncio.sleep(5)
 
