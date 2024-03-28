@@ -16,35 +16,33 @@ html {
     color: #000;
     margin-bottom: 1px;
     margin-left:10px;
-    font-weight: 600;
+    font-family: Arial, serif;
 }
 
 .text-grey-small{
             height: 28px;
             display: flex;
             align-items: center;
-            font-family:"Times New Roman", Times, serif;
+            font-family: Arial, serif;
             font-size: 26px;
-            font-weight: 700;
-            color: rgba(23, 12, 12, 0.91);
+            color: #606060;
          }
 .text-blue-small{
             height: 28px;
             display: flex;
             align-items: center;
             font-size: 26px;
-            font-weight: 700;
             color: #0a2e98;
+            font-family: Arial, serif;
          }
 
 .text-grey{
             height: 28px;
             display: flex;
             align-items: center;
-            font-family:"Times New Roman", Times, serif;
             font-size: 32px;
             color: #606060;
-            font-weight: bold;
+            font-family: Arial, serif;
          }
 .custom-file-upload {
     border: 1px solid #ccc;
@@ -114,7 +112,7 @@ input:checked + .slider:before {
     font-weight: bold;
     line-height: 10px;
     color: #000;
-    font-family: "Times New Roman", serif;
+    font-family: Arial, serif;
 }
 
 .logo-small {
@@ -173,12 +171,12 @@ input:checked + .slider:before {
 }
 
 .main-body .top-area {
-    height: 52%;
+    height: 49%;
     display: flex;
     flex-direction: row;
 }
 .main-body .bottom-area {
-    height: 48%;
+    height: 51%;
     display: flex;
     flex-direction: row;
 }
@@ -193,6 +191,6 @@ input:checked + .slider:before {
 .center-btn {
   display: flex;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 25px;
 }
 
