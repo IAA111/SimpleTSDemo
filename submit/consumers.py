@@ -216,6 +216,7 @@ class TaskChatConsumer(AsyncConsumer):
         })
 
     async def impute(self):
+        '''
         nan_counts_dict = {"figure1": 2, "figure2": 150, "figure3": 3, "figure4": 6, "figure5": 8, "figure6": 10}
         await self.send({
             "type": "websocket.send",
@@ -224,6 +225,7 @@ class TaskChatConsumer(AsyncConsumer):
             })
         })
 
+        '''
         print("开始执行补全")
 
         '''  
@@ -242,5 +244,5 @@ class TaskChatConsumer(AsyncConsumer):
              预测过程
 
         '''
-        await asyncio.sleep(5)
+        await asyncio.sleep(20)
 

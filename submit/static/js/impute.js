@@ -1,5 +1,3 @@
-var myChart = echarts.init(document.querySelector('.box'));
-var maxSeriesLength = 20;
 var data = [];
 
 $(function (){
@@ -23,6 +21,8 @@ $(function (){
     bindBtnDetails();
     // 保存 details 设置按钮
     bindBtnSaveDetails();
+    initChart_on();
+    updateChart_on();
 })
 
 function PredictWindowSize(){
@@ -33,7 +33,7 @@ function PredictWindowSize(){
 
 function ImputeModelSelect() {
     var data = {
-        models: ["Model 1", "Model 2", "Model 3", "Model 4"]
+        models: ["OT","global best"]
     };
 
     var selectList = $('#ImputeModelSelect');
@@ -50,7 +50,7 @@ function ImputeModelSelect() {
 
 function PredictModelSelect() {
     var data = {
-        models: ["Model 1", "Model 2", "Model 3", "Model 4"]
+        models: ["Transformer","NBeats","NPTS","ARIMA","Holt-Winters","global best"]
     };
 
     var selectList = $('#PredictModelSelect');
@@ -91,11 +91,6 @@ function Task() {
     socket.onmessage = function(event){
         console.log(`return message:${event.data}`);
         let data = JSON.parse(event.data);
-
-        if(data.hasOwnProperty("impute_data")) {
-        // 更新饼图
-        chartControl_missing.updateChart(data.impute_data);
-    }
 
         if (data.status === "progressing") {
             document.getElementById('predict').className = 'glyphicon glyphicon-record processing-color';
@@ -181,49 +176,8 @@ function TaskSetSave() {
   });
 }
 
-function initChart(){
-    option = {
-
-        title: {
-            text: 'Dynamic Data'
-        },
-
-        tooltip: {
-            trigger: 'axis',
-            formatter: function (params) {
-                const date = params[0].name.split("_")[0];
-                return (
-                    date +
-                    ' : ' +
-                    params[0].value[1]
-                );
-            },
-            axisPointer: {
-                animation: false
-            }
-        },
-
-        xAxis: {
-            type: 'category',
-            splitLine: {
-                show: false
-            }
-        },
-        yAxis: {
-            type: 'value',
-            boundaryGap: [0, '100%'],
-            splitLine: {
-                show: false
-            }
-        },
-        series: []
-    };
-    myChart.setOption(option);
-}
-
-
 function initMissingRateChart(){
-var myChart2 = echarts.init(document.getElementById('missing_rate_chart'));
+    var myChart2 = echarts.init(document.getElementById('missing_rate_chart'));
     option = {
   title: {
     text: 'missing_rate_chart',
@@ -234,7 +188,7 @@ var myChart2 = echarts.init(document.getElementById('missing_rate_chart'));
     trigger: 'item'
   },
   legend: {
-       top: '5%',
+       top: '1%',
   },
   series: [
     {
@@ -242,6 +196,12 @@ var myChart2 = echarts.init(document.getElementById('missing_rate_chart'));
       type: 'pie',
       radius: '50%',
       data: [
+        { value: 1048, name: '1' },
+        { value: 735, name: '2' },
+        { value: 580, name: '3' },
+        { value: 484, name: '4' },
+        { value: 300, name: '5' },
+        { value: 300, name: '6' }
       ],
       emphasis: {
         itemStyle: {
@@ -254,12 +214,13 @@ var myChart2 = echarts.init(document.getElementById('missing_rate_chart'));
   ]
 };
     myChart2.setOption(option);
-    // 在这里定义你的updateChart函数
+}
+
+     /*
+    myChart2.setOption(option);
     function updateChart(data) {
-        // 将数据转换为 ECharts 饼图所接受的格式
         var pieData = Object.entries(data).map(([key, value]) => ({name: key, value: value}));
 
-        // 使用 setOption 更新饼图数据
         myChart2.setOption({
             series: [{
                 data: pieData
@@ -270,6 +231,8 @@ var myChart2 = echarts.init(document.getElementById('missing_rate_chart'));
         updateChart: updateChart
     };
 }
+ */
+
 
 function initAnomalyRateChart(){
     var myChart3 = echarts.init(document.getElementById('anomaly_rate_chart'));
@@ -283,7 +246,7 @@ function initAnomalyRateChart(){
     trigger: 'item'
   },
   legend: {
-       top: '5%',
+       top: '1%',
   },
   series: [
     {
@@ -291,11 +254,12 @@ function initAnomalyRateChart(){
       type: 'pie',
       radius: '50%',
       data: [
-        { value: 1048, name: 'Search Engine' },
-        { value: 735, name: 'Direct' },
-        { value: 580, name: 'Email' },
-        { value: 484, name: 'Union Ads' },
-        { value: 300, name: 'Video Ads' }
+        { value: 10, name: 'Large concurrency' },
+        { value: 39, name: 'Out of memory' },
+        { value: 58, name: 'Lock race' },
+        { value: 44, name: 'Network delay' },
+        { value: 7, name: 'Index failure' },
+        { value: 32, name: 'Complex query' }
       ],
       emphasis: {
         itemStyle: {
@@ -364,7 +328,7 @@ function ShowTaskResults(){
         var page = $("input[name='page']", this).val();
 
         $.ajax({
-            url: '/load_anomaly_results/',  // Set this URL to load anomaly results data
+            url: '/load_anomaly_results/',
             type: 'GET',
             data: {'page': page},
             success: function (data) {
@@ -415,7 +379,6 @@ function bindBtnSaveDetails(){
             if(data.status == 'OK'){
                 alert('Saved successfully');
                 $("#myModal").modal('hide'); // 关闭模态框
-                // 你可以在这里添加代码来更新页面的其他元素，例如列表或者数据表格，来显示新的数据
             } else {
                 alert('Failed to save: ' + data.error);
             }
@@ -426,3 +389,151 @@ function bindBtnSaveDetails(){
     });
 })
 }
+
+// 初始化图表
+var current_index = 0;
+var myChart1 = echarts.init(document.getElementById('main'));
+var maxSeriesLength = 20;
+var option = null;
+var colors = ["#488f31", "#59cdaa", "#1b9be0", "#56428e", "#9c56b8", "#c23b75", "#ec2176", "#f03867", "#f66f4b", "#fca443", "#f3d72b", "#9edb40", "#30c16f", "#179f8c", "#147f9f", "#4986b5", "#7278a6", "#a066ab"];
+
+function initChart_on(){
+    option = {
+        title: {
+            text: ''
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                animation: false
+            }
+        },
+        xAxis: {
+            type: 'category',
+            splitLine: {
+                show: false
+            }
+        },
+        yAxis: {
+            type: 'value',
+            boundaryGap: [0, '100%'],
+            splitLine: {
+                show: false
+            },
+            max: 'dataMax',
+        },
+        series: [],
+        animationDurationUpdate: 0,
+    };
+    myChart1.setOption(option);
+}
+
+function updateChart_on() {
+    $.ajax({
+        url: "/get_chart_predata/",
+        type: "GET",
+        dataType: "json",
+        success: function (res) {
+            if(current_index < res.length) {  // 如果还有数据可获取
+                var new_data = res[current_index];  // 获取一个数据点，而不是整个列表
+                process_data(new_data);
+                current_index++;  // 更新当前索引
+            }
+        }
+    });
+}
+
+function process_data(newData) {
+    var figureCount = newData.figures.length;
+
+    while (option.series.length < figureCount * 2) {
+        var figureNumber = Math.floor(option.series.length / 2);
+        var isPredicted = option.series.length % 2 == 1;
+        var color = colors[figureNumber % colors.length];
+
+        option.series.push({
+            data: [],
+            type: 'line',
+            markPoint: {
+                data: []
+            },
+            showSymbol: false,
+            name: 'Figure ' + (figureNumber + 1) + (isPredicted ? ' Predicted' : ''),
+            lineStyle: isPredicted ? { type: 'dashed' } : {},
+            itemStyle: { color: color }
+        });
+    }
+
+    newData.figures.forEach((value, i) => {
+        if (option.series[i * 2].data.length >= maxSeriesLength) {
+            option.series[i * 2].data.shift();
+            if(option.series[i * 2].markPoint.data.length > 0){
+                if (option.series[i * 2].markPoint.data[0].coord[0] <= newData.time - maxSeriesLength) {
+                    option.series[i * 2].markPoint.data.shift();
+                }
+            }
+        }
+
+        var dataPoint = {
+            name: newData.time,
+            value: [newData.time, value],
+        };
+
+        option.series[i * 2].data.push(dataPoint);
+
+        if(newData.predicted_figures[i] !== null) {
+            if(option.series[i * 2 + 1].data.length >= maxSeriesLength) {
+                option.series[i * 2 + 1].data.shift();
+                if(option.series[i * 2 + 1].markPoint.data.length > 0){
+                    if (option.series[i * 2 + 1].markPoint.data[0].coord[0] <= newData.time - maxSeriesLength) {
+                        option.series[i * 2 + 1].markPoint.data.shift();
+                    }
+                }
+            }
+
+            var predictedDataPoint = {
+                name: newData.time,
+                value: [newData.time, newData.predicted_figures[i]],
+            };
+
+            option.series[i * 2 + 1].data.push(predictedDataPoint);
+        }
+
+
+        if (newData.highlighted_figures[i] !== null) {
+            var markPoint = {
+                coord: [newData.time, value],
+                symbol: 'circle',
+                symbolSize: 20,
+                label: { show: false },
+                animation: false,
+                animationDurationUpdate: 0,
+                itemStyle: { color: 'yellow' },
+            };
+            option.series[i * 2].markPoint.data.push(markPoint);
+        }
+
+        if (newData.highlighted_predicted_figures[i] !== null && newData.predicted_figures[i] !== null) {
+            var markPoint = {
+                coord: [newData.time, newData.predicted_figures[i]],
+                symbol: 'circle',
+                symbolSize: 20,
+                label: { show: false },
+                animation: false ,
+                animationDurationUpdate: 0,
+                itemStyle: { color: 'red' },
+            };
+            option.series[i * 2 + 1].markPoint.data.push(markPoint);
+        }
+    });
+
+    myChart1.setOption({
+        series: option.series,
+        xAxis: {
+            min: 'dataMin',
+            max: 'dataMax'
+        }
+    });
+}
+
+setInterval(updateChart_on, 300);

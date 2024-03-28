@@ -15,7 +15,7 @@ $(function (){
     // 绑定点击 StartTrainToggle 事件
     StartTrain();
     // 训练结果表单分页
-    ShowTrainResults();
+    //ShowTrainResults();
 
 })
 
@@ -39,7 +39,7 @@ function ImputationSize(){
 
 function PredictModelSelect(){
     var data = {
-        models: ["Model 1", "Model 2", "Model 3", "Model 4"]
+         models: ["Transformer", "DeepAR", "DeepFactor", "DeepState","GPForecaste","NBeats","NPTS","ARIMA","Holt-Winters"]
     };
 
     var selectList = $('#TrainPredictModel');
@@ -118,123 +118,77 @@ function binBtnTrainSetSave() {
    }})
         })}
 
-function StartTrain(){
+function StartTrain() {
     let intervalId;
     let socket = new WebSocket("ws://localhost:8000/ws/train/")
 
-    socket.onopen = function (e){
-         console.log("Connection open");
+    socket.onopen = function (e) {
+        console.log("Connection open");
     };
 
     document.getElementById('StartTrainToggle').addEventListener('change', (event) => {
-      if (event.target.checked) {
-        socket.send(JSON.stringify({"type": "training.start"}));
-      } else {
-        socket.send(JSON.stringify({"type": "training.stop"}));
-        intervalId && clearInterval(intervalId);
-        start_time = undefined;
-      }
+        if (event.target.checked) {
+            socket.send(JSON.stringify({"type": "training.start"}));
+        } else {
+            socket.send(JSON.stringify({"type": "training.stop"}));
+            intervalId && clearInterval(intervalId);
+        }
     });
 
-    socket.onmessage = function(event){
+    socket.onmessage = function (event) {
         console.log(`return message:${event.data}`);
         let data = JSON.parse(event.data)
-
-        start_time = new Date(data.start_time * 1000);
-        data.start_time = start_time.toLocaleString();
 
         let impute_start_time = new Date(data.impute_start_time * 1000);
         let predict_start_time = new Date(data.predict_start_time * 1000);
 
-
-        document.getElementById("imputeStatus").textContent = data.impute_status;
-        document.getElementById("predictStatus").textContent = data.predict_status;
         document.getElementById("PreModelCount").textContent = data.predict_model_count + "/" + data.predict_total_model;
         document.getElementById("ImpModelCount").textContent = data.impute_model_count + "/" + data.impute_total_model;
 
-         if (intervalId) {
+        if (intervalId) {
             clearInterval(intervalId);
         }
         intervalId = setInterval(() => {
-            updateTaskTime(impute_start_time, predict_start_time);
+            updateTaskTime(impute_start_time, predict_start_time, data);
         }, 1000);
 
         if (data.predict_status === "finished") {
             clearInterval(intervalId);
         }
     }
-          function updateTaskTime(imputeStartTime, predictStartTime) {
+}
+
+function updateTaskTime(imputeStartTime, predictStartTime, data) {
     let currentTime = new Date();
 
-    if (document.getElementById("imputeStatus").textContent !== "finished") {
+    if (data.impute_status !== "finished") {
         let imputeTime = parseInt((currentTime - imputeStartTime) / 1000);
         let formattedImputeTime = formatTime(imputeTime);
         document.getElementById("imputeTaskTime").textContent = formattedImputeTime;
     }
 
-    if (document.getElementById("predictStatus").textContent !== "Not Started" &&
-        document.getElementById("predictStatus").textContent !== "finished") {
+    if (data.predict_status !== "Not Started") {
         let predictTime = parseInt((currentTime - predictStartTime) / 1000);
         let formattedPredictTime = formatTime(predictTime);
         document.getElementById("predictTaskTime").textContent = formattedPredictTime;
+    } else {
+        document.getElementById("predictTaskTime").textContent = "00:00:00";
     }
 }
 
-// 将获得的秒数转换为 HH:MM:SS 格式
-    function formatTime(seconds) {
-        let hours = parseInt(seconds / 3600);
-        let minutes = parseInt((seconds % 3600) / 60);
-        let remainingSeconds = seconds % 60;
+function formatTime(timeInSeconds) {
+    let hours = Math.floor(timeInSeconds / 3600);
+    let minutes = Math.floor((timeInSeconds - (hours * 3600)) / 60);
+    let seconds = timeInSeconds - (hours * 3600) - (minutes * 60);
 
-        return `${hours}:${minutes}:${remainingSeconds}`;
-    }
-
-    socket.onclose = function(event) {
-        if (event.wasClean) {
-            console.log(`Connection closed properly：${event.code},${event.reason}`);
-        } else {
-            console.log('disconnect');
-        }
-        intervalId && clearInterval(intervalId);
-        start_time = undefined;
-    };
-
-    socket.onerror = function(error) {
-        console.log(`[error] ${error.message}`);
-    };
-
+    return hours.toString().padStart(2, '0') + ':' +
+        minutes.toString().padStart(2, '0') + ':' +
+        seconds.toString().padStart(2, '0');
 }
 
-function ShowTrainResults() {
-    $(document).on('click', '.pagination a', function (e) {
-        e.preventDefault();  // 阻止默认行为
+window.onload = function () {
+    StartTrain();
+};
 
-        var page = $(this).data('page');
 
-        $.ajax({
-            url: '/load_train_results/',
-            data: {'page': page},
-            method: 'GET',
-            success: function (data) {
-                $('#train-results-table').html(data.html);
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                console.log(thrownError);
-            }
-        });
-    });
-    $(document).on('submit', 'form', function (event) {
-        event.preventDefault();
-        var page = $("input[name='page']", this).val();
-
-        $.ajax({
-            url: '/load_train_results/',
-            type: 'GET',
-            data: {'page': page},
-            success: function (data) {
-                $('#train-results-table').html(data.html);
-            }
-        });
-    });
-}
 

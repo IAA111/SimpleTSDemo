@@ -15,22 +15,9 @@ class TrainResultForm(BootStrapModelForm):
         model = models.TrainResult
         fields = '__all__'
 
-class PredictResultForm(BootStrapModelForm):
-    class Meta:
-        model = models.PredictResult
-        fields = '__all__'
 
 def train_show(request):
-    form = TrainResultForm()
-    queryset = models.TrainResult.objects.all()
-    page_object = Pagination(request, queryset)
-
-    context = {
-        'form': form,
-        'queryset': page_object.page_queryset,
-        'page_string': page_object.html()
-    }
-    return render(request, 'home.html', context)
+    return render(request, 'home.html')
 
 def load_train_results(request):
     page = request.GET.get('page', 1)
@@ -171,3 +158,22 @@ def save_analysis(request):
             return JsonResponse({'status': 'ERROR', 'error': 'Item not found'})
     else:
         return JsonResponse({'status': 'ERROR', 'error': 'Invalid request'})
+
+PREDICTION_START_POINT = 1503
+def get_chart_predata(request):
+    data = models.Impdata.objects.all().order_by('index').values('index', 'data', 'predicted_data', 'mask',
+                                                                 'predicted_mask','time')
+    formatted_data = [
+        {   "time": data["time"].strftime('%Y-%m-%d %H:%M:%S'),
+            "index": data["index"],
+            "figures": [float(i) for i in data["data"].split(",")],
+            "predicted_figures": [float(i) if data["index"] >= PREDICTION_START_POINT else None for i in
+                                  data["predicted_data"].split(",")],
+            "highlighted_figures": [float(d) if m == 'True' else None for d, m in
+                                    zip(data["data"].split(","), data["mask"].split(","))],
+            "highlighted_predicted_figures": [float(d) if m == 'True' else None for d, m in
+                                              zip(data["predicted_data"].split(","), data["predicted_mask"].split(","))]
+        } for data in data
+    ]
+
+    return JsonResponse(formatted_data, safe=False)

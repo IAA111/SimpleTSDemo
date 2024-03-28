@@ -80,7 +80,7 @@ WSGI_APPLICATION = "SimpleTSDemo.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "TSMS",
+        "NAME": "test3",
         "USER": "root",
         "PASSWORD": "newpassword",
         "HOST": "localhost",
