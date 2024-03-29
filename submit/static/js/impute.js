@@ -447,7 +447,7 @@ function process_data(newData) {
         var figureNumber = Math.floor(option.series.length / 2);
         var isPredicted = option.series.length % 2 == 1;
         var color = colors[figureNumber % colors.length];
-
+        var seriesName = 'Variable ' + (figureNumber + 1) + (isPredicted ? ' Predicted' : '');
         option.series.push({
             data: [],
             type: 'line',
@@ -455,10 +455,11 @@ function process_data(newData) {
                 data: []
             },
             showSymbol: false,
-            name: 'Variable ' + (figureNumber + 1) + (isPredicted ? ' Predicted' : ''),
+             name: isPredicted ? '' : seriesName,
             lineStyle: isPredicted ? { type: 'dashed' } : {},
             itemStyle: { color: color }
         });
+
     }
 
     newData.figures.forEach((value, i) => {
