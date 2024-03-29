@@ -22,9 +22,11 @@ $(function (){
     // 保存 details 设置按钮
     bindBtnSaveDetails();
     initChart_on();
-    updateChart_on();
     // 点击按钮变色
     clickbtncolor();
+    // 点击 stop/click
+    clickstart();
+
 })
 
 function PredictWindowSize(){
@@ -536,7 +538,7 @@ function process_data(newData) {
     });
 }
 
-setInterval(updateChart_on, 300);
+
 
 
 function clickbtncolor(){
@@ -551,9 +553,9 @@ function clickbtncolor(){
     });
 }
 
-
-$(document).ready(function(){
+function clickstart(){
     $("#taskToggle").change(function() {
-
+        updateChart_on();
+        setInterval(updateChart_on, 300);
     });
-});
+}

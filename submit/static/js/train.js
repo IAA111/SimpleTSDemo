@@ -16,6 +16,8 @@ $(function (){
     StartTrain();
     // 训练结果表单分页
     //ShowTrainResults();
+    //显示选中文件名
+    showfilename();
 
 })
 
@@ -59,7 +61,7 @@ function ImputeModelSelect(){
 
     $(document).ready(function() {
     var data = {
-        models: ["Model 1", "Model 2", "Model 3", "Model 4"]
+        models: ["OT", "global best"]
     };
 
     var selectList = $('#TrainImputeModel');
@@ -191,4 +193,9 @@ window.onload = function () {
 };
 
 
-
+function showfilename(){
+    $('#upload').change(function() {
+        var filename = $(this).val().split('\\').pop();
+        $('.custom-file-upload').text(filename);
+    });
+}
