@@ -38,7 +38,7 @@ def load_train_results(request):
 def load_impute_results(request):
     page = request.GET.get('page', 1)
     queryset1 = models.ImputeResult.objects.all()
-    page_object1 = Pagination(request, queryset1)
+    page_object1 = Pagination(request, queryset1, page_size=7)
 
     context = {
         'queryset1': page_object1.page_queryset,
@@ -53,7 +53,7 @@ def load_impute_results(request):
 def load_anomaly_results(request):
     page = request.GET.get('page', 1)
     queryset2 = models.AnomalyResult.objects.all()
-    page_object2 = Pagination(request, queryset2)
+    page_object2 = Pagination(request, queryset2,page_size=6)
 
     context = {
         'queryset2': page_object2.page_queryset,
