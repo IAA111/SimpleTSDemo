@@ -182,7 +182,7 @@ function initMissingRateChart(){
   title: {
     text: 'missing_rate_chart',
     left: 'center',
-    top: '18%'
+    top: '14%'
   },
   tooltip: {
     trigger: 'item'
@@ -419,6 +419,7 @@ function initChart_on(){
             max: 'dataMax',
         },
         series: [],
+        legend: {},
         animationDurationUpdate: 0,
     };
     myChart1.setOption(option);
@@ -454,7 +455,7 @@ function process_data(newData) {
                 data: []
             },
             showSymbol: false,
-            name: 'Figure ' + (figureNumber + 1) + (isPredicted ? ' Predicted' : ''),
+            name: 'Variable ' + (figureNumber + 1) + (isPredicted ? ' Predicted' : ''),
             lineStyle: isPredicted ? { type: 'dashed' } : {},
             itemStyle: { color: color }
         });
