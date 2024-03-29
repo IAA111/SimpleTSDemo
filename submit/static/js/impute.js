@@ -23,6 +23,8 @@ $(function (){
     bindBtnSaveDetails();
     initChart_on();
     updateChart_on();
+    // 点击按钮变色
+    clickbtncolor();
 })
 
 function PredictWindowSize(){
@@ -132,7 +134,7 @@ function Task() {
         let minutes = parseInt((seconds % 3600) / 60);
         let remainingSeconds = seconds % 60;
 
-        return `${hours}:${minutes}:${remainingSeconds}`;
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
     }
 
     socket.onclose = function(event) {
@@ -535,3 +537,23 @@ function process_data(newData) {
 }
 
 setInterval(updateChart_on, 300);
+
+
+function clickbtncolor(){
+    $(".btn-group-xs .btn").click(function(){
+        // 先重置所有按钮的颜色
+        $(".btn-group-xs .btn").removeClass("btn-selected");
+        $(".btn-group-xs .btn").addClass("btn-default");
+
+        // 为选中的按钮添加新样式
+        $(this).removeClass("btn-default");
+        $(this).addClass("btn-selected");
+    });
+}
+
+
+$(document).ready(function(){
+    $("#taskToggle").change(function() {
+
+    });
+});
