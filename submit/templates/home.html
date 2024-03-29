@@ -24,6 +24,7 @@
     <nav class="top-layout">
         <div class="container-fluid">
             <div class="logo">TENDS</div>
+            <span id="to" style="font-size:30px;margin-top: 1px;margin-left: 970px" class="glyphicon glyphicon-chevron-right" aria-hidden="true" onclick="redirectToURL()"></span>
         </div>
     </nav>
     <!--主体部分-->
@@ -278,16 +279,17 @@
                     <div style="display: flex;border-radius: 10px 10px 0 0;background: var(--bg-color); align-items: center; padding: 13px 16px; border-bottom: 1px solid rgba(229, 229, 229, 1);">
                         <span style="font-size:30px;margin-top: 3px" class="glyphicon glyphicon-edit"
                               aria-hidden="true"></span>
-                        <h4 class="logo-small" style="margin: 0; font-weight: 600;white-space: nowrap;">Training Results</h4>
+                        <h4 class="logo-small" style="margin: 0; font-weight: 600;white-space: nowrap;">Training
+                            Results</h4>
                     </div>
                     <div class="container" style="width: 100%; display: flex; flex-flow: row nowrap;">
-    <div style="flex: 1;">
-        {% include "train_results.html" %}
-    </div>
-    <div style="flex: 1;">
-        {% include "train_class.html" %}
-    </div>
-</div>
+                        <div style="flex: 1;">
+                            {% include "train_results.html" %}
+                        </div>
+                        <div style="flex: 1;">
+                            {% include "train_class.html" %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

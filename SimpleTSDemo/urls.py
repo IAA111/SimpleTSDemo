@@ -23,7 +23,7 @@ urlpatterns = [
     path('train/save/', views.train_save),
     path('task/save/', views.task_save),
     path('predict/', views.predict),
-    path('home/', views.train_show),
+    path('home/', views.home),
     path('load_train_results/', views.load_train_results),
     path('load_impute_results/', views.load_impute_results),
     path('load_anomaly_results/', views.load_anomaly_results),

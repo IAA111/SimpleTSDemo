@@ -13,7 +13,6 @@ class TrainResult(models.Model):
     dataset = models.CharField(max_length=64)
     train_time = models.CharField(max_length=20)
     predict_time = models.CharField(max_length=20)
-    time = models.TimeField()
     accuracy = models.FloatField()
     precision = models.FloatField()
     SMAPE = models.FloatField()

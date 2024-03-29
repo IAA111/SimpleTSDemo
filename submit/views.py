@@ -16,13 +16,11 @@ class TrainResultForm(BootStrapModelForm):
         fields = '__all__'
 
 
-def train_show(request):
-    return render(request, 'home.html')
 
 def load_train_results(request):
     page = request.GET.get('page', 1)
     queryset = models.TrainResult.objects.all()
-    page_object = Pagination(request, queryset)
+    page_object = Pagination(request, queryset,page_size=7)
 
     context = {
         'queryset': page_object.page_queryset,
@@ -118,11 +116,17 @@ def task_save(request):
         return JsonResponse({"error": "error."})
 
 def home(request):
-    return render(request, 'home.html')
+    queryset = models.TrainResult.objects.all()
+    page_object = Pagination(request, queryset,page_size=7)
+    context = {
+        'queryset': page_object.page_queryset,
+        'page_string': page_object.html(),
+    }
+    return render(request, 'home.html',context)
 
 def predict(request):
     queryset1 = models.ImputeResult.objects.all()
-    page_object1 = Pagination(request, queryset1)
+    page_object1 = Pagination(request, queryset1,page_size=7)
 
     queryset2 = models.AnomalyResult.objects.all()
     page_object2 = Pagination(request, queryset2)

@@ -18,8 +18,43 @@ $(function (){
     //ShowTrainResults();
     //显示选中文件名
     showfilename();
+    // 训练结果分页
+    ShowTrainResults();
 
 })
+
+function ShowTrainResults(){
+    $('#train-results-table').on('submit', 'form', function(e) {
+        e.preventDefault();
+        var page = $("input[name='page']", this).val();
+
+        $.ajax({
+            url: '/load_train_results/',
+            type: 'GET',
+            data: {'page': page},
+            success: function (data) {
+                $('#train-results-table').html(data.html);
+            }
+        });
+    });
+$(document).on('click', '.pagination a', function (e) {
+        e.preventDefault();
+        var page = $(this).data('page');
+        $.ajax({
+            url: '/load_train_results/',
+            data: {'page': page},
+            method: 'GET',
+            success: function (data) {
+                $('#train-results-table').html(data.html);  // Update the impute results table
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError);
+            }
+        });
+    });
+}
+
+
 
 function TrainDataSize(){
     $('#TrainDataSize a').click(function(){
@@ -198,4 +233,8 @@ function showfilename(){
         var filename = $(this).val().split('\\').pop();
         $('.custom-file-upload').text(filename);
     });
+}
+
+function redirectToURL() {
+    window.location.href = "http://localhost:8000/predict/";
 }
