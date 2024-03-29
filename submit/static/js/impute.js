@@ -196,12 +196,8 @@ function initMissingRateChart(){
       type: 'pie',
       radius: '50%',
       data: [
-        { value: 1048, name: '1' },
-        { value: 735, name: '2' },
-        { value: 580, name: '3' },
-        { value: 484, name: '4' },
-        { value: 300, name: '5' },
-        { value: 300, name: '6' }
+        { value: 1048, name: 'complete data' },
+        { value: 23, name: 'missing data' },
       ],
       emphasis: {
         itemStyle: {
